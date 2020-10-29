@@ -1,0 +1,151 @@
+.Layout {
+    background-color: #b3b3b3;
+    min-height: 100vh;
+    font-family: 'Open Sans', 'Helvetica', sans-serif;
+    color: white;
+}
+
+.Layout-header {
+    background-color: #434343;
+    margin-bottom: 20px;
+    display: flex;
+    padding: 11.5px 200px;
+    align-content: center;
+    align-items: center;
+}
+
+.Layout-header-img {
+    max-height: 60px;
+    padding: 5px;
+    vertical-align: bottom;
+}
+
+.Layout-header-title {
+    font-size: 30px;
+    line-height: 28px;
+    font-weight: bolder;
+    color: #b4c498;
+    padding-left: 20px;
+    text-align: right;
+    display: inline-block;
+}
+
+.Layout-header-subtitle {
+    vertical-align: middle;
+    color: #4d4d4d;
+    font-weight: bold;
+    background-color: #b4c498;
+    padding: 2px;
+    margin-left: 20px;
+}
+
+.Layer-header-p {
+    margin: 5px 0 -5px 0;
+    color: #31322e;
+    font-weight: lighter;
+    text-transform: uppercase;
+    font-size: 8px;
+    letter-spacing: 1.2px;
+    text-align: center;
+}
+
+.Layer-section-header {
+    margin: 5px 0 8px 0;
+    color: #cccccc;
+    font-weight: lighter;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+}
+
+.Layout-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    padding: 5px 200px;
+    color: #ccc
+}
+
+.Layout-body-sidebar {
+    width: 10vw;
+    position: relative;
+    flex: 1;
+    margin-right: 10px;
+
+}
+
+.Layout-body-sidebar-row {
+    background-color: #4d4d4d;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.Layout-body-content {
+    background-color: #4d4d4d;
+    border-color: #000;
+    border-width: 1px;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.Layout-body-main {
+    flex: 4;
+}
+
+.Layout-navigation-breadcrumbs {
+    flex: 5;
+    display: flex;
+    align-items: center;
+}
+
+.Layout-navigation-button {
+    flex: 1
+}
+
+.Layout-body-content-info {
+    text-align: center;
+    padding: 20px;
+    color: #bbb;
+}
+
+.divider {
+    border-left: 5px solid #b4c498;
+    margin: 10px;
+}
+
+.p {
+    color: #aaaaaa;
+    font-size: 12px;
+}
+
+.Layout-group-header {
+    background-color: #4a4a4a;
+    font-size: 14px;
+    color: #ccc;
+    padding: 10px;
+    margin-bottom: 2px;
+    border-radius: 10px;
+
+}
+
+.Row {
+    display: flex;
+    flex-direction: row;
+}
+
+.Column {
+    flex: 1;
+    margin: 0 5px 0 5px;
+    vertical-align: bottom;
+}
+
+.Column-align-right .Column {
+    text-align: right;
+}
+
+.Layout-breadcrumbs {
+    display: inline-block;
+    vertical-align: middle;
+}

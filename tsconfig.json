@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "strictBindCallApply": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es5",
+    "jsx": "react",
+    "lib": [
+      "es2018",
+      "dom",
+      "esnext.asynciterable",
+      "es5",
+      "es6",
+      "dom"
+    ],
+    "allowJs": true,
+    "noEmit": true,
+    "incremental": true,
+    "preserveSymlinks": true,
+    "skipLibCheck": true,
+    "downlevelIteration": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "reportFiles": [
+      "./src/**/*"
+    ]
+  },
+  "plugins": [
+    {
+      "name": "typescript-plugin-css-module",
+      "options": {
+        "classnameTransform": "camelCase"
+      }
+    }
+  ]
+}

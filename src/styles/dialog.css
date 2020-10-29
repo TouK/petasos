@@ -1,0 +1,31 @@
+.Dialog-row {
+    display: flex;
+    flex-direction: row;
+    max-width: 600px;
+}
+
+.Dialog-column {
+    flex: 1;
+    margin: 0 5px 0 5px;
+    vertical-align: bottom;
+    max-width: 600px;
+}
+
+.Dialog-column-wide .Dialog-column {
+    width: 300px;
+}
+
+.Dialog-column-wider {
+    width: 600px;
+    flex: 1;
+}
+
+.Details-section-header {
+    color: #999;
+    font-weight: bolder;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-stretch: ultra-expanded;
+    margin-bottom: 15px;
+    font-family: 'Open Sans', 'Helvetica', sans-serif;
+}

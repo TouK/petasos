@@ -1,0 +1,26 @@
+.Topic {
+    display: flex;
+    flex-direction: row;
+}
+
+.Topic-column {
+    flex: 1;
+    margin: 0 5px 0 5px;
+    vertical-align: bottom;
+}
+
+.Topic-column-right {
+    text-align: center;
+    align-items: center;
+    display: flex;
+}
+
+.Topic-name {
+    font-weight: bolder;
+    font-size: medium;
+}
+
+.Topic-url {
+    font-size: smaller;
+    color: #b4c498;
+}

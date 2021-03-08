@@ -58,7 +58,7 @@ export const TopicDialog = ({initialValues, dialog}: {initialValues: TopicFormik
         }
 
         const taskOnSubmit = async (values: TopicFormikValues, includeAdvanced: boolean): Promise<void | ValidationError> => {
-            let topic: Topic = new Topic(values.group + "." + values.topic)
+            const topic: Topic = new Topic(values.group + "." + values.topic)
             topic.assignValuesFromForm(values, includeAdvanced)
             return topics.postTask(topic)
         }

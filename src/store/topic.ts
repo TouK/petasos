@@ -34,12 +34,12 @@ export class Topic implements TopicModel {
     @observable description: string
     @observable retentionTime: RetentionTimeModel = new DefaultStorageRetentionTimeModel(1, undefined)
     @observable jsonToAvroDryRun: boolean
-    @observable ack: string = "LEADER"
+    @observable ack = "LEADER"
     @observable trackingEnabled: boolean
     @observable migratedFromJsonType: boolean
     @observable schemaIdAwareSerializationEnabled: boolean
-    @observable contentType: string = "AVRO"
-    @observable maxMessageSize: number = 10240
+    @observable contentType = "AVRO"
+    @observable maxMessageSize = 10240
     @observable auth: AuthModel;
     @observable createdAt: number;
     @observable modifiedAt: number;
@@ -219,7 +219,7 @@ export class Topic implements TopicModel {
 }
 
 class DefaultOfflineStorage implements TopicDataOfflineStorageModel {
-    enabled: boolean = false;
+    enabled = false;
     retentionTime: RetentionTimeModel = new DefaultStorageRetentionTimeModel(60, undefined);
 }
 
@@ -234,7 +234,7 @@ class DefaultStorageRetentionTimeModel implements RetentionTimeModel {
 }
 
 export class DefaultOwner implements OwnerModel {
-    id: string = 'Default';
-    source: string = 'Plaintext';
+    id = 'Default';
+    source = 'Plaintext';
 
 }

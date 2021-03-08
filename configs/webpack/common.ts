@@ -39,13 +39,13 @@ export const commonConfig: Configuration = {
                 test: /\.[jt]sx?$/,
                 exclude: /node_modules/,
                 use: [
-                    "babel-loader"
+                    {loader: "babel-loader"}
                 ]
             },
             {
                 test: /\.css$/,
                 use: [
-                    "style-loader",
+                    {loader: "style-loader"},
                     {
                         loader: "css-loader",
                         options: {

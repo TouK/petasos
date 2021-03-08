@@ -16,9 +16,9 @@ export const devConfig = merge(commonConfig, {
             },
         },
     },
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'eval-cheap-module-source-map',
     optimization: {
-        namedModules: true,
+        moduleIds: "named"
     },
 });
 

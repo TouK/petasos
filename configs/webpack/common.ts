@@ -1,14 +1,14 @@
-import AddAssetHtmlPlugin from 'add-asset-html-webpack-plugin';
-import dotenv from 'dotenv';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import {resolve} from 'path';
-import {Configuration} from 'webpack';
-import pkg from '../../package.json';
+import AddAssetHtmlPlugin from "add-asset-html-webpack-plugin";
+import dotenv from "dotenv";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import {resolve} from "path";
+import {Configuration} from "webpack";
+import pkg from "../../package.json";
 
 dotenv.config();
 
-const findEnvModule = (context, request, callback) => {
+const findEnvModule = ({request}, callback) => {
     if (/\/_env$/.test(request)) {
         return callback(null, "window['.env']");
     }
@@ -17,16 +17,21 @@ const findEnvModule = (context, request, callback) => {
 
 export const commonConfig: Configuration = {
     resolve: {
-        extensions: ['.tsx', '.ts', '.jsx', '.js'],
-        symlinks: false,
+        extensions: [
+            ".tsx",
+            ".ts",
+            ".jsx",
+            ".js"
+        ],
+        symlinks: false
     },
-    context: resolve(__dirname, '../..'),
-    target: 'web',
+    context: resolve(__dirname, "../.."),
+    target: "web",
     output: {
-        publicPath: '',
+        publicPath: ""
     },
     externals: [
-        findEnvModule,
+        findEnvModule
     ],
     module: {
         rules: [
@@ -34,52 +39,68 @@ export const commonConfig: Configuration = {
                 test: /\.[jt]sx?$/,
                 exclude: /node_modules/,
                 use: [
-                    'babel-loader',
-                ],
+                    "babel-loader"
+                ]
             },
             {
                 test: /\.css$/,
                 use: [
-                    'style-loader',
+                    "style-loader",
                     {
-                        loader: 'css-loader',
+                        loader: "css-loader",
                         options: {
                             importLoaders: 1,
                             modules: {
-                                mode: 'local',
-                                exportLocalsConvention: 'dashes'
-                            },
+                                mode: "local",
+                                exportLocalsConvention: "dashes"
+                            }
                         }
                     }
                 ]
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
-                loaders: [
-                    'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
-                    'image-webpack-loader?bypassOnDebug&optipng.optimizationLevel=7&gifsicle.interlaced=false',
-                ],
-            },
-        ],
+                use: [
+                    {
+                        loader: "file-loader",
+                        options: {
+                            name: "img/[hash].[ext]"
+                        }
+                    },
+                    {
+                        loader: "image-webpack-loader",
+                        options: {
+                            bypassOnDebug: true,
+                            optipng: {
+                                optimizationLevel: 7
+                            },
+                            gifsicle: {
+                                interlaced: false
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
     },
     entry: [
-        './src/index.tsx',
+        "./src/index.tsx"
     ],
     plugins: [
         new ForkTsCheckerWebpackPlugin(),
         new HtmlWebpackPlugin({
-            title: `${pkg.name} ${pkg.version}`,
+            title: `${pkg.name} ${pkg.version}`
         }),
         new AddAssetHtmlPlugin({
-            filepath: resolve(__dirname, '../../_env.js'),
-        }),
+            filepath: resolve(__dirname, "../../_env.js")
+        })
     ],
     performance: {
-        hints: false,
+        hints: false
     },
     optimization: {
         runtimeChunk: false,
         mergeDuplicateChunks: true,
-        concatenateModules: true,
-    },
+        concatenateModules: true
+    }
 };

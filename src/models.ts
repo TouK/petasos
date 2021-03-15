@@ -145,15 +145,15 @@ export class SubscriptionFormikValues implements FormValues {
 }
 
 export class AdvancedSubscriptionFormikValues implements FormikValues {
-    mode: string = 'ANYCAST';
-    rate: number = 100;
-    sendingDelay: number = 0;
-    messageTtl: number = 3600;
-    trackingMode: string = "trackingOff";
-    retryClientErrors: boolean = false;
-    messageBackoff: number = 1000;
-    backoffMultiplier: number = 1;
-    backoffMaxIntervalInSec: number = 600;
+    mode = 'ANYCAST';
+    rate = 100;
+    sendingDelay = 0;
+    messageTtl = 3600;
+    trackingMode = "trackingOff";
+    retryClientErrors = false;
+    messageBackoff = 1000;
+    backoffMultiplier = 1;
+    backoffMaxIntervalInSec = 600;
 }
 
 export class GroupFormValues implements FormValues {

@@ -1,39 +1,57 @@
-import { HotModuleReplacementPlugin } from 'webpack';
-import merge from 'webpack-merge';
-import { commonConfig } from './common';
+import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
+import {CustomizeRule, mergeWithRules} from "webpack-merge";
+import {commonConfig} from "./common";
 
-export const devConfig = merge(commonConfig, {
-    mode: 'development',
-    entry: [
-        'react-hot-loader/patch', // activate HMR for React
-        'webpack-dev-server/client?http://0.0.0.0:7890', // bundle the client for webpack-dev-server and connect to the provided endpoint
-        'webpack/hot/only-dev-server', // bundle the client for hot reloading, only- means to only hot reload for successful updates
-    ],
-    resolve: {
-        alias: {
-            'react-dom': '@hot-loader/react-dom',
-        },
-    },
+export const devConfig = mergeWithRules({
+    module: {
+        rules: {
+            test: CustomizeRule.Match,
+            use: {
+                loader: CustomizeRule.Match,
+                options: CustomizeRule.Replace
+            }
+        }
+    }
+})(commonConfig, {
+    mode: "development",
     devServer: {
-        host: '0.0.0.0',
+        host: "0.0.0.0",
         port: 7890,
         hot: true, // enable HMR on the server
         historyApiFallback: true,
         proxy: {
-            '/apps-proxy': {
+            "/apps-proxy": {
                 target: process.env.HERMES_MANAGEMENT_DEFAULT,
-                pathRewrite: { '^/apps-proxy': '' },
-                changeOrigin: true,
-            },
-        },
+                pathRewrite: {"^/apps-proxy": ""},
+                changeOrigin: true
+            }
+        }
     },
-    devtool: 'cheap-module-eval-source-map',
-    plugins: [
-        new HotModuleReplacementPlugin(), // enable HMR globally
-    ],
+    devtool: "eval-cheap-module-source-map",
     optimization: {
-        namedModules: true,
+        moduleIds: "named"
     },
+    plugins: [
+        new ReactRefreshWebpackPlugin()
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.[jt]sx?$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: "babel-loader",
+                        options: {
+                            plugins: [
+                                require.resolve("react-refresh/babel")
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
 });
 
 export default devConfig;

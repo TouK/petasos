@@ -13,7 +13,7 @@ configure({
 });
 
 function init() {
-  let appRoot = document.getElementById("appRoot");
+  const appRoot = document.getElementById("appRoot");
   if (appRoot) {
     render(<Root />, domContainer);
   } else {

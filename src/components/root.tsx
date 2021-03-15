@@ -1,12 +1,11 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import {hot} from 'react-hot-loader/root';
 import {StoreProvider} from '../store/storeProvider';
 import {App} from './app';
-import {MuiPickersUtilsProvider} from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
+import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 
-export const Root = hot(() => {
+export const Root = () => {
     return (
         <StoreProvider>
             <Helmet>
@@ -22,5 +21,5 @@ export const Root = hot(() => {
             </MuiPickersUtilsProvider>
         </StoreProvider>
     );
-});
+};
 

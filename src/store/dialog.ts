@@ -1,8 +1,8 @@
 import {action, observable} from "mobx";
 
 export class Dialog {
-    @observable open: boolean = false;
-    @action setOpen(v: boolean): void { this.open = v };
+    @observable open = false;
+    @action setOpen(v: boolean): void { this.open = v }
 }
 
 export class DeleteGroupDialog {

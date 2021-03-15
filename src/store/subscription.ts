@@ -33,9 +33,9 @@ export class Subscription implements SubscriptionModel {
     @observable endpoint: string;
     @observable description: string;
     @observable owner: OwnerModel = new DefaultOwner()
-    @observable contentType: string = "JSON"
-    @observable deliveryType: string = "SERIAL"
-    @observable mode: string = "ANYCAST"
+    @observable contentType = "JSON"
+    @observable deliveryType = "SERIAL"
+    @observable mode = "ANYCAST"
     @observable createdAt: number;
     @observable http2Enabled: boolean;
     @observable modifiedAt: number;
@@ -196,20 +196,20 @@ export class Subscription implements SubscriptionModel {
 }
 
 class DefaultSubscriptionPolicy implements SubscriptionPolicyModel {
-    backoffMaxIntervalInSec: number = 600;
+    backoffMaxIntervalInSec = 600;
     backoffMaxIntervalMillis: number = undefined;
-    backoffMultiplier: number = 1;
+    backoffMultiplier = 1;
     inflightSize: number = undefined;
-    messageBackoff: number = 1000;
-    messageTtl: number = 3600;
-    rate: number = 100;
+    messageBackoff = 1000;
+    messageTtl = 3600;
+    rate = 100;
     requestTimeout: number = undefined;
     retryClientErrors: boolean = undefined;
-    sendingDelay: number = 0;
+    sendingDelay = 0;
     socketTimeout: number = undefined;
 }
 
 class DefaultMonitoringDetails implements MonitoringDetailsModel {
-    reaction: string = "";
-    severity: string = "NON_IMPORTANT";
+    reaction = "";
+    severity = "NON_IMPORTANT";
 }

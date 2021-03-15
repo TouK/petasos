@@ -22,7 +22,7 @@ export function DialogTemplate<T extends FormValues>({
                                                      }: {
     dialog: Dialog, validateFunc: ((FormValues, boolean) => void),
     taskOnSubmit: (T, boolean) => Promise<void | ValidationError>, onSubmitSuccess: (T) => Promise<void>,
-    onCancel: () => void, dialogTitle: string, submitButtonText: string, initialValues: T,
+    onCancel?: () => void, dialogTitle: string, submitButtonText: string, initialValues: T,
     basicFields: ((FormikErrors) => JSX.Element[]), advancedFields: ((FormikErrors) => JSX.Element[]), wider: boolean
 }) {
     const [backendValidationError, setBackendValidationError] = useState(undefined)
@@ -42,7 +42,7 @@ export function DialogTemplate<T extends FormValues>({
 
     const cancelForm = () => {
         setBackendValidationError(undefined)
-        onCancel()
+        onCancel?.()
         dialog.setOpen(false)
         setAdvancedOptions(false)
     }

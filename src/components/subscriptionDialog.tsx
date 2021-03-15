@@ -171,14 +171,12 @@ export const SubscriptionDialog = ({isEdit, dialogTitle, submitButtonText, initi
             }
         }
 
-        const onCancel = (): void => {}
-
         return (
             <DialogTemplate<SubscriptionFormikValues> advancedFields={advancedFields} basicFields={basicFields}
                                                       dialog={dialog}
                                                       submitButtonText={submitButtonText}
                                                       dialogTitle={dialogTitle}
-                                                      initialValues={initialValues} onCancel={onCancel}
+                                                      initialValues={initialValues}
                                                       onSubmitSuccess={onSubmitSuccess} taskOnSubmit={taskOnSubmit}
                                                       validateFunc={validateFunc} wider={true}/>
         )
@@ -193,7 +191,7 @@ export const AddSubscriptionDialog = () => {
     }
 
     const taskOnSubmit = async (values: SubscriptionFormikValues, includeAdvanced: boolean): Promise<void | ValidationError> => {
-        let sub: Subscription = new Subscription(values.name, topics.selectedTopic)
+        const sub: Subscription = new Subscription(values.name, topics.selectedTopic)
         sub.assignValuesFromForm(values, includeAdvanced)
         await topics.selectedTopic.postSubscriptionTask(sub)
         await topics.selectedTopic.fetchSubscriptionsTask()
@@ -219,7 +217,7 @@ export const AddClonedSubscriptionDialog = () => {
         }
 
         const taskOnSubmit = async (values: SubscriptionFormikValues, includeAdvanced: boolean): Promise<void | ValidationError> => {
-            let sub: Subscription = new Subscription(values.name, topics.selectedTopic)
+            const sub: Subscription = new Subscription(values.name, topics.selectedTopic)
             sub.assignValuesFromForm(values, includeAdvanced)
             return topics.selectedTopic.postSubscriptionTask(sub)
         }

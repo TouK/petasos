@@ -1,13 +1,11 @@
-import {createBrowserHistory} from 'history';
-import {observable} from 'mobx';
-import {Groups} from './groups';
-import {Topics} from './topics';
-import {
-    Dialog, DeleteGroupDialog
-} from "./dialog";
+import {createBrowserHistory} from "history";
+import {observable} from "mobx";
+import {DeleteGroupDialog, Dialog} from "./dialog";
+import {Groups} from "./groups";
+import {Topics} from "./topics";
 
 export const history = createBrowserHistory({
-    basename: window.document.baseURI.replace(window.location.origin, ''),
+    basename: window.document.baseURI.replace(window.location.origin, "")
 });
 
 export class Store {

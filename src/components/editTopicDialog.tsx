@@ -1,21 +1,28 @@
-import React from "react";
-import {useObserver} from "mobx-react-lite";
 import {
-    FormControl, FormHelperText, FormLabel,
+    FormControl,
+    FormControlLabel,
+    FormHelperText,
+    FormLabel,
     InputLabel,
-    MenuItem, Radio
-} from "@material-ui/core";
-import {useStore} from "../store/storeProvider";
+    MenuItem,
+    Radio
+} from "@mui/material";
 import {Field, FormikErrors} from "formik";
-import dialogStyles from '../styles/dialog.css'
+import {CheckboxWithLabel, RadioGroup, Select, TextField} from "formik-mui";
+import {useObserver} from "mobx-react-lite";
+import React from "react";
 import {TopicFormikValues} from "../models";
+import {useStore} from "../store/storeProvider";
 import {ValidationError} from "../store/topics";
+import dialogStyles from "../styles/dialog.css";
 import {DialogTemplate} from "./dialogTemplate";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {RadioGroup, CheckboxWithLabel, Select, TextField} from "formik-material-ui";
 
 export const EditTopicDialog = () => {
-    const {dialogs, groups, topics} = useStore();
+    const {
+        dialogs,
+        groups,
+        topics
+    } = useStore();
 
     return useObserver(() => {
 

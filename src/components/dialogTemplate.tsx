@@ -1,27 +1,41 @@
-import React, {useState} from "react"
-import {Dialog} from "../store/dialog";
-import {Form, Formik} from "formik";
-import {ValidationError} from "../store/topics";
-import {useObserver} from "mobx-react-lite";
+import {Alert} from "@mui/lab";
 import {
-    Button, DialogActions,
+    Button,
+    DialogActions,
     DialogContent,
     DialogTitle,
-    Divider, LinearProgress,
+    Divider,
+    LinearProgress,
     ThemeProvider
-} from "@material-ui/core";
-import dialogStyles from "../styles/dialog.css";
-import {Alert} from "@material-ui/lab";
+} from "@mui/material";
+import {Form, Formik} from "formik";
+import {useObserver} from "mobx-react-lite";
+import React, {useState} from "react";
 import {FormValues} from "../models";
-import {formTheme} from "./theme";
+import {Dialog} from "../store/dialog";
+import {ValidationError} from "../store/topics";
+import dialogStyles from "../styles/dialog.css";
 import {StyledDialog} from "./styledMuiComponents";
+import {formTheme} from "./theme";
 
-export function DialogTemplate<T extends FormValues>({
-                                                         dialog, validateFunc, taskOnSubmit, onSubmitSuccess,
-                                                         onCancel, dialogTitle, submitButtonText, initialValues, basicFields, advancedFields, wider
-                                                     }: {
+export function DialogTemplate<T extends FormValues> ({
+    dialog,
+    validateFunc,
+    taskOnSubmit,
+    onSubmitSuccess,
+    onCancel,
+    dialogTitle,
+    submitButtonText,
+    initialValues,
+    basicFields,
+    advancedFields,
+    wider
+}: {
     dialog: Dialog, validateFunc: ((FormValues, boolean) => void),
-    taskOnSubmit: (T, boolean) => Promise<void | ValidationError>, onSubmitSuccess: (T) => Promise<void>,
+    taskOnSubmit: (
+        T,
+        boolean
+    ) => Promise<void | ValidationError>, onSubmitSuccess: (T) => Promise<void>,
     onCancel?: () => void, dialogTitle: string, submitButtonText: string, initialValues: T,
     basicFields: ((FormikErrors) => JSX.Element[]), advancedFields: ((FormikErrors) => JSX.Element[]), wider: boolean
 }) {
@@ -50,16 +64,25 @@ export function DialogTemplate<T extends FormValues>({
     return useObserver(() => {
         return (
             dialog.open &&
-            <StyledDialog open={dialog.open} onClose={() => dialog.setOpen(false)}
-                          disableBackdropClick={true}>
+            <StyledDialog open={dialog.open}
+                          onClose={() => dialog.setOpen(false)}>
                 <DialogTitle>{dialogTitle}</DialogTitle>
                 <ThemeProvider theme={formTheme}>
                     <Formik
                         initialValues={initialValues}
                         enableReinitialize={true}
-                        validate={(values) => validateFunc(values, advancedOptions)}
+                        validate={(values) => validateFunc(
+                            values,
+                            advancedOptions
+                        )}
                         onSubmit={submitFunc}>
-                        {({submitForm, isSubmitting, errors, validateForm, values}) => (
+                        {({
+                            submitForm,
+                            isSubmitting,
+                            errors,
+                            validateForm,
+                            values
+                        }) => (
                             <>
                                 <DialogContent>
                                     <Form>

@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from "react"
-import {useStore} from "../store/storeProvider";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import {Backdrop, Button, CircularProgress} from "@mui/material";
 import {useObserver} from "mobx-react-lite";
-import styles from '../styles/details.css'
-import layout from '../styles/layout.css'
 import moment from "moment";
+import React, {useEffect, useState} from "react";
+import {TopicInfo} from "../propertiesInfo";
+import {useStore} from "../store/storeProvider";
+import styles from "../styles/details.css";
+import layout from "../styles/layout.css";
 import {
-    Backdrop,
-    Button,
-    CircularProgress
-} from "@material-ui/core";
+    createRow,
+    PropertiesTable,
+    PropertiesTableRow
+} from "./propertiesTable";
 import {StyledPaper} from "./styledMuiComponents";
 import {SubscriptionListElement} from "./subscriptionListElement";
-import {createRow, PropertiesTable, PropertiesTableRow} from "./propertiesTable";
-import {TopicInfo} from "../propertiesInfo";
-import EditIcon from "@material-ui/icons/Edit";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
-import AddIcon from '@material-ui/icons/Add';
 import {TopicFrontendUrl} from "./topicFrontendUrl";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 export const TopicDetails = () => {
     const {topics, dialogs} = useStore();

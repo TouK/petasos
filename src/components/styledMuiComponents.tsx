@@ -1,82 +1,75 @@
-import React from "react"
-import IconButton from '@material-ui/core/IconButton';
-import {withStyles} from '@material-ui/core/styles';
-import {Pagination} from "@material-ui/lab";
-import {Button, Dialog, ListItem, Paper, Tooltip} from "@material-ui/core";
+import {
+    Button,
+    Dialog,
+    IconButton,
+    ListItem,
+    Pagination,
+    Paper,
+    styled,
+    Tooltip
+} from "@mui/material";
+import React from "react";
 
-export const SmallIconButton = withStyles({
-    root: {
-        '& .MuiSvgIcon-root': {
-            fontSize: '1.0rem',
-        }
-
+export const SmallIconButton = styled(IconButton)({
+    ".MuiSvgIcon-root": {
+        fontSize: "1.0rem"
     }
-})(IconButton)
+});
 
-export const StyledPagination = withStyles({
+export const StyledPagination = styled(Pagination)({
     ul: {
         justifyContent: "center"
     }
-})(Pagination)
+});
 
-export const StyledListItem = withStyles({
-    root: {
-        paddingTop: '2px',
-        paddingBottom: '2px',
-        margin: '4px 0 4px 0',
-        '& .Mui-selected': {
-            backgroundColor: 'rgba(0, 0, 0, 0.2)'
-        }
+export const StyledListItem = styled(ListItem)({
+    paddingTop: "2px",
+    paddingBottom: "2px",
+    margin: "4px 0 4px 0",
+    ".Mui-selected": {
+        backgroundColor: "rgba(0, 0, 0, 0.2)"
     }
-})(ListItem)
+});
 
-export const DarkTooltip = withStyles({
+export const DarkTooltip = styled(Tooltip)({
     arrow: {
-        color: '#000'
+        color: "#000000"
     },
     tooltip: {
-        backgroundColor: '#404040'
+        backgroundColor: "#404040"
     }
-})(Tooltip)
+});
 
-export const StyledButton = withStyles({
-    root: {
-        width: '100%'
-    }
-})(Button)
+export const StyledButton = styled(Button)({
+    width: "100%"
+});
 
-export const StyledDialog = withStyles({
-    root: {
-        '& .MuiPaper-root': {
-            backgroundColor: '#585858',
-            color: '#bbb',
-            maxWidth: '1200px'
-        },
-        '& .MuiDialogContentText-root': {
-            color: '#bbb'
-        }
+export const StyledDialog = styled(Dialog)({
+    ".MuiPaper-root": {
+        backgroundColor: "#585858",
+        color: "#BBBBBB",
+        maxWidth: "1200px"
+    },
+    ".MuiDialogContentText-root": {
+        color: "#BBBBBB"
     }
-})(Dialog)
+});
 
-export const StyledPaper = withStyles({
-    root: {
-        backgroundColor: '#585858',
-        color: '#ccc',
-        '& .MuiTableCell-body': {
-            color: '#ccc'
-        },
-        boxShadow: 'none'
-    }
-})(Paper)
+export const StyledPaper = styled(Paper)({
+    backgroundColor: "#585858",
+    color: "#CCCCCC",
+    ".MuiTableCell-body": {
+        color: "#CCCCCC"
+    },
+    boxShadow: "none"
+});
 
-export const StyledTopicCard = withStyles((theme) => ({
-    root: {
-        backgroundColor: '#616161',
-        color: '#ccc',
-        marginBottom: '5px',
-        '& .MuiCardContent-root': {
-            padding: '10px'
-        },
-        boxShadow: 'none'
-    }
-}))(Paper)
+export const StyledTopicCard = styled(Paper)((theme) => ({
+    backgroundColor: "#616161",
+    color: "#CCCCCC",
+    marginBottom: "5px",
+    ".MuiCardContent-root, .MuiCardContent-root:last-child": {
+        padding: "10px"
+    },
+    boxShadow: "none"
+}));

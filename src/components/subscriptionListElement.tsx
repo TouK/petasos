@@ -1,20 +1,20 @@
-import React, {useEffect} from "react"
-import {Subscription} from "../store/subscription";
+import {NavigateNext} from "@mui/icons-material";
+import {CardContent, Chip, CircularProgress, IconButton} from "@mui/material";
 import {useObserver} from "mobx-react-lite";
-import {CardContent, Chip, CircularProgress, IconButton} from "@material-ui/core";
-import layout from "../styles/layout.css";
-import styles from "../styles/details.css";
-import {NavigateNext} from "@material-ui/icons";
+import React, {useEffect} from "react";
 import {useStore} from "../store/storeProvider";
+import {Subscription} from "../store/subscription";
+import styles from "../styles/details.css";
+import layout from "../styles/layout.css";
 import {StyledTopicCard} from "./styledMuiComponents";
 
 export const SubscriptionListElement = ({subscription}: { subscription: Subscription }) => {
-    const {topics} = useStore()
+    const {topics} = useStore();
 
     return useObserver(() => {
         useEffect(() => {
             subscription.fetchTask();
-        }, [subscription])
+        }, [subscription]);
 
         return (
             <StyledTopicCard key={subscription.name}>

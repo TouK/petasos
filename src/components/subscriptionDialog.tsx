@@ -1,23 +1,32 @@
-import React from "react";
-import {useObserver} from "mobx-react-lite";
-import {useStore} from "../store/storeProvider";
+import {FormControl, FormControlLabel, FormLabel, Radio} from "@mui/material";
 import {Field, FormikErrors} from "formik";
-import {AdvancedSubscriptionFormikValues, SubscriptionFormikValues} from "../models";
+import {CheckboxWithLabel, RadioGroup, TextField} from "formik-mui";
+import {useObserver} from "mobx-react-lite";
+import React from "react";
+import {
+    AdvancedSubscriptionFormikValues,
+    SubscriptionFormikValues
+} from "../models";
+import {Dialog} from "../store/dialog";
+import {useStore} from "../store/storeProvider";
 import {Subscription} from "../store/subscription";
 import {ValidationError} from "../store/topics";
 import {DialogTemplate} from "./dialogTemplate";
-import {FormControl, FormLabel, Radio} from "@material-ui/core";
-import {CheckboxWithLabel, RadioGroup, TextField} from "formik-material-ui";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {Dialog} from "../store/dialog";
 
-export const SubscriptionDialog = ({isEdit, dialogTitle, submitButtonText, initialValues, dialog, taskOnSubmit}:
-                                       {
-                                           isEdit: boolean, dialogTitle: string,
-                                           submitButtonText: string, initialValues: SubscriptionFormikValues,
-                                           dialog: Dialog,
-                                           taskOnSubmit: (SubscriptionFormikValues, boolean) => Promise<void | ValidationError>
-                                       }) => {
+export const SubscriptionDialog = ({
+    isEdit,
+    dialogTitle,
+    submitButtonText,
+    initialValues,
+    dialog,
+    taskOnSubmit
+}:
+    {
+        isEdit: boolean, dialogTitle: string,
+        submitButtonText: string, initialValues: SubscriptionFormikValues,
+        dialog: Dialog,
+        taskOnSubmit: (SubscriptionFormikValues, boolean) => Promise<void | ValidationError>
+    }) => {
     const {groups, topics} = useStore();
 
     const validateFunc = (values: SubscriptionFormikValues, includeAdvanced: boolean) => {

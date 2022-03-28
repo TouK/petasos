@@ -1,14 +1,17 @@
-import React from "react";
-import {useStore} from "../store/storeProvider";
-import {useObserver} from "mobx-react-lite";
 import {Field, FormikErrors} from "formik";
+import {TextField} from "formik-mui";
+import {useObserver} from "mobx-react-lite";
+import React from "react";
 import {GroupFormValues} from "../models";
+import {useStore} from "../store/storeProvider";
 import {ValidationError} from "../store/topics";
 import {DialogTemplate} from "./dialogTemplate";
-import {TextField} from "formik-material-ui";
 
 export const AddGroupDialog = () => {
-    const {dialogs, groups} = useStore()
+    const {
+        dialogs,
+        groups
+    } = useStore();
 
     const basicFields = (): JSX.Element[] => [
         <Field

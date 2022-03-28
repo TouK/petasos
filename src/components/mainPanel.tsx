@@ -1,33 +1,36 @@
+import {Backdrop, Button, CircularProgress, ThemeProvider} from "@mui/material";
 import {useObserver} from "mobx-react-lite";
-import React, {useEffect} from "react"
-import {useStore} from "../store/storeProvider"
-import {TopicList} from "./topicList";
-import {GroupsList} from "./groupsList";
-import styles from "../styles/layout.css"
-import {Header} from "./header";
-import {TopicDetails} from "./topicDetails";
-import {AddClonedTopicDialog, AddTopicDialog} from "./addTopicDialog";
+import React, {useEffect} from "react";
+import {useStore} from "../store/storeProvider";
+import styles from "../styles/layout.css";
 import {AddGroupDialog} from "./addGroupDialog";
-import {theme} from "./theme";
-import {Backdrop, Button, CircularProgress, ThemeProvider} from "@material-ui/core";
+import {AddClonedTopicDialog, AddTopicDialog} from "./addTopicDialog";
+import {DeleteSubscriptionDialog, DeleteTopicDialog} from "./deleteDialog";
+import {DeleteGroupDialog} from "./deleteGroupDialog";
+import {EditTopicDialog} from "./editTopicDialog";
+import {GroupsList} from "./groupsList";
+import {Header} from "./header";
+import {NavigationBar} from "./navigationBar";
 import {SubscriptionDetails} from "./subscriptionDetails";
 import {
     AddClonedSubscriptionDialog,
     AddSubscriptionDialog,
     EditSubscriptionDialog
 } from "./subscriptionDialog";
-import {EditTopicDialog} from "./editTopicDialog";
-import {NavigationBar} from "./navigationBar";
-import {DeleteGroupDialog} from "./deleteGroupDialog";
-import {DeleteSubscriptionDialog, DeleteTopicDialog} from "./deleteDialog";
+import {theme} from "./theme";
+import {TopicDetails} from "./topicDetails";
+import {TopicList} from "./topicList";
 
 export const MainPanel = () => {
-    const {groups, topics} = useStore();
+    const {
+        groups,
+        topics
+    } = useStore();
 
     return useObserver(() => {
         useEffect(() => {
             fetchData();
-        }, [])
+        }, []);
 
         const fetchData = async () => {
             await groups.fetchTask();

@@ -1,18 +1,31 @@
-import React, {useState} from "react"
-import {ValidationError} from "../store/topics";
-import {Dialog} from "../store/dialog";
+import {Alert} from "@mui/lab";
+import {
+    Button,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    LinearProgress
+} from "@mui/material";
 import {useObserver} from "mobx-react-lite";
-import {Button, DialogActions, DialogContent, DialogContentText, LinearProgress} from "@material-ui/core";
-import {Alert} from "@material-ui/lab";
+import React, {useState} from "react";
+import {Dialog} from "../store/dialog";
 import {useStore} from "../store/storeProvider";
+import {ValidationError} from "../store/topics";
 import {StyledDialog} from "./styledMuiComponents";
 
-export const DeleteDialog = ({dialog, taskOnSubmit, text, deleteButtonText, onSubmitSuccess}: {
+export const DeleteDialog = ({
+    dialog,
+    taskOnSubmit,
+    text,
+    deleteButtonText,
+    onSubmitSuccess
+}: {
     dialog: Dialog, taskOnSubmit: () => Promise<void | ValidationError>, text: string,
     deleteButtonText: string, onSubmitSuccess: () => Promise<void>
 }) => {
-    const [backendValidationError, setBackendValidationError] = useState(undefined)
-    const [loading, setLoading] = useState(false)
+    const [backendValidationError, setBackendValidationError] = useState(
+        undefined);
+    const [loading, setLoading] = useState(false);
 
     const submitFunc = async () => {
         setLoading(true);

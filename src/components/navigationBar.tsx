@@ -1,13 +1,17 @@
-import React from "react"
-import {useStore} from "../store/storeProvider";
+import AddIcon from "@mui/icons-material/Add";
+import {Breadcrumbs, Link, Typography} from "@mui/material";
 import {useObserver} from "mobx-react-lite";
-import {Breadcrumbs, Link, Typography} from "@material-ui/core";
-import layout from "../styles/layout.css"
+import React from "react";
+import {useStore} from "../store/storeProvider";
+import layout from "../styles/layout.css";
 import {StyledButton} from "./styledMuiComponents";
-import AddIcon from "@material-ui/icons/Add";
 
 export const NavigationBar = () => {
-    const {topics, groups, dialogs} = useStore()
+    const {
+        topics,
+        groups,
+        dialogs
+    } = useStore();
 
     return useObserver(() => {
         return (

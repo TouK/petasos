@@ -1,5 +1,10 @@
+import {
+    Button,
+    DialogActions,
+    DialogContent,
+    DialogContentText
+} from "@mui/material";
 import {useObserver} from "mobx-react-lite";
-import {Button, DialogActions, DialogContent, DialogContentText} from "@material-ui/core";
 import React, {useState} from "react";
 import {useStore} from "../store/storeProvider";
 import {StyledDialog} from "./styledMuiComponents";

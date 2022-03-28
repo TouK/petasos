@@ -1,7 +1,13 @@
-import React from "react"
-import {Table, TableBody, TableCell, TableContainer, TableRow} from "@material-ui/core";
-import {StyledPaper} from "./styledMuiComponents";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow
+} from "@mui/material";
+import React from "react";
 import {InfoPopover} from "./InfoPopover";
+import {StyledPaper} from "./styledMuiComponents";
 
 export const PropertiesTable = ({properties}: { properties: PropertiesTableRow[] }) =>
     <TableContainer component={StyledPaper}>

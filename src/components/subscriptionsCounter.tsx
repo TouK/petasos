@@ -1,6 +1,6 @@
-import React, {useEffect} from "react"
+import {Chip, CircularProgress} from "@mui/material";
 import {useObserver} from "mobx-react-lite";
-import {Chip, CircularProgress} from "@material-ui/core";
+import React, {useEffect} from "react";
 import {Topic} from "../store/topic";
 
 export const SubscriptionsCounter = ({topic}: {topic: Topic}) => {

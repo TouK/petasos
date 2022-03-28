@@ -1,82 +1,96 @@
-import {createMuiTheme} from "@material-ui/core";
+import { createTheme as createMuiTheme } from '@mui/material/styles'
 
 export const theme = createMuiTheme({
     palette: {
         primary: {
-            main: '#ccc'
+            main: "#CCCCCC"
         },
         secondary: {
-            main: '#536436',
-            dark: '#4a5930'
+            main: "#536436",
+            dark: "#4A5930"
         },
         info: {
-            main: '#717171',
-            light: '#6e6e6e',
-            dark: '#5c5c5c'
+            main: "#717171",
+            light: "#6E6E6E",
+            dark: "#5C5C5C"
 
         }
-    },
-})
+    }
+});
 
 export const formTheme = createMuiTheme({
     palette: {
         primary: {
-            main: '#b4c498'
+            main: "#B4C498"
         },
         secondary: {
-            main: '#536436',
-            dark: '#4a5930'
+            main: "#536436",
+            dark: "#4A5930"
         }
     },
-    overrides: {
+    components: {
         MuiSvgIcon: {
-            root: {
-                color: '#bbb'
+            styleOverrides: {
+                root: {
+                    color: "#BBBBBB"
+                }
             }
         },
         MuiInputBase: {
-            input: {
-                color: '#bbb'
+            styleOverrides: {
+                input: {
+                    color: "#BBBBBB"
+                }
             }
         },
         MuiFormLabel: {
-            root: {
-                color: '#aaa'
+            styleOverrides: {
+                root: {
+                    color: "#AAAAAA"
+                }
             }
         },
         MuiInput: {
-            underline: {
-                '&&&&:before': {
-                    borderBottom: '1px solid #8D8D8D'
+            styleOverrides: {
+                underline: {
+                    "&&&&:before": {
+                        borderBottom: "1px solid #8D8D8D"
+                    }
                 }
             }
         },
         MuiPaper: {
-            root: {
-                backgroundColor: '#585858',
-                color: '#ccc',
-                '& .MuiTableCell-body': {
-                    color: '#ccc'
-                },
-                boxShadow: 'none'
+            styleOverrides: {
+                root: {
+                    backgroundColor: "#585858",
+                    color: "#CCCCCC",
+                    "& .MuiTableCell-body": {
+                        color: "#CCCCCC"
+                    },
+                    boxShadow: "none"
+                }
             }
         }
     }
-})
+});
 
 export const calendarTheme = createMuiTheme({
     ...formTheme,
-    overrides: {
-        ...formTheme.overrides,
+    components: {
+        ...formTheme.components,
         MuiPaper: {
-            root: {
-                backgroundColor: '#6d6d6d'
+            styleOverrides: {
+                root: {
+                    backgroundColor: "#6D6D6D"
+                }
             }
         },
         MuiTab: {
-            root: {
-                backgroundColor: '#454545'
+            styleOverrides: {
+                root: {
+                    backgroundColor: "#454545"
+                }
             }
         }
     }
-})
+});

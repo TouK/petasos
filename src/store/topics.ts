@@ -14,14 +14,13 @@ export class Topics {
   @observable names: string[] = [];
   @observable selectedTopicName: string = null;
   @observable selectedSubscriptionName: string = null;
-  @observable topicsMap: Map<string, Topic> = new Map<string, Topic>();
-  getTopicsOfGroup = computedFn(function getTopicsOfGroup(
-    groupName: string
-  ): string[] {
-    return this.names
-      ? this.names.filter((name) => name.indexOf(groupName + ".") === 0)
+  @observable topicsMap = observable.map<string, Topic>();
+
+  forGroup = (groupName: string) =>
+    this.names
+      ? this.names.filter((name) => name.indexOf(`${groupName}.`) === 0)
       : [];
-  });
+
   @action.bound
   changeSelectedTopic = (topicName: string) => {
     this.selectedSubscriptionName = null;

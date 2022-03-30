@@ -38,8 +38,8 @@ export const DeleteDialog = ({
       setLoading(false);
     } else {
       setBackendValidationError(undefined);
-      await onSubmitSuccess();
       setLoading(false);
+      await onSubmitSuccess();
       dialog.setOpen(false);
     }
   };
@@ -84,7 +84,7 @@ export const DeleteDialog = ({
 };
 
 export const DeleteTopicDialog = () => {
-  const { dialogs, topics, groups } = useStore();
+  const { dialogs, topics } = useStore();
   return useObserver(() => (
     <DeleteDialog
       dialog={dialogs.deleteTopicDialog}
@@ -96,9 +96,8 @@ export const DeleteTopicDialog = () => {
       }
       deleteButtonText={"Remove topic"}
       onSubmitSuccess={async () => {
-        topics.changeSelectedTopic(null);
-        await groups.fetchTask();
         await topics.fetchTask();
+        topics.changeSelectedTopic(null);
       }}
     />
   ));
@@ -121,6 +120,7 @@ export const DeleteSubscriptionDialog = () => {
       }
       deleteButtonText={"Delete subscription"}
       onSubmitSuccess={async () => {
+        await topics.selectedTopic.fetchSubscriptionsTask();
         topics.changeSelectedSubscription(null);
       }}
     />

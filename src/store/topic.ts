@@ -43,10 +43,7 @@ export class Topic implements TopicModel {
   @observable schemaIdAwareSerializationSchemaEnabled: boolean;
   @observable subscribingRestricted: boolean;
   @observable schema: string;
-  @observable subscriptionsMap: Map<string, Subscription> = new Map<
-    string,
-    Subscription
-  >();
+  @observable subscriptionsMap = observable.map<string, Subscription>();
   @observable messagePreview: MessagePreviewModel[];
   private replacer = (key, value) => {
     if (key === "parent") {
@@ -187,19 +184,18 @@ export class Topic implements TopicModel {
     }
     const url = `${Hosts.APP_API}/topics/${this.name}/subscriptions`;
     return fetchFn<string[]>(url, true).then(
-      action((data: string[]) => {
-        data.forEach(
-          (subscriptionName) =>
-            this.subscriptionsMap.get(subscriptionName) ||
-            this.subscriptionsMap.set(
-              subscriptionName,
-              new Subscription(subscriptionName, this)
-            )
-        );
-        [...this.subscriptionsMap.keys()].forEach(
-          (sub) => data.includes(sub) || this.subscriptionsMap.delete(sub)
-        );
-      })
+      action((data = []) =>
+        this.subscriptionsMap.replace(
+          data.reduce(
+            (values, name) =>
+              values.set(
+                name,
+                this.subscriptionsMap.get(name) || new Subscription(name, this)
+              ),
+            new Map<string, Subscription>()
+          )
+        )
+      )
     );
   }
 

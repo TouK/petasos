@@ -1,21 +1,13 @@
-import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  InputLabel,
-  MenuItem,
-  Radio,
-} from "@mui/material";
+import { FormControl, FormControlLabel, FormLabel, Radio } from "@mui/material";
 import { Field, FormikErrors } from "formik";
-import { CheckboxWithLabel, RadioGroup, Select, TextField } from "formik-mui";
+import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
 import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { TopicFormikValues } from "../models";
 import { useStore } from "../store/storeProvider";
 import { ValidationError } from "../store/topics";
-import dialogStyles from "../styles/dialog.css";
 import { DialogTemplate } from "./dialogTemplate";
+import { GroupsFormControl } from "./groupsFormControl";
 
 export const EditTopicDialog = () => {
   const { dialogs, groups, topics } = useStore();
@@ -95,36 +87,15 @@ export const EditTopicDialog = () => {
           description: "",
         };
 
-    const GroupField = (errors: FormikErrors<TopicFormikValues>) => (
-      <div className={dialogStyles.DialogRow}>
-        <div className={dialogStyles.DialogColumn}>
-          <FormControl style={{ width: "100%" }}>
-            <InputLabel htmlFor="group">Group</InputLabel>
-            <Field
-              component={Select}
-              required
-              name="group"
-              label="Group"
-              disabled
-            >
-              {groups.names.map((groupName) => (
-                <MenuItem value={groupName} key={groupName}>
-                  {groupName}
-                </MenuItem>
-              ))}
-            </Field>
-            {errors.group && (
-              <FormHelperText error>{errors.group}</FormHelperText>
-            )}
-          </FormControl>
-        </div>
-      </div>
-    );
-
     const basicFields = (
       errors: FormikErrors<TopicFormikValues>
     ): JSX.Element[] => [
-      GroupField(errors),
+      <GroupsFormControl
+        key="group"
+        errors={errors}
+        groups={groups}
+        disabled
+      />,
       <Field
         required
         component={TextField}

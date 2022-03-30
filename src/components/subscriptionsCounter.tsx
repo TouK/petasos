@@ -4,11 +4,11 @@ import React, { useEffect } from "react";
 import { Topic } from "../store/topic";
 
 export const SubscriptionsCounter = ({ topic }: { topic: Topic }) => {
-  return useObserver(() => {
-    useEffect(() => {
-      topic.fetchSubscriptionsTask();
-    }, []);
+  useEffect(() => {
+    topic.fetchSubscriptionsTask();
+  }, [topic]);
 
+  return useObserver(() => {
     return (
       <Chip
         size="small"

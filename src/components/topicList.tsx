@@ -43,42 +43,41 @@ export const TopicList = () => {
       );
     });
 
-  const TopicsPage = ({ topicsList }: { topicsList: string[] }) =>
-    useObserver(() => {
-      const [page, setPage] = useState(1);
-      const topicsPerPage = 10;
+  const TopicsPage = ({ topicsList }: { topicsList: string[] }) => {
+    const [page, setPage] = useState(1);
+    const topicsPerPage = 10;
 
-      return (
-        <div className={styles.LayoutBodyMain}>
-          {topicsList.length === 0 ? (
+    return useObserver(() => (
+      <div className={styles.LayoutBodyMain}>
+        {topicsList.length === 0 ? (
+          <div className={styles.LayoutBodyContent}>
+            <div className={layout.LayerSectionHeader}>Topics</div>
+            <div className={layout.LayoutBodyContentInfo}>
+              No topics yet
+              {groups.selectedGroup && ` in group ${groups.selectedGroup}`}.
+            </div>
+          </div>
+        ) : (
+          <>
             <div className={styles.LayoutBodyContent}>
               <div className={layout.LayerSectionHeader}>Topics</div>
-              <div className={layout.LayoutBodyContentInfo}>
-                No topics yet
-                {groups.selectedGroup && ` in group ${groups.selectedGroup}`}.
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className={styles.LayoutBodyContent}>
-                <div className={layout.LayerSectionHeader}>Topics</div>
-                <TopicsSublist
-                  topicsList={topicsList.slice(
-                    (page - 1) * topicsPerPage,
-                    Math.min(topicsList.length, page * topicsPerPage)
-                  )}
-                />
-              </div>
-              <StyledPagination
-                count={Math.ceil(topicsList.length / topicsPerPage)}
-                page={page}
-                onChange={(event, p) => setPage(p)}
+              <TopicsSublist
+                topicsList={topicsList.slice(
+                  (page - 1) * topicsPerPage,
+                  Math.min(topicsList.length, page * topicsPerPage)
+                )}
               />
-            </>
-          )}
-        </div>
-      );
-    });
+            </div>
+            <StyledPagination
+              count={Math.ceil(topicsList.length / topicsPerPage)}
+              page={page}
+              onChange={(event, p) => setPage(p)}
+            />
+          </>
+        )}
+      </div>
+    ));
+  };
 
   return useObserver(() => {
     return (

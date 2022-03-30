@@ -14,12 +14,11 @@ export const SubscriptionListElement = ({
   subscription: Subscription;
 }) => {
   const { topics } = useStore();
+  useEffect(() => {
+    subscription.fetchTask();
+  }, [subscription]);
 
   return useObserver(() => {
-    useEffect(() => {
-      subscription.fetchTask();
-    }, [subscription]);
-
     return (
       <StyledTopicCard key={subscription.name}>
         <CardContent>

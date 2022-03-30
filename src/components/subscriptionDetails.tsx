@@ -40,25 +40,24 @@ import { calendarTheme } from "./theme";
 
 export const SubscriptionDetails = () => {
   const { topics, dialogs } = useStore();
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [openStateChangeDialog, setOpenStateChangeDialog] = useState(false);
+  const [openRetransmissionDialog, setOpenRetransmissionDialog] =
+    useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [selectedDate, handleDateChange] = useState(moment());
+  const [isCopied, copy] = useCopyClipboard();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await topics.selectedSubscription.fetchTask();
+      await topics.selectedSubscription.fetchMetricsTask();
+      await topics.selectedSubscription.fetchLastUndeliveredMsgTask();
+    };
+    fetchData();
+  }, [topics.selectedSubscription]);
 
   return useObserver(() => {
-    const [showAdvanced, setShowAdvanced] = useState(false);
-    const [openStateChangeDialog, setOpenStateChangeDialog] = useState(false);
-    const [openRetransmissionDialog, setOpenRetransmissionDialog] =
-      useState(false);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [selectedDate, handleDateChange] = useState(moment());
-    const [isCopied, copy] = useCopyClipboard();
-
-    useEffect(() => {
-      const fetchData = async () => {
-        await topics.selectedSubscription.fetchTask();
-        await topics.selectedSubscription.fetchMetricsTask();
-        await topics.selectedSubscription.fetchLastUndeliveredMsgTask();
-      };
-      fetchData();
-    }, [topics.selectedSubscription]);
-
     const timeFormat = "dddd, MMMM Do, YYYY h:mm:ss A";
 
     const properties: PropertiesTableRow[] = [

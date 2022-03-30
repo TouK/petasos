@@ -21,17 +21,16 @@ import { TopicFrontendUrl } from "./topicFrontendUrl";
 
 export const TopicDetails = () => {
   const { topics, dialogs } = useStore();
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      topics.selectedTopic && (await topics.selectedTopic.fetchTask());
+      await topics.selectedTopic.fetchMessagePreviewTask();
+    };
+    fetchData();
+  }, [topics.selectedTopic]);
 
   return useObserver(() => {
-    const [showAdvanced, setShowAdvanced] = useState(false);
-    useEffect(() => {
-      const fetchData = async () => {
-        topics.selectedTopic && (await topics.selectedTopic.fetchTask());
-        await topics.selectedTopic.fetchMessagePreviewTask();
-      };
-      fetchData();
-    }, [topics.selectedTopic]);
-
     const timeFormat = "dddd, MMMM Do, YYYY h:mm:ss A";
 
     const properties: PropertiesTableRow[] = [

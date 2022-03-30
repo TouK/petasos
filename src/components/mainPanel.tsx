@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { useObserver } from "mobx-react-lite";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useStore } from "../store/storeProvider";
 import styles from "../styles/layout.css";
 import { AddGroupDialog } from "./addGroupDialog";
@@ -29,16 +29,16 @@ import { TopicList } from "./topicList";
 export const MainPanel = () => {
   const { groups, topics } = useStore();
 
+  const fetchData = useCallback(async () => {
+    await groups.fetchTask();
+    await topics.fetchTask();
+  }, [groups, topics]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   return useObserver(() => {
-    useEffect(() => {
-      fetchData();
-    }, []);
-
-    const fetchData = async () => {
-      await groups.fetchTask();
-      await topics.fetchTask();
-    };
-
     return (
       <ThemeProvider theme={theme}>
         <div className={styles.Layout}>

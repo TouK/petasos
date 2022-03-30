@@ -7,9 +7,9 @@ import { MainPanel } from "./mainPanel";
 export function App() {
   return useObserver(() => (
     <Router history={history}>
-        <Switch>
-          <Route path="/" component={MainPanel} />
-        </Switch>
+      <Switch>
+        <Route path="/" component={MainPanel} />
+      </Switch>
     </Router>
   ));
 }

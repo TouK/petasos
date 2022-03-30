@@ -1,13 +1,17 @@
-import {action, observable} from "mobx";
+import { action, observable } from "mobx";
 
 export class Dialog {
-    @observable open = false;
+  @observable open = false;
 
-    @action setOpen (v: boolean): void { this.open = v; }
+  @action setOpen(v: boolean): void {
+    this.open = v;
+  }
 }
 
 export class DeleteGroupDialog {
-    @observable groupToBeDeleted: string = undefined;
+  @observable groupToBeDeleted: string = undefined;
 
-    @action setGroupToBeDeleted (v: string) { this.groupToBeDeleted = v; }
+  @action setGroupToBeDeleted(v: string) {
+    this.groupToBeDeleted = v;
+  }
 }

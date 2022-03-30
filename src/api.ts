@@ -22,7 +22,7 @@ export const fetchJson = async <R>(
   if (!response.ok && failIfResponseNotOk) {
     throw new Error("Not 2xx response");
   }
-  let json: any;
+  let json: R & { error?: unknown; message?: unknown };
 
   try {
     json = await response.json();
@@ -33,7 +33,7 @@ export const fetchJson = async <R>(
   if (json.error) {
     throw json.message || json.error;
   }
-  return json;
+  return json as R;
 };
 
 export function withToken(

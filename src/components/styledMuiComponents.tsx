@@ -8,7 +8,6 @@ import {
   styled,
   Tooltip,
 } from "@mui/material";
-import React from "react";
 
 export const SmallIconButton = styled(IconButton)({
   ".MuiSvgIcon-root": {
@@ -64,7 +63,7 @@ export const StyledPaper = styled(Paper)({
   boxShadow: "none",
 });
 
-export const StyledTopicCard = styled(Paper)((theme) => ({
+export const StyledTopicCard = styled(Paper)(() => ({
   backgroundColor: "#616161",
   color: "#CCCCCC",
   marginBottom: "5px",

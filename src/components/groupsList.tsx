@@ -9,6 +9,7 @@ import {
   styled,
   Tooltip,
 } from "@mui/material";
+import { IconButtonProps } from "@mui/material/IconButton/IconButton";
 import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { useStore } from "../store/storeProvider";
@@ -100,12 +101,16 @@ const AlteredIconButton = styled(IconButton)({
   },
 });
 
+interface IconButtonWithTooltipProps extends IconButtonProps {
+  tooltipText: string;
+}
+
 const IconButtonWithTooltip = ({
   tooltipText,
   disabled,
   onClick,
   ...other
-}) => {
+}: IconButtonWithTooltipProps) => {
   const adjustedButtonProps = {
     disabled: disabled,
     component: disabled ? "div" : undefined,

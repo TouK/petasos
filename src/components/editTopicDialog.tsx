@@ -60,9 +60,7 @@ export const EditTopicDialog = () => {
       return topics.selectedTopic.putTask();
     };
 
-    const onSubmitSuccess = async (
-      values: TopicFormikValues
-    ): Promise<void> => {
+    const onSubmitSuccess = async (): Promise<void> => {
       await groups.fetchTask();
       await topics.fetchTask();
     };
@@ -132,6 +130,7 @@ export const EditTopicDialog = () => {
         component={TextField}
         label="Topic name"
         name="topic"
+        key="topic"
         style={{ width: "100%" }}
         disabled
       />,
@@ -140,12 +139,14 @@ export const EditTopicDialog = () => {
         component={TextField}
         label="Topic description"
         name="description"
+        key="description"
         style={{ width: "100%" }}
       />,
       <Field
         component={TextField}
         label="Avro schema"
         name="schema"
+        key="schema"
         id="schema"
         style={{ width: "100%" }}
         variant="outlined"
@@ -154,10 +155,8 @@ export const EditTopicDialog = () => {
       />,
     ];
 
-    const advancedFields = (
-      errors: FormikErrors<TopicFormikValues>
-    ): JSX.Element[] => [
-      <FormControl>
+    const advancedFields = (): JSX.Element[] => [
+      <FormControl key="advancedValues.acknowledgement">
         <FormLabel>Acknowledgement</FormLabel>
         <Field
           component={RadioGroup}
@@ -172,18 +171,21 @@ export const EditTopicDialog = () => {
         component={CheckboxWithLabel}
         Label={{ label: "Tracking enabled" }}
         name="advancedValues.trackingEnabled"
+        key="advancedValues.trackingEnabled"
         type="checkbox"
       />,
       <Field
         component={TextField}
         label="Max message size (bytes)"
         name="advancedValues.maxMessageSize"
+        key="advancedValues.maxMessageSize"
         style={{ width: "100%" }}
       />,
       <Field
         component={TextField}
         label="Retention time (days)"
         name="advancedValues.retentionTime"
+        key="advancedValues.retentionTime"
         style={{ width: "100%" }}
       />,
     ];

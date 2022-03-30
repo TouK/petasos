@@ -49,8 +49,7 @@ export class Topics {
 
   private fetchTopics() {
     const url = `${Hosts.APP_API}/topics`;
-    const fetchFn = fetchJson;
-    return fetchFn<string[]>(url, true).then(
+    return fetchJson<string[]>(url, true).then(
       action((data) => {
         this.names = data;
         data.forEach(

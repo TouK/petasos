@@ -16,6 +16,7 @@ export const AddGroupDialog = () => {
       component={TextField}
       label="Group name"
       name="name"
+      key="name"
       style={{ width: "100%" }}
     />,
   ];
@@ -30,8 +31,7 @@ export const AddGroupDialog = () => {
     };
 
     const taskOnSubmit = async (
-      values: GroupFormValues,
-      includeAdvanced: boolean
+      values: GroupFormValues
     ): Promise<void | ValidationError> => {
       if (!values.name) {
         console.error("Something went extremely wrong.");
@@ -45,8 +45,6 @@ export const AddGroupDialog = () => {
       groups.changeDefaultGroup(values.name);
     };
 
-    const onCancel = (): void => {};
-
     const initialValues: GroupFormValues = {
       name: "",
       advancedValues: undefined,
@@ -59,7 +57,6 @@ export const AddGroupDialog = () => {
         dialog={dialogs.group}
         dialogTitle={"Add new group"}
         initialValues={initialValues}
-        onCancel={onCancel}
         submitButtonText={"Add group"}
         onSubmitSuccess={onSubmitSuccess}
         taskOnSubmit={taskOnSubmit}

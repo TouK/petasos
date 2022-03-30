@@ -74,14 +74,13 @@ export const SubscriptionDialog = ({
     return errors;
   };
 
-  const basicFields = (
-    errors: FormikErrors<SubscriptionFormikValues>
-  ): JSX.Element[] => [
+  const basicFields = (): JSX.Element[] => [
     <Field
       required
       component={TextField}
       label="Subscription name"
       name="name"
+      key="name"
       style={{ width: "100%" }}
       disabled={isEdit}
     />,
@@ -90,6 +89,7 @@ export const SubscriptionDialog = ({
       component={TextField}
       label="Endpoint"
       name="endpoint"
+      key="endpoint"
       style={{ width: "100%" }}
     />,
     <Field
@@ -97,14 +97,13 @@ export const SubscriptionDialog = ({
       component={TextField}
       label="Description"
       name="description"
+      key="description"
       style={{ width: "100%" }}
     />,
   ];
 
-  const advancedFields = (
-    errors: FormikErrors<SubscriptionFormikValues>
-  ): JSX.Element[] => [
-    <FormControl>
+  const advancedFields = (): JSX.Element[] => [
+    <FormControl key="advancedValues.mode">
       <FormLabel>Mode</FormLabel>
       <Field component={RadioGroup} row name={"advancedValues.mode"}>
         <FormControlLabel value="ANYCAST" control={<Radio />} label="ANYCAST" />
@@ -119,45 +118,52 @@ export const SubscriptionDialog = ({
       component={TextField}
       label="Rate limit (messages/second)"
       name="advancedValues.rate"
+      key="advancedValues.rate"
       style={{ width: "100%" }}
     />,
     <Field
       component={TextField}
       label="Sending delay (milliseconds)"
       name="advancedValues.sendingDelay"
+      key="advancedValues.sendingDelay"
       style={{ width: "100%" }}
     />,
     <Field
       component={TextField}
       label="Message TTL (seconds)"
       name="advancedValues.messageTtl"
+      key="advancedValues.messageTtl"
       style={{ width: "100%" }}
     />,
     <Field
       component={CheckboxWithLabel}
       Label={{ label: "Retry on 4xx status" }}
       name="advancedValues.retryClientErrors"
+      key="advancedValues.retryClientErrors"
       type="checkbox"
     />,
     <Field
       component={TextField}
       label="Retry backoff (milliseconds)"
       name="advancedValues.messageBackoff"
+      key="advancedValues.messageBackoff"
       style={{ width: "100%" }}
     />,
     <Field
       component={TextField}
       label="Retry backoff multiplier"
       name="advancedValues.backoffMultiplier"
+      key="advancedValues.backoffMultiplier"
       style={{ width: "100%" }}
     />,
     <Field
       component={TextField}
       label="Retry backoff maximal interval (seconds)"
       name="advancedValues.backoffMaxIntervalInSec"
+      key="advancedValues.backoffMaxIntervalInSec"
       style={{ width: "100%" }}
     />,
-    <FormControl>
+    <FormControl key="advancedValues.trackingMode">
       <FormLabel>Tracking mode</FormLabel>
       <Field component={RadioGroup} row name={"advancedValues.trackingMode"}>
         <FormControlLabel
@@ -180,9 +186,7 @@ export const SubscriptionDialog = ({
   ];
 
   return useObserver(() => {
-    const onSubmitSuccess = async (
-      values: SubscriptionFormikValues
-    ): Promise<void> => {
+    const onSubmitSuccess = async (): Promise<void> => {
       await groups.fetchTask();
       await topics.fetchTask();
       if (!isEdit) {

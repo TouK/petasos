@@ -215,11 +215,10 @@ export class Topic implements TopicModel {
       },
       this.replacer
     );
-    const response = await fetchFn<ValidationError | void>(url, false, {
+    return await fetchFn<ValidationError | void>(url, false, {
       method: "POST",
       body,
     });
-    return response;
   }
 
   @action.bound

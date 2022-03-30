@@ -130,6 +130,7 @@ export const TopicDialog = ({
         component={TextField}
         label="Topic name"
         name="topic"
+        key="topic"
         style={{ width: "100%" }}
       />,
       <Field
@@ -137,12 +138,14 @@ export const TopicDialog = ({
         component={TextField}
         label="Topic description"
         name="description"
+        key="description"
         style={{ width: "100%" }}
       />,
       <Field
         component={TextField}
         label="Avro schema"
         name="schema"
+        key="schema"
         id="schema"
         style={{ width: "100%" }}
         variant="outlined"
@@ -151,10 +154,8 @@ export const TopicDialog = ({
       />,
     ];
 
-    const advancedFields = (
-      errors: FormikErrors<TopicFormikValues>
-    ): JSX.Element[] => [
-      <FormControl>
+    const advancedFields = (): JSX.Element[] => [
+      <FormControl key="advancedValues.acknowledgement">
         <FormLabel>Acknowledgement</FormLabel>
         <Field
           component={RadioGroup}
@@ -169,18 +170,21 @@ export const TopicDialog = ({
         component={CheckboxWithLabel}
         Label={{ label: "Tracking enabled" }}
         name="advancedValues.trackingEnabled"
+        key="advancedValues.trackingEnabled"
         type="checkbox"
       />,
       <Field
         component={TextField}
         label="Max message size (bytes)"
         name="advancedValues.maxMessageSize"
+        key="advancedValues.maxMessageSize"
         style={{ width: "100%" }}
       />,
       <Field
         component={TextField}
         label="Retention time (days)"
         name="advancedValues.retentionTime"
+        key="advancedValues.retentionTime"
         style={{ width: "100%" }}
       />,
     ];

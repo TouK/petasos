@@ -5,7 +5,7 @@ import { Store } from "./store";
 
 const StoreContext = createContext<Store>(null);
 
-export function StoreProvider(props: PropsWithChildren<{}>) {
+export function StoreProvider(props: PropsWithChildren<unknown>) {
   const store = useLocalStore(() => new Store());
   return (
     <StoreContext.Provider value={store}>

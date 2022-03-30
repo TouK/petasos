@@ -105,7 +105,7 @@ export const DeleteTopicDialog = () => {
 };
 
 export const DeleteSubscriptionDialog = () => {
-  const { dialogs, topics, groups } = useStore();
+  const { dialogs, topics } = useStore();
   return useObserver(() => (
     <DeleteDialog
       dialog={dialogs.deleteSubscriptionDialog}

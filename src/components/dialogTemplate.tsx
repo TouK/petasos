@@ -102,14 +102,17 @@ export function DialogTemplate<T extends FormValues>({
                         >
                           <div className={dialogStyles.DialogRow}>
                             <div className={dialogStyles.DialogColumn}>
-                              {basicFields(errors).map((field, i) => (
-                                <div key={i} style={{ marginBottom: "10px" }}>
-                                  {field}
-                                </div>
-                              ))}
+                              {basicFields(errors)
+                                .filter(Boolean)
+                                .map((field, i) => (
+                                  <div key={i} style={{ marginBottom: "10px" }}>
+                                    {field}
+                                  </div>
+                                ))}
                             </div>
                           </div>
-                          {advancedFields(errors).length > 0 && (
+                          {advancedFields(errors).filter(Boolean).length >
+                            0 && (
                             <>
                               {advancedOptions && (
                                 <>

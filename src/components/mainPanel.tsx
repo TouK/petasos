@@ -55,10 +55,10 @@ export const MainPanel = () => {
           <AddTopicDialog />
           <AddClonedTopicDialog />
           <EditTopicDialog />
-          <AddGroupDialog />
           <AddSubscriptionDialog />
           <EditSubscriptionDialog />
           <AddClonedSubscriptionDialog />
+          <AddGroupDialog />
           <DeleteGroupDialog />
           {topics.selectedSubscriptionName && <DeleteSubscriptionDialog />}
           {topics.selectedTopicName && <DeleteTopicDialog />}
@@ -85,7 +85,7 @@ export const MainPanel = () => {
                   </div>
                 ) : (
                   <>
-                    <GroupsList />
+                    {groups.isGroupRemoveAllowed && <GroupsList />}
                     <TopicList />
                   </>
                 )}

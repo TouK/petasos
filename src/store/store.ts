@@ -1,5 +1,5 @@
 import { createBrowserHistory } from "history";
-import { observable } from "mobx";
+import { action, observable } from "mobx";
 import { DeleteGroupDialog, Dialog } from "./dialog";
 import { Groups } from "./groups";
 import { Topics } from "./topics";
@@ -7,6 +7,11 @@ import { Topics } from "./topics";
 export const history = createBrowserHistory({
   basename: window.document.baseURI.replace(window.location.origin, ""),
 });
+
+export interface StoreOptions {
+  forcedGroupName?: string;
+  groupsHidden?: boolean;
+}
 
 export class Store {
   @observable readonly groups = new Groups(this);
@@ -23,4 +28,14 @@ export class Store {
     deleteTopicDialog: new Dialog(),
     deleteSubscriptionDialog: new Dialog(),
   };
+
+  @observable options: StoreOptions = {};
+
+  constructor(options: StoreOptions = {}) {
+    this.setOptions(options);
+  }
+
+  setOptions = action((options: StoreOptions = {}) => {
+    this.options = options;
+  });
 }

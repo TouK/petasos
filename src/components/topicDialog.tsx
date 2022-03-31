@@ -87,15 +87,19 @@ export const TopicDialog = ({
     const basicFields = (
       errors: FormikErrors<TopicFormikValues>
     ): JSX.Element[] => [
-      <GroupsFormControl key="group" errors={errors} groups={groups}>
-        <StyledButton
-          variant="contained"
-          color="secondary"
-          onClick={() => dialogs.group.setOpen(true)}
-        >
-          Create new group
-        </StyledButton>
-      </GroupsFormControl>,
+      groups.isGroupRemoveAllowed && (
+        <GroupsFormControl key="group" errors={errors} groups={groups}>
+          {groups.isGroupAddAllowed && (
+            <StyledButton
+              variant="contained"
+              color="secondary"
+              onClick={() => dialogs.group.setOpen(true)}
+            >
+              Create new group
+            </StyledButton>
+          )}
+        </GroupsFormControl>
+      ),
       <Field
         required
         component={TextField}

@@ -6,6 +6,7 @@ import React from "react";
 import { TopicFormikValues } from "../models";
 import { useStore } from "../store/storeProvider";
 import { ValidationError } from "../store/topics";
+import { DEFAULT_TOPIC_VALUES } from "./addTopicDialog";
 import { DialogTemplate } from "./dialogTemplate";
 import { GroupsFormControl } from "./groupsFormControl";
 
@@ -75,27 +76,21 @@ export const EditTopicDialog = () => {
           description: topics.selectedTopic.description,
         }
       : {
-          advancedValues: {
-            acknowledgement: "LEADER",
-            trackingEnabled: false,
-            maxMessageSize: 10240,
-            retentionTime: 1,
-          },
-          topic: "",
-          schema: "",
-          group: groups.defaultGroup || "",
-          description: "",
+          ...DEFAULT_TOPIC_VALUES,
+          group: groups.defaultGroup,
         };
 
     const basicFields = (
       errors: FormikErrors<TopicFormikValues>
     ): JSX.Element[] => [
-      <GroupsFormControl
-        key="group"
-        errors={errors}
-        groups={groups}
-        disabled
-      />,
+      groups.isGroupRemoveAllowed && (
+        <GroupsFormControl
+          key="group"
+          errors={errors}
+          groups={groups}
+          disabled
+        />
+      ),
       <Field
         required
         component={TextField}

@@ -11,29 +11,39 @@ export class Groups {
   addTask = task.resolved(this.addGroup);
   deleteTask = task.resolved(this.deleteGroup);
   @observable selectedGroup: string = null;
-  @observable defaultGroup: string = undefined;
+  @observable _defaultGroup: string;
   private url = `${Hosts.APP_API}/groups`;
   @observable private groups = observable.map<string, Group>();
 
-  constructor(private readonly store: Store, private fallbackName?: string) {
+  constructor(private readonly store: Store) {
     autorun(() => {
-      if (
-        this.fallbackName &&
-        this.fetchTask.resolved &&
-        this.groups.size < 1
-      ) {
-        this.addTask(this.fallbackName).then(() => this.fetchTask());
+      if (this.needsForcedGroup) {
+        this.addTask(this.store.options.forcedGroupName).then(this.fetchTask);
+      }
+    });
+
+    autorun(() => {
+      if (!this.isGroupRemoveAllowed && this.selectedGroup) {
+        this.changeSelectedGroup(null);
       }
     });
   }
 
-  @computed get names(): string[] {
-    return this.list.map((g) => g.name);
+  @computed get defaultGroup(): string {
+    return this.names.length === 1 ? this.names[0] : this._defaultGroup || "";
   }
 
-  @computed
-  private get list(): Group[] {
-    return Array.from(this.groups.values());
+  @computed get needsForcedGroup() {
+    const { forcedGroupName } = this.store.options;
+    return (
+      this.fetchTask.resolved &&
+      forcedGroupName &&
+      !this.names.includes(forcedGroupName)
+    );
+  }
+
+  @computed get names(): string[] {
+    return this.list.map((g) => g.name);
   }
 
   @computed get topicsPerGroup(): Map<string, string[]> {
@@ -62,6 +72,22 @@ export class Groups {
     return this.topicsPerGroup.get(this.selectedGroup);
   }
 
+  @computed
+  get isGroupAddAllowed() {
+    const { groupsHidden } = this.store.options;
+    return !groupsHidden || this.groups.size < 1 || this.needsForcedGroup;
+  }
+
+  @computed
+  get isGroupRemoveAllowed() {
+    return this.isGroupAddAllowed || this.groups.size > 1;
+  }
+
+  @computed
+  private get list(): Group[] {
+    return Array.from(this.groups.values());
+  }
+
   @action.bound
   changeSelectedGroup(group: string) {
     this.selectedGroup = group;
@@ -69,9 +95,10 @@ export class Groups {
 
   @action.bound
   changeDefaultGroup(group: string) {
-    this.defaultGroup = group;
+    this._defaultGroup = group;
   }
 
+  @action.bound
   private fetchGroups() {
     return fetchFn<string[]>(this.url, true).then(
       action((data = []) =>
@@ -91,6 +118,14 @@ export class Groups {
 
   private async addGroup(name: string): Promise<ValidationError | void> {
     const body = JSON.stringify({ groupName: name });
+
+    if (!this.isGroupAddAllowed) {
+      return {
+        message: "no more groups allowed",
+        code: "418",
+      };
+    }
+
     return await fetchFn<ValidationError>(this.url, false, {
       method: "POST",
       body,

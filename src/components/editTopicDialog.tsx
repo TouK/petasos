@@ -81,7 +81,7 @@ export const EditTopicDialog = () => {
     const basicFields = (
       errors: FormikErrors<TopicFormikValues>
     ): JSX.Element[] => [
-      groups.isGroupRemoveAllowed && (
+      !groups.areGroupsHidden && (
         <GroupsFormControl
           key="group"
           errors={errors}

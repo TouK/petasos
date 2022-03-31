@@ -19,3 +19,8 @@ export const Hosts = {
     ? `https://${domainName[groupId]}-${Env.HERMES_MANAGEMENT_ENDING}`
     : Env.HERMES_MANAGEMENT_DEFAULT,
 };
+
+export const StoreOptions = {
+  forcedGroupName: Env.FORCED_GROUP_NAME,
+  groupsHidden: Boolean(Env.GROUPS_HIDDEN),
+};

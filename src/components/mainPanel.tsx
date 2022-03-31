@@ -85,7 +85,7 @@ export const MainPanel = () => {
                   </div>
                 ) : (
                   <>
-                    {groups.isGroupRemoveAllowed && <GroupsList />}
+                    {!groups.areGroupsHidden && <GroupsList />}
                     <TopicList />
                   </>
                 )}

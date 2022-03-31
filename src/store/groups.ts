@@ -23,7 +23,7 @@ export class Groups {
     });
 
     autorun(() => {
-      if (!this.isGroupRemoveAllowed && this.selectedGroup) {
+      if (this.areGroupsHidden && this.selectedGroup) {
         this.changeSelectedGroup(null);
       }
     });
@@ -81,6 +81,11 @@ export class Groups {
   @computed
   get isGroupRemoveAllowed() {
     return this.isGroupAddAllowed || this.groups.size > 1;
+  }
+
+  @computed
+  get areGroupsHidden() {
+    return !this.isGroupRemoveAllowed;
   }
 
   @computed

@@ -10,6 +10,9 @@ export const NavigationBar = () => {
   const { topics, groups, dialogs } = useStore();
 
   return useObserver(() => {
+    const homeText = groups.areGroupsHidden
+      ? "Topics list"
+      : "Groups and topics";
     return (
       <div className={layout.LayoutBody}>
         <div className={layout.LayoutNavigationBreadcrumbs}>
@@ -20,7 +23,7 @@ export const NavigationBar = () => {
                 color="textSecondary"
                 onClick={() => topics.changeSelectedTopic(null)}
               >
-                Groups and topics
+                {homeText}
               </Link>
             )}
             {topics.selectedSubscription && (
@@ -29,7 +32,7 @@ export const NavigationBar = () => {
                 color="textSecondary"
                 onClick={() => topics.changeSelectedSubscription(null)}
               >
-                {topics.selectedTopic.name}
+                {topics.selectedTopic.displayName}
               </Link>
             )}
             {topics.selectedSubscription && (
@@ -39,12 +42,12 @@ export const NavigationBar = () => {
             )}
             {topics.selectedTopic && !topics.selectedSubscription && (
               <Typography variant="body2" color="textPrimary">
-                {topics.selectedTopic.name}
+                {topics.selectedTopic.displayName}
               </Typography>
             )}
             {!topics.selectedTopic && (
               <Typography variant="body2" color="textPrimary">
-                Groups and topics
+                {homeText}
               </Typography>
             )}
           </Breadcrumbs>

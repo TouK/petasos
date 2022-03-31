@@ -1,4 +1,5 @@
 import Env from "../_env";
+import { StoreOptions } from "./store/store";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -20,7 +21,7 @@ export const Hosts = {
     : Env.HERMES_MANAGEMENT_DEFAULT,
 };
 
-export const StoreOptions = {
+export const Options: StoreOptions = {
   forcedGroupName: Env.FORCED_GROUP_NAME,
   groupsHidden: Boolean(Env.GROUPS_HIDDEN),
 };

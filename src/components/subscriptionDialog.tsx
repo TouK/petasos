@@ -26,10 +26,7 @@ export const SubscriptionDialog = ({
   submitButtonText: string;
   initialValues: SubscriptionFormikValues;
   dialog: Dialog;
-  taskOnSubmit: (
-    SubscriptionFormikValues,
-    boolean
-  ) => Promise<void | ValidationError>;
+  taskOnSubmit: (SubscriptionFormikValues) => Promise<void | ValidationError>;
 }) => {
   const { groups, topics } = useStore();
 
@@ -222,14 +219,13 @@ export const AddSubscriptionDialog = () => {
   };
 
   const taskOnSubmit = async (
-    values: SubscriptionFormikValues,
-    includeAdvanced: boolean
+    values: SubscriptionFormikValues
   ): Promise<void | ValidationError> => {
     const sub: Subscription = new Subscription(
       values.name,
       topics.selectedTopic
     );
-    sub.assignValuesFromForm(values, includeAdvanced);
+    sub.assignValuesFromForm(values);
     await topics.selectedTopic.postSubscriptionTask(sub);
     await topics.selectedTopic.fetchSubscriptionsTask();
   };
@@ -262,14 +258,13 @@ export const AddClonedSubscriptionDialog = () => {
         };
 
     const taskOnSubmit = async (
-      values: SubscriptionFormikValues,
-      includeAdvanced: boolean
+      values: SubscriptionFormikValues
     ): Promise<void | ValidationError> => {
       const sub: Subscription = new Subscription(
         values.name,
         topics.selectedTopic
       );
-      sub.assignValuesFromForm(values, includeAdvanced);
+      sub.assignValuesFromForm(values);
       return topics.selectedTopic.postSubscriptionTask(sub);
     };
 
@@ -300,10 +295,9 @@ export const EditSubscriptionDialog = () => {
         };
 
     const taskOnSubmit = async (
-      values: SubscriptionFormikValues,
-      includeAdvanced: boolean
+      values: SubscriptionFormikValues
     ): Promise<void | ValidationError> => {
-      topics.selectedSubscription.assignValuesFromForm(values, includeAdvanced);
+      topics.selectedSubscription.assignValuesFromForm(values);
       return topics.selectedSubscription.putTask();
     };
 

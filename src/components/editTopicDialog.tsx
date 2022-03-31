@@ -46,11 +46,9 @@ export const EditTopicDialog = () => {
     };
 
     const taskOnSubmit = async (
-      values: TopicFormikValues,
-      includeAdvanced: boolean
+      values: TopicFormikValues
     ): Promise<void | ValidationError> => {
-      topics.selectedTopic.assignValuesFromForm(values, includeAdvanced);
-      return topics.selectedTopic.putTask();
+      return topics.selectedTopic.updateTask(values);
     };
 
     const onSubmitSuccess = async (): Promise<void> => {
@@ -70,7 +68,7 @@ export const EditTopicDialog = () => {
             maxMessageSize: topics.selectedTopic.maxMessageSize,
             retentionTime: topics.selectedTopic.retentionTime.duration,
           },
-          topic: topics.selectedTopic.name,
+          topic: topics.selectedTopic.displayName,
           schema: topics.selectedTopic.schemaWithoutMetadata,
           group: groups.groupOfSelectedTopic,
           description: topics.selectedTopic.description,

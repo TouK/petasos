@@ -15,7 +15,7 @@ export interface StoreOptions {
 
 export class Store {
   @observable readonly groups = new Groups(this);
-  @observable readonly topics = new Topics();
+  @observable readonly topics = new Topics(this);
   @observable readonly dialogs = {
     topic: new Dialog(),
     editTopic: new Dialog(),

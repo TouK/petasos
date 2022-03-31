@@ -33,7 +33,7 @@ export function DialogTemplate<T extends FormValues>({
 }: {
   dialog: Dialog;
   validateFunc: (FormValues, boolean) => void;
-  taskOnSubmit: (T, boolean) => Promise<void | ValidationError>;
+  taskOnSubmit: (T) => Promise<void | ValidationError>;
   onSubmitSuccess: (T) => Promise<void>;
   onCancel?: () => void;
   dialogTitle: string;
@@ -47,13 +47,16 @@ export function DialogTemplate<T extends FormValues>({
     useState(undefined);
   const [advancedOptions, setAdvancedOptions] = useState(false);
 
-  const submitFunc = async (values: T) => {
-    const response = await taskOnSubmit(values, advancedOptions);
+  const submitFunc = async ({ advancedValues, ...otherValues }: T) => {
+    const nextValues = advancedOptions
+      ? { advancedValues, ...otherValues }
+      : otherValues;
+    const response = await taskOnSubmit(nextValues);
     if (response) {
       setBackendValidationError(response.message);
     } else {
       setBackendValidationError(undefined);
-      await onSubmitSuccess(values);
+      await onSubmitSuccess(nextValues);
       setAdvancedOptions(undefined);
       dialog.setOpen(false);
     }

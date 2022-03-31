@@ -75,6 +75,7 @@ export const DeleteDialog = ({
           size="small"
           onClick={submitFunc}
           disabled={loading}
+          autoFocus
         >
           {deleteButtonText}
         </Button>

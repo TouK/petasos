@@ -50,6 +50,7 @@ export const DeleteGroupDialog = () => {
           size="small"
           onClick={deleteGroup}
           disabled={deleting}
+          autoFocus
         >
           Delete group
         </Button>

@@ -7,7 +7,6 @@ import { TopicFormikValues } from "../models";
 import { Dialog } from "../store/dialog";
 import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
-import { ValidationError } from "../store/topics";
 import { DialogTemplate } from "./dialogTemplate";
 import { GroupsFormControl } from "./groupsFormControl";
 import { StyledButton } from "./styledMuiComponents";
@@ -19,7 +18,8 @@ export const TopicDialog = ({
   initialValues: TopicFormikValues;
   dialog: Dialog;
 }) => {
-  const { dialogs, groups, topics } = useStore();
+  const store = useStore();
+  const { dialogs, groups, topics } = store;
 
   return useObserver(() => {
     const validateFunc = (
@@ -62,14 +62,7 @@ export const TopicDialog = ({
       return errors;
     };
 
-    const taskOnSubmit = async (
-      values: TopicFormikValues,
-      includeAdvanced: boolean
-    ): Promise<void | ValidationError> => {
-      const topic: Topic = new Topic(values.group + "." + values.topic);
-      topic.assignValuesFromForm(values, includeAdvanced);
-      return topics.postTask(topic);
-    };
+    const taskOnSubmit = (values) => Topic.create(values, store);
 
     const onSubmitSuccess = async (
       values: TopicFormikValues

@@ -71,7 +71,7 @@ export const TopicDetails = () => {
                 <div className={layout.Column}>
                   <div className={styles.DetailsHeaderSubtitle}>topic</div>
                   <div className={styles.DetailsHeaderTitle}>
-                    {topics.selectedTopic.name}
+                    {topics.selectedTopic.displayName}
                   </div>
                   <TopicFrontendUrl topic={topics.selectedTopic.name} />
                 </div>

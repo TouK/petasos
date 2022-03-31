@@ -24,7 +24,9 @@ const TopicsSublist = ({ topicsList }: { topicsList: string[] }) => {
                 <CardContent>
                   <div className={topicBarStyles.Topic}>
                     <div className={topicBarStyles.TopicColumn}>
-                      <div className={topicBarStyles.TopicName}>{topic}</div>
+                      <div className={topicBarStyles.TopicName}>
+                        {topicsMap.get(topic).displayName}
+                      </div>
                       <TopicFrontendUrl topic={topic} />
                     </div>
                     <div className={topicBarStyles.TopicColumnRight}>

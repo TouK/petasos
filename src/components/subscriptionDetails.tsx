@@ -264,6 +264,7 @@ export const SubscriptionDetails = () => {
               variant="contained"
               size="small"
               onClick={changeSubscriptionState}
+              autoFocus
               disabled={
                 !topics.selectedSubscription.activateTask.resolved ||
                 !topics.selectedSubscription.suspendTask.resolved
@@ -456,6 +457,7 @@ export const SubscriptionDetails = () => {
                         variant="contained"
                         size="small"
                         onClick={() => setOpenRetransmissionDialog(true)}
+                        autoFocus
                       >
                         Retransmit
                       </Button>

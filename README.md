@@ -13,8 +13,8 @@ Set up the environmental variables:
  
 Then run:
 ```
-yarn install
-yarn start
+npm ci
+npm start
 ```
 
 Application will be available at [localhost:7890](http://localhost:7890)

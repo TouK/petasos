@@ -1,6 +1,11 @@
 {
   "presets": [
-    "@babel/preset-env",
+    [
+      "@babel/preset-env",
+      {
+        "loose": true
+      }
+    ],
     "@babel/typescript",
     "@babel/preset-react"
   ],
@@ -17,8 +22,6 @@
         "loose": true
       }
     ],
-    "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-transform-runtime"
   ]
 }

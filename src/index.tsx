@@ -8,14 +8,12 @@ configure({
 });
 
 function init() {
-  const appRoot = document.getElementById("appRoot");
-  if (appRoot) {
-    render(<Root />, appRoot);
-  } else {
-    const root = document.createElement("div");
-    document.body.appendChild(root);
-    render(<Root />, root);
+  let appRoot = document.getElementById("appRoot");
+  if (!appRoot) {
+    appRoot = document.createElement("div");
+    document.body.appendChild(appRoot);
   }
+  render(<Root />, appRoot);
 }
 
 init();

@@ -3,13 +3,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { Backdrop, Button, CircularProgress } from "@mui/material";
-import { useObserver } from "mobx-react-lite";
+import { Observer, useObserver } from "mobx-react-lite";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { TopicInfo } from "../propertiesInfo";
 import { useStore } from "../store/storeProvider";
+import { Topic } from "../store/topic";
 import styles from "../styles/details.css";
 import layout from "../styles/layout.css";
+import { DetailsBox } from "./detailsBox";
 import {
   createRow,
   PropertiesTable,
@@ -18,6 +20,34 @@ import {
 import { StyledPaper } from "./styledMuiComponents";
 import { SubscriptionListElement } from "./subscriptionListElement";
 import { TopicFrontendUrl } from "./topicFrontendUrl";
+
+function MessagePreview({ topic }: { topic: Topic }) {
+  return (
+    <DetailsBox header="Message preview">
+      <Observer>
+        {() =>
+          topic.fetchMessagePreviewTask.pending ? (
+            <CircularProgress />
+          ) : (
+            <>
+              {topic.messagePreview.length === 0 ? (
+                <div className={layout.p}>There are no messages available.</div>
+              ) : (
+                <StyledPaper style={{ padding: "10px" }}>
+                  <div>
+                    {topic.filteredMessagePreview.map((msg, i) => (
+                      <pre key={i}>{msg}</pre>
+                    ))}
+                  </div>
+                </StyledPaper>
+              )}
+            </>
+          )
+        }
+      </Observer>
+    </DetailsBox>
+  );
+}
 
 export const TopicDetails = () => {
   const { topics, dialogs } = useStore();
@@ -107,8 +137,7 @@ export const TopicDetails = () => {
               <>
                 <div className={layout.Row}>
                   <div className={layout.Column}>
-                    <div className={styles.DetailsBox}>
-                      <div className={styles.DetailsBoxHeader}>Properties</div>
+                    <DetailsBox header="Properties">
                       {showAdvanced ? (
                         <PropertiesTable
                           properties={properties.concat(advancedProperties)}
@@ -123,20 +152,23 @@ export const TopicDetails = () => {
                       >
                         {showAdvanced ? "Hide advanced" : "Show advanced"}
                       </Button>
-                    </div>
-                    <div className={styles.DetailsBox}>
-                      <div className={styles.DetailsBoxHeader}>
-                        Subscriptions{" "}
-                        <Button
-                          color="secondary"
-                          variant="contained"
-                          startIcon={<AddIcon />}
-                          size="small"
-                          onClick={() => dialogs.subscription.setOpen(true)}
-                        >
-                          Add subscription
-                        </Button>
-                      </div>
+                    </DetailsBox>
+                    <DetailsBox
+                      header={
+                        <>
+                          Subscriptions{" "}
+                          <Button
+                            color="secondary"
+                            variant="contained"
+                            startIcon={<AddIcon />}
+                            size="small"
+                            onClick={() => dialogs.subscription.setOpen(true)}
+                          >
+                            Add subscription
+                          </Button>
+                        </>
+                      }
+                    >
                       {topics.selectedTopic.subscriptionsMap.size > 0 ? (
                         Array.from(topics.selectedTopic.subscriptionsMap).map(
                           ([name, sub]) => (
@@ -149,13 +181,10 @@ export const TopicDetails = () => {
                       ) : (
                         <div className={layout.p}>No subscriptions yet</div>
                       )}
-                    </div>
+                    </DetailsBox>
                   </div>
                   <div className={layout.Column}>
-                    <div className={styles.DetailsBox}>
-                      <div className={styles.DetailsBoxHeader}>
-                        Message schema
-                      </div>
+                    <DetailsBox header="Message schema">
                       <StyledPaper style={{ padding: "10px" }}>
                         {topics.selectedTopic.contentType !== "AVRO" ? (
                           <div className={layout.p}>Not an AVRO schema</div>
@@ -165,33 +194,8 @@ export const TopicDetails = () => {
                           </pre>
                         )}
                       </StyledPaper>
-                    </div>
-                    <div className={styles.DetailsBox}>
-                      <div className={styles.DetailsBoxHeader}>
-                        Message preview
-                      </div>
-                      {topics.selectedTopic.fetchMessagePreviewTask.pending ? (
-                        <CircularProgress />
-                      ) : (
-                        <>
-                          {topics.selectedTopic.messagePreview.length === 0 ? (
-                            <div className={layout.p}>
-                              There are no messages available.
-                            </div>
-                          ) : (
-                            <StyledPaper style={{ padding: "10px" }}>
-                              <div>
-                                {topics.selectedTopic.filteredMessagePreview.map(
-                                  (msg, i) => (
-                                    <pre key={i}>{msg}</pre>
-                                  )
-                                )}
-                              </div>
-                            </StyledPaper>
-                          )}
-                        </>
-                      )}
-                    </div>
+                    </DetailsBox>
+                    <MessagePreview topic={topics.selectedTopic} />
                   </div>
                 </div>
               </>

@@ -24,6 +24,7 @@ import { SubscriptionInfo } from "../propertiesInfo";
 import { useStore } from "../store/storeProvider";
 import styles from "../styles/details.css";
 import layout from "../styles/layout.css";
+import { DetailsBox } from "./detailsBox";
 import { LoadingButton } from "./loadingButton";
 import {
   createRow,
@@ -348,8 +349,7 @@ export const SubscriptionDetails = () => {
                 </div>
               </div>
             </div>
-            <div className={styles.DetailsBox}>
-              <div className={styles.DetailsBoxHeader}>Endpoint</div>
+            <DetailsBox header="Endpoint">
               <StyledPaper
                 style={{
                   padding: "10px",
@@ -371,11 +371,10 @@ export const SubscriptionDetails = () => {
                   </SmallIconButton>
                 </DarkTooltip>
               </StyledPaper>
-            </div>
+            </DetailsBox>
             <div className={layout.Row}>
               <div className={layout.Column}>
-                <div className={styles.DetailsBox}>
-                  <div className={styles.DetailsBoxHeader}>Properties</div>
+                <DetailsBox header="Properties">
                   <PropertiesTable
                     properties={
                       showAdvanced
@@ -390,11 +389,8 @@ export const SubscriptionDetails = () => {
                   >
                     {showAdvanced ? "Hide advanced" : "Show advanced"}
                   </Button>
-                </div>
-                <div className={styles.DetailsBox}>
-                  <div className={styles.DetailsBoxHeader}>
-                    Last undelivered message
-                  </div>
+                </DetailsBox>
+                <DetailsBox header="Last undelivered message">
                   {topics.selectedSubscription.fetchLastUndeliveredMsgTask
                     .resolved && (
                     <>
@@ -409,11 +405,10 @@ export const SubscriptionDetails = () => {
                   )}
                   {topics.selectedSubscription.fetchLastUndeliveredMsgTask
                     .pending && <CircularProgress />}
-                </div>
+                </DetailsBox>
               </div>
               <div className={layout.Column}>
-                <div className={styles.DetailsBox}>
-                  <div className={styles.DetailsBoxHeader}>Metrics</div>
+                <DetailsBox header="Metrics">
                   <div className={layout.Row}>
                     <div className={layout.Column}>
                       {topics.selectedSubscription.fetchMetricsTask
@@ -423,11 +418,8 @@ export const SubscriptionDetails = () => {
                       )}
                     </div>
                   </div>
-                </div>
-                <div className={styles.DetailsBox}>
-                  <div className={styles.DetailsBoxHeader}>
-                    Message retransmission
-                  </div>
+                </DetailsBox>
+                <DetailsBox header="Message retransmission">
                   <StyledPaper
                     style={{
                       padding: "10px",
@@ -485,7 +477,7 @@ export const SubscriptionDetails = () => {
                       )}
                     </Snackbar>
                   </StyledPaper>
-                </div>
+                </DetailsBox>
               </div>
             </div>
           </>

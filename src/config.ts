@@ -21,7 +21,10 @@ export const Hosts = {
     : Env.HERMES_MANAGEMENT_DEFAULT,
 };
 
+const parse = <T>(value: string): T => JSON.parse(JSON.stringify(value)) as T;
+
 export const Options: StoreOptions = {
   forcedGroupName: Env.FORCED_GROUP_NAME,
-  groupsHidden: Boolean(Env.GROUPS_HIDDEN),
+  groupsHidden: parse(Env.GROUPS_HIDDEN),
+  allowAdvancedFields: parse(Env.ALLOW_ADVANCED_FIELDS),
 };

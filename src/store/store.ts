@@ -11,6 +11,7 @@ export const history = createBrowserHistory({
 export interface StoreOptions {
   forcedGroupName?: string;
   groupsHidden?: boolean;
+  allowAdvancedFields?: boolean;
 }
 
 export class Store {

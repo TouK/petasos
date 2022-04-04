@@ -2,12 +2,13 @@ import AdapterMoment from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import React from "react";
 import Helmet from "react-helmet";
+import { StoreOptions } from "../config";
 import { StoreProvider } from "../store/storeProvider";
 import { App } from "./app";
 
 export const Root = () => {
   return (
-    <StoreProvider>
+    <StoreProvider options={StoreOptions}>
       <Helmet>
         <link
           rel="stylesheet"

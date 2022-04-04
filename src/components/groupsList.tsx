@@ -66,21 +66,23 @@ export const GroupsList = () => {
                       <AddIcon />
                     </IconButton>
                   </Tooltip>{" "}
-                  <IconButtonWithTooltip
-                    size="small"
-                    color="primary"
-                    disabled={groups.topicsPerGroup.get(group).length > 0}
-                    onClick={() =>
-                      dialogs.deleteGroupDialog.setGroupToBeDeleted(group)
-                    }
-                    tooltipText={
-                      groups.topicsPerGroup.get(group).length > 0
-                        ? "Only empty groups can be deleted"
-                        : "Delete group"
-                    }
-                  >
-                    <DeleteIcon />
-                  </IconButtonWithTooltip>
+                  {groups.isGroupRemoveAllowed && (
+                    <IconButtonWithTooltip
+                      size="small"
+                      color="primary"
+                      disabled={groups.topicsPerGroup.get(group).length > 0}
+                      onClick={() =>
+                        dialogs.deleteGroupDialog.setGroupToBeDeleted(group)
+                      }
+                      tooltipText={
+                        groups.topicsPerGroup.get(group).length > 0
+                          ? "Only empty groups can be deleted"
+                          : "Delete group"
+                      }
+                    >
+                      <DeleteIcon />
+                    </IconButtonWithTooltip>
+                  )}
                 </span>
               </StyledListItem>
             ))}

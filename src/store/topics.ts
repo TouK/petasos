@@ -1,27 +1,21 @@
 import { action, computed, observable } from "mobx";
 import { task } from "mobx-task";
-import { computedFn } from "mobx-utils";
 import { fetchJson } from "../api";
 import { Hosts } from "../config";
-import { TopicModel } from "../models";
+import { Store } from "./store";
 import { Subscription } from "./subscription";
 import { Topic } from "./topic";
 
 export class Topics {
   fetchTask = task(this.fetchTopics);
-  postTask = task(this.postTopic);
-
   @observable names: string[] = [];
   @observable selectedTopicName: string = null;
   @observable selectedSubscriptionName: string = null;
-  @observable topicsMap: Map<string, Topic> = new Map<string, Topic>();
-  getTopicsOfGroup = computedFn(function getTopicsOfGroup(
-    groupName: string
-  ): string[] {
-    return this.names
-      ? this.names.filter((name) => name.indexOf(groupName + ".") === 0)
+  @observable topicsMap = observable.map<string, Topic>();
+  forGroup = (groupName: string) =>
+    this.names
+      ? this.names.filter((name) => name.indexOf(`${groupName}.`) === 0)
       : [];
-  });
   @action.bound
   changeSelectedTopic = (topicName: string) => {
     this.selectedSubscriptionName = null;
@@ -31,6 +25,8 @@ export class Topics {
   changeSelectedSubscription = (subscriptionName: string) => {
     this.selectedSubscriptionName = subscriptionName;
   };
+
+  constructor(private readonly store: Store) {}
 
   @computed get selectedTopic(): Topic {
     return this.selectedTopicName === null
@@ -55,26 +51,13 @@ export class Topics {
         data.forEach(
           (topicName) =>
             this.topicsMap.get(topicName) ||
-            this.topicsMap.set(topicName, new Topic(topicName))
+            this.topicsMap.set(topicName, new Topic(topicName, this.store))
         );
         [...this.topicsMap.keys()].forEach(
           (topic) => data.includes(topic) || this.topicsMap.delete(topic)
         );
       })
     );
-  }
-
-  @action.bound
-  private async postTopic(
-    data: Partial<TopicModel>
-  ): Promise<ValidationError | void> {
-    const url = `${Hosts.APP_API}/topics`;
-    const fetchFn = fetchJson;
-    const body = JSON.stringify({ ...data });
-    return await fetchFn<ValidationError | void>(url, false, {
-      method: "POST",
-      body,
-    });
   }
 }
 

@@ -1,21 +1,14 @@
-import {
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  MenuItem,
-  Radio,
-} from "@mui/material";
+import { FormControl, FormControlLabel, FormLabel, Radio } from "@mui/material";
 import { Field, FormikErrors } from "formik";
-import { CheckboxWithLabel, RadioGroup, Select, TextField } from "formik-mui";
+import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
 import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { TopicFormikValues } from "../models";
 import { Dialog } from "../store/dialog";
 import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
-import { ValidationError } from "../store/topics";
-import dialogStyles from "../styles/dialog.css";
 import { DialogTemplate } from "./dialogTemplate";
+import { GroupsFormControl } from "./groupsFormControl";
 import { StyledButton } from "./styledMuiComponents";
 
 export const TopicDialog = ({
@@ -25,7 +18,8 @@ export const TopicDialog = ({
   initialValues: TopicFormikValues;
   dialog: Dialog;
 }) => {
-  const { dialogs, groups, topics } = useStore();
+  const store = useStore();
+  const { dialogs, groups, topics } = store;
 
   return useObserver(() => {
     const validateFunc = (
@@ -68,14 +62,7 @@ export const TopicDialog = ({
       return errors;
     };
 
-    const taskOnSubmit = async (
-      values: TopicFormikValues,
-      includeAdvanced: boolean
-    ): Promise<void | ValidationError> => {
-      const topic: Topic = new Topic(values.group + "." + values.topic);
-      topic.assignValuesFromForm(values, includeAdvanced);
-      return topics.postTask(topic);
-    };
+    const taskOnSubmit = (values) => Topic.create(values, store);
 
     const onSubmitSuccess = async (
       values: TopicFormikValues
@@ -90,41 +77,22 @@ export const TopicDialog = ({
       groups.changeDefaultGroup(undefined);
     };
 
-    const GroupField = (errors: FormikErrors<TopicFormikValues>) => (
-      <div className={dialogStyles.DialogRow}>
-        <div className={dialogStyles.DialogColumn}>
-          <Field
-            component={Select}
-            formControl={{ fullWidth: true }}
-            formHelperText={{ children: errors.group }}
-            required
-            name="group"
-            label="Group"
-            labelId="demo-simple-select-label"
-          >
-            {groups.names.map((groupName) => (
-              <MenuItem value={groupName} key={groupName}>
-                {groupName}
-              </MenuItem>
-            ))}
-          </Field>
-        </div>
-        <div className={dialogStyles.DialogColumn}>
-          <StyledButton
-            variant="contained"
-            color="secondary"
-            onClick={() => dialogs.group.setOpen(true)}
-          >
-            Create new group
-          </StyledButton>
-        </div>
-      </div>
-    );
-
     const basicFields = (
       errors: FormikErrors<TopicFormikValues>
     ): JSX.Element[] => [
-      GroupField(errors),
+      !groups.areGroupsHidden && (
+        <GroupsFormControl key="group" errors={errors} groups={groups}>
+          {groups.isGroupAddAllowed && (
+            <StyledButton
+              variant="contained"
+              color="secondary"
+              onClick={() => dialogs.group.setOpen(true)}
+            >
+              Create new group
+            </StyledButton>
+          )}
+        </GroupsFormControl>
+      ),
       <Field
         required
         component={TextField}

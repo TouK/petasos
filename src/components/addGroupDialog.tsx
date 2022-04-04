@@ -47,7 +47,6 @@ export const AddGroupDialog = () => {
 
     const initialValues: GroupFormValues = {
       name: "",
-      advancedValues: undefined,
     };
 
     return (

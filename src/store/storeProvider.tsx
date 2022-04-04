@@ -1,16 +1,22 @@
 import { useLocalStore } from "mobx-react-lite";
 import * as React from "react";
-import { createContext, PropsWithChildren, useContext } from "react";
-import { Store } from "./store";
+import { createContext, PropsWithChildren, useContext, useEffect } from "react";
+import { Store, StoreOptions } from "./store";
 
 const StoreContext = createContext<Store>(null);
 
-export function StoreProvider(props: PropsWithChildren<unknown>) {
-  const store = useLocalStore(() => new Store());
+export function StoreProvider({
+  children,
+  options,
+}: PropsWithChildren<{ options?: StoreOptions }>) {
+  const store = useLocalStore(() => new Store(options));
+
+  useEffect(() => {
+    store.setOptions(options);
+  }, [options, store]);
+
   return (
-    <StoreContext.Provider value={store}>
-      {props.children}
-    </StoreContext.Provider>
+    <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
   );
 }
 

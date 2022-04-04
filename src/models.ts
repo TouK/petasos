@@ -6,7 +6,7 @@ export interface TopicModel {
   owner: OwnerModel;
   retentionTime: RetentionTimeModel;
   jsonToAvroDryRun: boolean;
-  ack: string;
+  ack: Acknowledgement;
   trackingEnabled: boolean;
   migratedFromJsonType: boolean;
   schemaIdAwareSerializationSchemaEnabled: boolean;
@@ -116,30 +116,32 @@ export interface UndeliveredMessage {
   messageId: string;
 }
 
-export interface FormValues {
-  advancedValues: FormikValues | void;
+export interface FormValues<T extends FormikValues = FormikValues> {
+  advancedValues?: T;
 }
 
-export class TopicFormikValues implements FormValues {
+export interface TopicFormikValues
+  extends FormValues<AdvancedTopicFormikValues> {
   topic: string;
   schema: string;
   group: string;
   description: string;
-  advancedValues: AdvancedTopicFormikValues;
 }
 
-export class AdvancedTopicFormikValues implements FormikValues {
-  acknowledgement: string; // LEADER | ALL
+export type Acknowledgement = "LEADER" | "ALL";
+
+export interface AdvancedTopicFormikValues extends FormikValues {
+  acknowledgement: Acknowledgement;
   retentionTime: number;
   trackingEnabled: boolean;
   maxMessageSize: number;
 }
 
-export class SubscriptionFormikValues implements FormValues {
+export interface SubscriptionFormikValues
+  extends FormValues<AdvancedSubscriptionFormikValues> {
   name: string;
   endpoint: string;
   description: string;
-  advancedValues: AdvancedSubscriptionFormikValues;
 }
 
 export class AdvancedSubscriptionFormikValues implements FormikValues {
@@ -154,7 +156,6 @@ export class AdvancedSubscriptionFormikValues implements FormikValues {
   backoffMaxIntervalInSec = 600;
 }
 
-export class GroupFormValues implements FormValues {
+export interface GroupFormValues extends FormValues<never> {
   name: string;
-  advancedValues: void = null;
 }

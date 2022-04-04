@@ -3,11 +3,6 @@ import * as React from "react";
 import { render } from "react-dom";
 import { Root } from "./components/root";
 
-const root = document.createElement("div");
-document.body.appendChild(root);
-
-const domContainer = document.querySelector("#appRoot");
-
 configure({
   enforceActions: "observed",
 });
@@ -15,8 +10,10 @@ configure({
 function init() {
   const appRoot = document.getElementById("appRoot");
   if (appRoot) {
-    render(<Root />, domContainer);
+    render(<Root />, appRoot);
   } else {
+    const root = document.createElement("div");
+    document.body.appendChild(root);
     render(<Root />, root);
   }
 }

@@ -79,14 +79,11 @@ export class Subscription implements SubscriptionModel {
   }
 
   @action
-  assignValuesFromForm(
-    object: SubscriptionFormikValues,
-    includeAdvanced: boolean
-  ) {
+  assignValuesFromForm(object: SubscriptionFormikValues) {
     this.name = object.name;
     this.endpoint = object.endpoint;
     this.description = object.description;
-    if (includeAdvanced) {
+    if (object.advancedValues) {
       if (object.advancedValues.trackingMode) {
         this.trackingMode = object.advancedValues.trackingMode;
       }

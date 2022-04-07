@@ -30,7 +30,7 @@ export const fetchJson = async <R>(
     return;
   }
 
-  if (json.error) {
+  if (!response.ok || json.error) {
     throw json.message || json.error;
   }
   return json as R;

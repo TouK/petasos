@@ -19,7 +19,7 @@ import dialogStyles from "../styles/dialog.css";
 import { StyledDialog } from "./styledMuiComponents";
 import { formTheme } from "./theme";
 
-export function DialogTemplate<T extends FormValues>({
+export const DialogTemplate = <T extends FormValues, R = void>({
   dialog,
   validateFunc,
   taskOnSubmit,
@@ -32,10 +32,12 @@ export function DialogTemplate<T extends FormValues>({
   advancedFields,
   wider,
 }: {
-  dialog: Dialog;
+  dialog: Dialog<unknown, R>;
   validateFunc: (FormValues, boolean) => void;
-  taskOnSubmit: (T) => Promise<void | ValidationError>;
-  onSubmitSuccess: (T) => Promise<void>;
+  taskOnSubmit: (
+    values: T | Omit<T, "advancedValues">
+  ) => Promise<void | ValidationError>;
+  onSubmitSuccess: (values: T | Omit<T, "advancedValues">) => Promise<R>;
   onCancel?: () => void;
   dialogTitle: string;
   submitButtonText: string;
@@ -43,77 +45,98 @@ export function DialogTemplate<T extends FormValues>({
   basicFields: (FormikErrors) => JSX.Element[];
   advancedFields: (FormikErrors) => JSX.Element[];
   wider: boolean;
-}) {
+}) => {
   const { options } = useStore();
   const [backendValidationError, setBackendValidationError] =
     useState(undefined);
   const [advancedOptions, setAdvancedOptions] = useState(false);
 
-  const submitFunc = async ({ advancedValues, ...otherValues }: T) => {
-    const nextValues = advancedOptions
-      ? { advancedValues, ...otherValues }
-      : otherValues;
-    const response = await taskOnSubmit(nextValues);
-    if (response) {
-      setBackendValidationError(response.message);
-    } else {
-      setBackendValidationError(undefined);
-      await onSubmitSuccess(nextValues);
-      setAdvancedOptions(false);
-      dialog.setOpen(false);
-    }
-  };
-
-  const cancelForm = () => {
-    setBackendValidationError(undefined);
-    onCancel?.();
-    dialog.setOpen(false);
-    setAdvancedOptions(false);
-  };
-
   return useObserver(() => {
+    const submitFunc = async ({ advancedValues, ...otherValues }: T) => {
+      const nextValues = advancedOptions
+        ? { advancedValues, ...otherValues }
+        : otherValues;
+      const response = await taskOnSubmit(nextValues);
+      if (response) {
+        setBackendValidationError(response.message);
+      } else {
+        setBackendValidationError(undefined);
+        const result = await onSubmitSuccess(nextValues);
+        setAdvancedOptions(false);
+        dialog.close(result);
+      }
+    };
+    const cancelForm = () => {
+      setBackendValidationError(undefined);
+      onCancel?.();
+      dialog.close();
+      setAdvancedOptions(false);
+    };
+
+    if (!dialog.isOpen) {
+      return null;
+    }
+
     return (
-      dialog.open && (
-        <StyledDialog open={dialog.open} onClose={() => dialog.setOpen(false)}>
-          <DialogTitle>{dialogTitle}</DialogTitle>
-          <ThemeProvider theme={formTheme}>
-            <Formik
-              initialValues={initialValues}
-              enableReinitialize={true}
-              validate={(values) => validateFunc(values, advancedOptions)}
-              onSubmit={submitFunc}
-            >
-              {({ submitForm, isSubmitting, errors, validateForm, values }) => {
-                const advanced = options.allowAdvancedFields
-                  ? advancedFields(errors).filter(Boolean)
-                  : [];
-                return (
-                  <>
-                    <DialogContent>
-                      <Form>
+      <StyledDialog open={dialog.isOpen} onClose={() => dialog.close()}>
+        <DialogTitle>{dialogTitle}</DialogTitle>
+        <ThemeProvider theme={formTheme}>
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize={true}
+            validate={(values) => validateFunc(values, advancedOptions)}
+            onSubmit={submitFunc}
+          >
+            {({ submitForm, isSubmitting, errors, validateForm, values }) => {
+              const advanced = options.allowAdvancedFields
+                ? advancedFields(errors).filter(Boolean)
+                : [];
+              return (
+                <>
+                  <DialogContent>
+                    <Form>
+                      <div
+                        className={dialogStyles.DialogRow}
+                        style={{ marginBottom: "10px" }}
+                      >
+                        {backendValidationError && (
+                          <Alert severity="error" style={{ width: "100%" }}>
+                            {backendValidationError}
+                          </Alert>
+                        )}
+                      </div>
+                      <div className={dialogStyles.DialogRow}>
                         <div
-                          className={dialogStyles.DialogRow}
-                          style={{ marginBottom: "10px" }}
+                          className={
+                            wider
+                              ? dialogStyles.DialogColumnWider
+                              : dialogStyles.DialogColumnWide
+                          }
                         >
-                          {backendValidationError && (
-                            <Alert severity="error" style={{ width: "100%" }}>
-                              {backendValidationError}
-                            </Alert>
-                          )}
-                        </div>
-                        <div className={dialogStyles.DialogRow}>
-                          <div
-                            className={
-                              wider
-                                ? dialogStyles.DialogColumnWider
-                                : dialogStyles.DialogColumnWide
-                            }
-                          >
-                            <div className={dialogStyles.DialogRow}>
-                              <div className={dialogStyles.DialogColumn}>
-                                {basicFields(errors)
-                                  .filter(Boolean)
-                                  .map((field, i) => (
+                          <div className={dialogStyles.DialogRow}>
+                            <div className={dialogStyles.DialogColumn}>
+                              {basicFields(errors)
+                                .filter(Boolean)
+                                .map((field, i) => (
+                                  <div key={i} style={{ marginBottom: "10px" }}>
+                                    {field}
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                          {advanced.length > 0 && (
+                            <>
+                              {advancedOptions && (
+                                <>
+                                  <Divider />
+                                  <div
+                                    className={
+                                      dialogStyles.DetailsSectionHeader
+                                    }
+                                  >
+                                    Advanced options
+                                  </div>
+                                  {advanced.map((field, i) => (
                                     <div
                                       key={i}
                                       style={{ marginBottom: "10px" }}
@@ -121,74 +144,51 @@ export function DialogTemplate<T extends FormValues>({
                                       {field}
                                     </div>
                                   ))}
-                              </div>
-                            </div>
-                            {advanced.length > 0 && (
-                              <>
-                                {advancedOptions && (
-                                  <>
-                                    <Divider />
-                                    <div
-                                      className={
-                                        dialogStyles.DetailsSectionHeader
-                                      }
-                                    >
-                                      Advanced options
-                                    </div>
-                                    {advanced.map((field, i) => (
-                                      <div
-                                        key={i}
-                                        style={{ marginBottom: "10px" }}
-                                      >
-                                        {field}
-                                      </div>
-                                    ))}
-                                  </>
-                                )}
-                                <Divider />
-                                <Button
-                                  size="small"
-                                  onClick={async () => {
-                                    setAdvancedOptions(!advancedOptions);
-                                    await validateForm(values);
-                                  }}
-                                >
-                                  {advancedOptions
-                                    ? "Hide advanced options"
-                                    : "Show advanced options"}
-                                </Button>
-                              </>
-                            )}
-                          </div>
+                                </>
+                              )}
+                              <Divider />
+                              <Button
+                                size="small"
+                                onClick={async () => {
+                                  setAdvancedOptions(!advancedOptions);
+                                  await validateForm(values);
+                                }}
+                              >
+                                {advancedOptions
+                                  ? "Hide advanced options"
+                                  : "Show advanced options"}
+                              </Button>
+                            </>
+                          )}
                         </div>
-                      </Form>
-                      {isSubmitting && <LinearProgress color="secondary" />}
-                    </DialogContent>
-                    <DialogActions>
-                      <Button
-                        color="secondary"
-                        variant="contained"
-                        onClick={cancelForm}
-                        disabled={isSubmitting}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        color="secondary"
-                        variant="contained"
-                        onClick={submitForm}
-                        disabled={isSubmitting}
-                      >
-                        {submitButtonText}
-                      </Button>
-                    </DialogActions>
-                  </>
-                );
-              }}
-            </Formik>
-          </ThemeProvider>
-        </StyledDialog>
-      )
+                      </div>
+                    </Form>
+                    {isSubmitting && <LinearProgress color="secondary" />}
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={cancelForm}
+                      disabled={isSubmitting}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={submitForm}
+                      disabled={isSubmitting}
+                    >
+                      {submitButtonText}
+                    </Button>
+                  </DialogActions>
+                </>
+              );
+            }}
+          </Formik>
+        </ThemeProvider>
+      </StyledDialog>
     );
   });
-}
+};

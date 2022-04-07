@@ -40,22 +40,25 @@ export const AddGroupDialog = () => {
       return groups.addTask(values.name);
     };
 
-    const onSubmitSuccess = async (values: GroupFormValues): Promise<void> => {
+    const onSubmitSuccess = async (
+      values: GroupFormValues
+    ): Promise<string> => {
       await groups.fetchTask();
-      groups.changeDefaultGroup(values.name);
+      return values.name;
     };
 
-    const initialValues: GroupFormValues = {
+    const initialValues = (): GroupFormValues => ({
       name: "",
-    };
+    });
 
+    const dialog = dialogs.group;
     return (
-      <DialogTemplate<GroupFormValues>
+      <DialogTemplate<GroupFormValues, string>
         advancedFields={() => []}
         basicFields={basicFields}
-        dialog={dialogs.group}
+        dialog={dialog}
         dialogTitle={"Add new group"}
-        initialValues={initialValues}
+        initialValues={initialValues()}
         submitButtonText={"Add group"}
         onSubmitSuccess={onSubmitSuccess}
         taskOnSubmit={taskOnSubmit}

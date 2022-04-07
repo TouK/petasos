@@ -1,7 +1,7 @@
 import { action, computed, observable, runInAction, toJS } from "mobx";
-import { task } from "mobx-task";
 import { fetchFn, fetchJson } from "../api";
 import { Hosts } from "../config";
+import { debouncedTask } from "../helpers/debouncedTask";
 import {
   Acknowledgement,
   AuthModel,
@@ -18,17 +18,18 @@ import { Subscription } from "./subscription";
 import { ValidationError } from "./topics";
 
 export class Topic implements TopicModel {
-  createTask = task(this.create);
+  static GROUP_NAME_SEPARATOR = ".";
 
+  createTask = debouncedTask(this.create);
+  test?: string;
   @observable name: string;
-  fetchTask = task(this.fetchTopic);
-  fetchSubscriptionsTask = task(this.fetchTopicSubscriptions);
-  fetchMessagePreviewTask = task(this.fetchMessagePreview);
-  postSubscriptionTask = task(this.postSubscription);
-  deleteSubscriptionTask = task.resolved(this.deleteSubscription);
-  updateTask = task(this.update);
+  fetchTask = debouncedTask(this.fetchTopic);
+  fetchSubscriptionsTask = debouncedTask(this.fetchTopicSubscriptions);
+  fetchMessagePreviewTask = debouncedTask(this.fetchMessagePreview);
+  postSubscriptionTask = debouncedTask(this.postSubscription);
+  updateTask = debouncedTask(this.update);
   @observable ack: Acknowledgement = "LEADER";
-  deleteTask = task.resolved(this.removeTopic);
+  deleteTask = debouncedTask.rejected(this.removeTopic);
   @observable description: string;
   @observable retentionTime: RetentionTimeModel =
     new DefaultStorageRetentionTimeModel(1, undefined);
@@ -49,6 +50,7 @@ export class Topic implements TopicModel {
   @observable schema: string;
   @observable subscriptionsMap = observable.map<string, Subscription>();
   @observable messagePreview: MessagePreviewModel[];
+  @observable group: string;
   private replacer = (key, value) => {
     if (key === "parent") {
       return undefined;
@@ -99,7 +101,7 @@ export class Topic implements TopicModel {
   }
 
   @computed get displayName(): string {
-    const [group, topic] = this.name.split(".");
+    const [group, topic] = Topic.splitName(this.name);
     return group === this.store.options.forcedGroupName ? topic : this.name;
   }
 
@@ -166,11 +168,19 @@ export class Topic implements TopicModel {
     );
   }
 
+  static splitName(name: string): string[] {
+    return name.split(Topic.GROUP_NAME_SEPARATOR);
+  }
+
+  static joinName(group: string, name: string) {
+    return [group, name].join(Topic.GROUP_NAME_SEPARATOR);
+  }
+
   static create(
     values: TopicFormikValues,
     store: Store
   ): Promise<ValidationError | void> {
-    const topic = new Topic(values.group + "." + values.topic, store);
+    const topic = new Topic(Topic.joinName(values.group, values.topic), store);
     return topic.createTask(values);
   }
 
@@ -215,6 +225,7 @@ export class Topic implements TopicModel {
     }
   }
 
+  @action.bound
   private async fetchTopic() {
     if (!this.name) {
       console.log("Something went wrong...");
@@ -226,10 +237,11 @@ export class Topic implements TopicModel {
         this.model = data;
       })
     );
-    await this.fetchTopicSubscriptions();
+    await this.fetchSubscriptionsTask();
     return result;
   }
 
+  @action.bound
   private fetchTopicSubscriptions() {
     if (!this.name) {
       console.log("Something went wrong...");
@@ -289,12 +301,6 @@ export class Topic implements TopicModel {
     return await fetchFn<ValidationError | null>(url, false, {
       method: "DELETE",
     });
-  }
-
-  @action.bound
-  private async deleteSubscription(name: string) {
-    const deleteUrl = `${Hosts.APP_API}/topics/${this.name}/subscriptions/${name}`;
-    await fetchFn(deleteUrl, true, { method: "DELETE" });
   }
 
   @action.bound

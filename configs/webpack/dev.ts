@@ -18,7 +18,9 @@ export const devConfig = mergeWithRules({
     host: "0.0.0.0",
     port: 7890,
     hot: true, // enable HMR on the server
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
     proxy: {
       "/apps-proxy": {
         target: process.env.HERMES_MANAGEMENT_DEFAULT,

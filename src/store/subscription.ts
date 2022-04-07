@@ -1,8 +1,8 @@
 import { action, computed, observable, runInAction } from "mobx";
-import { task } from "mobx-task";
 import moment from "moment";
 import { fetchFn } from "../api";
 import { Hosts } from "../config";
+import { debouncedTask } from "../helpers/debouncedTask";
 import {
   MonitoringDetailsModel,
   OwnerModel,
@@ -17,14 +17,17 @@ import { ValidationError } from "./topics";
 
 export class Subscription implements SubscriptionModel {
   @observable name: string;
-  fetchTask = task(this.fetchSubscription);
-  putTask = task(this.putSubscription);
-  suspendTask = task.resolved(this.suspendSubscription);
-  activateTask = task.resolved(this.activateSubscription);
-  fetchMetricsTask = task(this.getMetrics);
-  fetchLastUndeliveredMsgTask = task(this.getLastUndeliveredMessage);
-  fetch100LastUndeliveredMsgsTask = task(this.get100LastUndeliveredMessages);
-  retransmitMessagesTask = task.resolved(this.retransmitMessages);
+  fetchTask = debouncedTask(this.fetchSubscription);
+  putTask = debouncedTask(this.putSubscription);
+  suspendTask = debouncedTask.resolved(this.suspendSubscription);
+  activateTask = debouncedTask.resolved(this.activateSubscription);
+  deleteTask = debouncedTask.rejected(this.deleteSubscription);
+  fetchMetricsTask = debouncedTask(this.getMetrics);
+  fetchLastUndeliveredMsgTask = debouncedTask(this.getLastUndeliveredMessage);
+  fetch100LastUndeliveredMsgsTask = debouncedTask(
+    this.get100LastUndeliveredMessages
+  );
+  retransmitMessagesTask = debouncedTask.resolved(this.retransmitMessages);
   @observable endpoint: string;
   @observable description: string;
   @observable owner: OwnerModel = new DefaultOwner();
@@ -145,6 +148,7 @@ export class Subscription implements SubscriptionModel {
     this.headers = subscriptionData.headers;
   }
 
+  @action.bound
   private fetchSubscription() {
     if (!this.name) {
       console.error("Something is off");
@@ -226,6 +230,12 @@ export class Subscription implements SubscriptionModel {
     );
     runInAction(() => (this.lastUndeliveredMessages = lastUndeliveredMessages));
     return lastUndeliveredMessages;
+  }
+
+  @action.bound
+  private deleteSubscription(): Promise<void> {
+    const deleteUrl = `${Hosts.APP_API}/topics/${this.parent.name}/subscriptions/${this.name}`;
+    return fetchFn(deleteUrl, true, { method: "DELETE" });
   }
 
   @action.bound

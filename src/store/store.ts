@@ -1,12 +1,9 @@
-import { createBrowserHistory } from "history";
 import { action, observable } from "mobx";
-import { DeleteGroupDialog, Dialog } from "./dialog";
+import { Dialog } from "./dialog";
 import { Groups } from "./groups";
+import { Subscription } from "./subscription";
+import { Topic } from "./topic";
 import { Topics } from "./topics";
-
-export const history = createBrowserHistory({
-  basename: window.document.baseURI.replace(window.location.origin, ""),
-});
 
 export interface StoreOptions {
   forcedGroupName?: string;
@@ -18,16 +15,30 @@ export class Store {
   @observable readonly groups = new Groups(this);
   @observable readonly topics = new Topics(this);
   @observable readonly dialogs = {
-    topic: new Dialog(),
-    editTopic: new Dialog(),
-    addClonedTopic: new Dialog(),
-    group: new Dialog(),
-    subscription: new Dialog(),
-    editSubscription: new Dialog(),
-    addClonedSubscription: new Dialog(),
-    deleteGroupDialog: new DeleteGroupDialog(),
-    deleteTopicDialog: new Dialog(),
-    deleteSubscriptionDialog: new Dialog(),
+    //groups
+    group: new Dialog<void, string>(),
+    deleteGroupDialog: new Dialog<{ group: string }>(),
+
+    //topics
+    topic: new Dialog<{ topic: Topic; group?: string }>(),
+    editTopic: new Dialog<{ topic: Topic }>(),
+    addClonedTopic: new Dialog<{ topic: Topic }>(),
+    deleteTopicDialog: new Dialog<{ topic: Topic }>(),
+
+    //subscription
+    subscription: new Dialog<{ topic: Topic }>(),
+    editSubscription: new Dialog<{
+      topic: Topic;
+      subscription: Subscription;
+    }>(),
+    addClonedSubscription: new Dialog<{
+      topic: Topic;
+      subscription: Subscription;
+    }>(),
+    deleteSubscriptionDialog: new Dialog<{
+      topic: Topic;
+      subscription: Subscription;
+    }>(),
   };
 
   @observable options: StoreOptions = {};

@@ -1,28 +1,33 @@
 import { MenuItem } from "@mui/material";
-import { Field, FormikErrors } from "formik";
+import { Field, FormikErrors, useField } from "formik";
 import { Select } from "formik-mui";
 import { FieldAttributes } from "formik/dist/Field";
-import { Observer } from "mobx-react-lite";
-import React, { PropsWithChildren } from "react";
+import { observer } from "mobx-react-lite";
+import React, { ReactNode, useEffect } from "react";
 import { TopicFormikValues } from "../models";
-import { Groups } from "../store/groups";
+import { useStore } from "../store/storeProvider";
 import dialogStyles from "../styles/dialog.css";
 
-type Props = PropsWithChildren<
-  {
-    errors?: FormikErrors<TopicFormikValues>;
-    groups: Groups;
-  } & Partial<FieldAttributes<unknown>>
->;
+type Props = Partial<FieldAttributes<unknown>> & {
+  errors?: FormikErrors<TopicFormikValues>;
+  addButton?: ReactNode;
+};
 
-export const GroupsFormControl = ({
-  errors,
-  groups,
-  children,
-  ...props
-}: Props): JSX.Element => (
-  <Observer>
-    {() => (
+export const GroupsFormControl = observer(
+  ({ errors, addButton, ...props }: Props): JSX.Element => {
+    const store = useStore();
+    const { dialogs, groups } = store;
+
+    const [, , { setValue }] = useField("group");
+    const { result, resolved, reset } = dialogs.group.open;
+    useEffect(() => {
+      if (resolved && result) {
+        setValue(result);
+        reset();
+      }
+    }, [reset, resolved, result, setValue]);
+
+    return (
       <div className={dialogStyles.DialogRow}>
         <div className={dialogStyles.DialogColumn}>
           <Field
@@ -42,10 +47,10 @@ export const GroupsFormControl = ({
             ))}
           </Field>
         </div>
-        {children && (
-          <div className={dialogStyles.DialogColumn}>{children}</div>
+        {addButton && (
+          <div className={dialogStyles.DialogColumn}>{addButton}</div>
         )}
       </div>
-    )}
-  </Observer>
+    );
+  }
 );

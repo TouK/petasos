@@ -22,9 +22,6 @@ export const commonConfig: Configuration = {
   },
   context: resolve(__dirname, "../.."),
   target: "web",
-  output: {
-    publicPath: "",
-  },
   externals: [findEnvModule],
   module: {
     rules: [
@@ -79,9 +76,11 @@ export const commonConfig: Configuration = {
     new ForkTsCheckerWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: `${pkg.name} ${pkg.version}`,
+      publicPath: "/",
     }),
     new AddAssetHtmlPlugin({
       filepath: resolve(__dirname, "../../_env.js"),
+      publicPath: "/",
     }),
   ],
   performance: {

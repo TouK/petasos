@@ -2,6 +2,7 @@ import { NavigateNext } from "@mui/icons-material";
 import { CardContent, Chip, CircularProgress, IconButton } from "@mui/material";
 import { useObserver } from "mobx-react-lite";
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
 import { Subscription } from "../store/subscription";
 import styles from "../styles/details.css";
@@ -14,6 +15,7 @@ export const SubscriptionListElement = ({
   subscription: Subscription;
 }) => {
   const { topics } = useStore();
+  const navigate = useNavigate();
   useEffect(() => {
     subscription.fetchTask();
   }, [subscription]);
@@ -50,9 +52,9 @@ export const SubscriptionListElement = ({
               />
               <IconButton
                 size="small"
-                onClick={() =>
-                  topics.changeSelectedSubscription(subscription.name)
-                }
+                onClick={() => {
+                  navigate(subscription.name);
+                }}
               >
                 <NavigateNext />
               </IconButton>

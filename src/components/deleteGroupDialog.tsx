@@ -1,60 +1,26 @@
-import {
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-} from "@mui/material";
-import { useObserver } from "mobx-react-lite";
-import React, { useState } from "react";
+import { observer } from "mobx-react-lite";
+import React from "react";
+import { useSearchParams } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
-import { StyledDialog } from "./styledMuiComponents";
+import { DeleteDialog } from "./deleteDialog";
 
-export const DeleteGroupDialog = () => {
+export const DeleteGroupDialog = observer(() => {
   const { dialogs, groups, topics } = useStore();
-  const [deleting, setDeleting] = useState(false);
-
-  const deleteGroup = async () => {
-    setDeleting(true);
-    groups.changeSelectedGroup(null);
-    await groups.deleteTask(dialogs.deleteGroupDialog.groupToBeDeleted);
-    await groups.fetchTask();
-    await topics.fetchTask();
-    setDeleting(false);
-    dialogs.deleteGroupDialog.setGroupToBeDeleted(undefined);
-  };
-
-  return useObserver(() => (
-    <StyledDialog
-      open={dialogs.deleteGroupDialog.groupToBeDeleted !== undefined}
-    >
-      <DialogContent>
-        <DialogContentText>
-          Are you sure you want to delete group{" "}
-          <b>{dialogs.deleteGroupDialog.groupToBeDeleted}</b>?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="contained"
-          size="small"
-          disabled={deleting}
-          onClick={() =>
-            dialogs.deleteGroupDialog.setGroupToBeDeleted(undefined)
-          }
-        >
-          Cancel
-        </Button>
-        <Button
-          color="secondary"
-          variant="contained"
-          size="small"
-          onClick={deleteGroup}
-          disabled={deleting}
-          autoFocus
-        >
-          Delete group
-        </Button>
-      </DialogActions>
-    </StyledDialog>
-  ));
-};
+  const [params, setParams] = useSearchParams();
+  const dialog = dialogs.deleteGroupDialog;
+  const { group } = dialog.params;
+  return (
+    <DeleteDialog
+      dialog={dialog}
+      taskOnSubmit={groups.deleteTask.wrap((fn) => () => fn(group))}
+      text={`Are you sure you want to delete group ${group}?`}
+      deleteButtonText={"Remove topic"}
+      onSubmitSuccess={async () => {
+        groups.fetchTask();
+        topics.fetchTask();
+        params.delete("group");
+        setParams(params);
+      }}
+    />
+  );
+});

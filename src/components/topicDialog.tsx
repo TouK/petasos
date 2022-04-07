@@ -1,8 +1,9 @@
 import { FormControl, FormControlLabel, FormLabel, Radio } from "@mui/material";
 import { Field, FormikErrors } from "formik";
 import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
-import { useObserver } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { TopicFormikValues } from "../models";
 import { Dialog } from "../store/dialog";
 import { useStore } from "../store/storeProvider";
@@ -11,17 +12,17 @@ import { DialogTemplate } from "./dialogTemplate";
 import { GroupsFormControl } from "./groupsFormControl";
 import { StyledButton } from "./styledMuiComponents";
 
-export const TopicDialog = ({
-  initialValues,
-  dialog,
-}: {
-  initialValues: TopicFormikValues;
-  dialog: Dialog;
-}) => {
-  const store = useStore();
-  const { dialogs, groups, topics } = store;
+export const TopicDialog = observer(
+  ({
+    initialValues,
+    dialog,
+  }: {
+    initialValues: () => TopicFormikValues;
+    dialog: Dialog<{ topic: Topic }>;
+  }) => {
+    const store = useStore();
+    const { dialogs, groups, topics } = store;
 
-  return useObserver(() => {
     const validateFunc = (
       values: TopicFormikValues,
       includeAdvanced: boolean
@@ -29,8 +30,8 @@ export const TopicDialog = ({
       const errors: FormikErrors<TopicFormikValues> = {};
       if (!values.topic) {
         errors.topic = "Required";
-      } else if (values.topic.split(".").length > 1) {
-        errors.topic = "Name cannot contain '.'";
+      } else if (Topic.splitName(values.topic).length > 1) {
+        errors.topic = `Name cannot contain "${Topic.GROUP_NAME_SEPARATOR}"`;
       } else if (!/^[a-zA-Z0-9_.-]+$/i.test(values.topic)) {
         errors.topic = "Invalid topic name";
       }
@@ -64,34 +65,37 @@ export const TopicDialog = ({
 
     const taskOnSubmit = (values) => Topic.create(values, store);
 
-    const onSubmitSuccess = async (
-      values: TopicFormikValues
-    ): Promise<void> => {
+    const navigate = useNavigate();
+
+    const onSubmitSuccess = async ({
+      group,
+      topic,
+    }: TopicFormikValues): Promise<void> => {
       await groups.fetchTask();
       await topics.fetchTask();
-      groups.changeSelectedGroup(values.group);
-      topics.changeSelectedTopic(`${values.group}.${values.topic}`);
-    };
-
-    const onCancel = (): void => {
-      groups.changeDefaultGroup(undefined);
+      const topicName = Topic.joinName(group, topic);
+      navigate(`/${topicName}`);
     };
 
     const basicFields = (
       errors: FormikErrors<TopicFormikValues>
     ): JSX.Element[] => [
       !groups.areGroupsHidden && (
-        <GroupsFormControl key="group" errors={errors} groups={groups}>
-          {groups.isGroupAddAllowed && (
-            <StyledButton
-              variant="contained"
-              color="secondary"
-              onClick={() => dialogs.group.setOpen(true)}
-            >
-              Create new group
-            </StyledButton>
-          )}
-        </GroupsFormControl>
+        <GroupsFormControl
+          key="group"
+          errors={errors}
+          addButton={
+            groups.isGroupAddAllowed && (
+              <StyledButton
+                variant="contained"
+                color="secondary"
+                onClick={() => dialogs.group.open()}
+              >
+                Create new group
+              </StyledButton>
+            )
+          }
+        />
       ),
       <Field
         required
@@ -163,8 +167,7 @@ export const TopicDialog = ({
         basicFields={basicFields}
         dialog={dialog}
         dialogTitle={"Add new topic"}
-        initialValues={initialValues}
-        onCancel={onCancel}
+        initialValues={initialValues()}
         submitButtonText={"Add topic"}
         onSubmitSuccess={onSubmitSuccess}
         taskOnSubmit={taskOnSubmit}
@@ -172,5 +175,5 @@ export const TopicDialog = ({
         wider={true}
       />
     );
-  });
-};
+  }
+);

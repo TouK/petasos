@@ -1,8 +1,9 @@
 import { FormControl, FormControlLabel, FormLabel, Radio } from "@mui/material";
 import { Field, FormikErrors } from "formik";
 import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
-import { useObserver } from "mobx-react-lite";
+import { observer, useObserver } from "mobx-react-lite";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   AdvancedSubscriptionFormikValues,
   SubscriptionFormikValues,
@@ -25,7 +26,7 @@ export const SubscriptionDialog = ({
   dialogTitle: string;
   submitButtonText: string;
   initialValues: SubscriptionFormikValues;
-  dialog: Dialog;
+  dialog: Dialog<unknown>;
   taskOnSubmit: (SubscriptionFormikValues) => Promise<void | ValidationError>;
 }) => {
   const { groups, topics } = useStore();
@@ -186,9 +187,6 @@ export const SubscriptionDialog = ({
     const onSubmitSuccess = async (): Promise<void> => {
       await groups.fetchTask();
       await topics.fetchTask();
-      if (!isEdit) {
-        topics.changeSelectedSubscription(null);
-      }
     };
 
     return (
@@ -208,108 +206,98 @@ export const SubscriptionDialog = ({
   });
 };
 
-export const AddSubscriptionDialog = () => {
-  const { topics, dialogs } = useStore();
+const getDefaultSubscriptionValues = () => ({
+  name: "",
+  endpoint: "",
+  description: "",
+  advancedValues: new AdvancedSubscriptionFormikValues(),
+});
 
-  const initialValues: SubscriptionFormikValues = {
-    name: "",
-    endpoint: "",
-    description: "",
-    advancedValues: new AdvancedSubscriptionFormikValues(),
-  };
+export const AddSubscriptionDialog = observer(() => {
+  const { dialogs } = useStore();
+  const dialog = dialogs.subscription;
+  const { topic } = dialog.params;
+  const initialValues = getDefaultSubscriptionValues;
 
   const taskOnSubmit = async (
     values: SubscriptionFormikValues
   ): Promise<void | ValidationError> => {
-    const sub: Subscription = new Subscription(
-      values.name,
-      topics.selectedTopic
-    );
+    const sub: Subscription = new Subscription(values.name, topic);
     sub.assignValuesFromForm(values);
-    await topics.selectedTopic.postSubscriptionTask(sub);
-    await topics.selectedTopic.fetchSubscriptionsTask();
+    await topic.postSubscriptionTask(sub);
+    await topic.fetchSubscriptionsTask();
+  };
+  return (
+    <SubscriptionDialog
+      isEdit={false}
+      dialogTitle={`Add new subscription to topic ${topic?.name}`}
+      submitButtonText={"Add subscription"}
+      initialValues={initialValues()}
+      dialog={dialog}
+      taskOnSubmit={taskOnSubmit}
+    />
+  );
+});
+
+export const AddClonedSubscriptionDialog = observer(() => {
+  const { dialogs } = useStore();
+  const dialog = dialogs.addClonedSubscription;
+  const { topic, subscription } = dialog.params;
+
+  const initialValues = (): SubscriptionFormikValues =>
+    subscription
+      ? {
+          ...subscription.toForm,
+          name: "",
+        }
+      : getDefaultSubscriptionValues();
+
+  const navigate = useNavigate();
+  const taskOnSubmit = async (
+    values: SubscriptionFormikValues
+  ): Promise<void | ValidationError> => {
+    const sub: Subscription = new Subscription(values.name, topic);
+    sub.assignValuesFromForm(values);
+    await topic.postSubscriptionTask(sub);
+    await topic.fetchSubscriptionsTask();
+    navigate(`/${topic.name}/${values.name}`);
   };
 
-  return useObserver(() => {
-    return (
-      <SubscriptionDialog
-        isEdit={false}
-        dialogTitle={`Add new subscription to topic ${topics.selectedTopicName}`}
-        submitButtonText={"Add subscription"}
-        initialValues={initialValues}
-        dialog={dialogs.subscription}
-        taskOnSubmit={taskOnSubmit}
-      />
-    );
-  });
-};
+  return (
+    <SubscriptionDialog
+      isEdit={false}
+      dialogTitle={`Add new subscription to topic ${topic?.name}`}
+      submitButtonText={"Add subscription"}
+      initialValues={initialValues()}
+      dialog={dialog}
+      taskOnSubmit={taskOnSubmit}
+    />
+  );
+});
 
-export const AddClonedSubscriptionDialog = () => {
-  const { topics, dialogs } = useStore();
+export const EditSubscriptionDialog = observer(() => {
+  const { dialogs } = useStore();
+  const dialog = dialogs.editSubscription;
+  const { topic, subscription } = dialog.params;
 
-  return useObserver(() => {
-    const initialValues: SubscriptionFormikValues = topics.selectedSubscription
-      ? topics.selectedSubscription.toForm
-      : {
-          name: "",
-          endpoint: "",
-          description: "",
-          advancedValues: new AdvancedSubscriptionFormikValues(),
-        };
+  const initialValues = (): SubscriptionFormikValues =>
+    subscription ? subscription.toForm : getDefaultSubscriptionValues();
 
-    const taskOnSubmit = async (
-      values: SubscriptionFormikValues
-    ): Promise<void | ValidationError> => {
-      const sub: Subscription = new Subscription(
-        values.name,
-        topics.selectedTopic
-      );
-      sub.assignValuesFromForm(values);
-      return topics.selectedTopic.postSubscriptionTask(sub);
-    };
+  const taskOnSubmit = async (
+    values: SubscriptionFormikValues
+  ): Promise<void | ValidationError> => {
+    subscription.assignValuesFromForm(values);
+    return subscription.putTask();
+  };
 
-    return (
-      <SubscriptionDialog
-        isEdit={false}
-        dialogTitle={`Add new subscription to topic ${topics.selectedTopicName}`}
-        submitButtonText={"Add subscription"}
-        initialValues={initialValues}
-        dialog={dialogs.addClonedSubscription}
-        taskOnSubmit={taskOnSubmit}
-      />
-    );
-  });
-};
-
-export const EditSubscriptionDialog = () => {
-  const { topics, dialogs } = useStore();
-
-  return useObserver(() => {
-    const initialValues: SubscriptionFormikValues = topics.selectedSubscription
-      ? topics.selectedSubscription.toForm
-      : {
-          name: "",
-          endpoint: "",
-          description: "",
-          advancedValues: new AdvancedSubscriptionFormikValues(),
-        };
-
-    const taskOnSubmit = async (
-      values: SubscriptionFormikValues
-    ): Promise<void | ValidationError> => {
-      topics.selectedSubscription.assignValuesFromForm(values);
-      return topics.selectedSubscription.putTask();
-    };
-
-    return (
-      <SubscriptionDialog
-        isEdit={true}
-        dialogTitle={`Edit subscription to topic ${topics.selectedTopicName}`}
-        submitButtonText={"Update subscription"}
-        initialValues={initialValues}
-        dialog={dialogs.editSubscription}
-        taskOnSubmit={taskOnSubmit}
-      />
-    );
-  });
-};
+  return (
+    <SubscriptionDialog
+      isEdit={true}
+      dialogTitle={`Edit subscription to topic ${topic?.name}`}
+      submitButtonText={"Update subscription"}
+      initialValues={initialValues()}
+      dialog={dialog}
+      taskOnSubmit={taskOnSubmit}
+    />
+  );
+});

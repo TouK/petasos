@@ -1,48 +1,26 @@
-import { action, computed, observable } from "mobx";
-import { task } from "mobx-task";
+import { action, observable } from "mobx";
 import { fetchJson } from "../api";
 import { Hosts } from "../config";
+import { debouncedTask } from "../helpers/debouncedTask";
 import { Store } from "./store";
-import { Subscription } from "./subscription";
 import { Topic } from "./topic";
 
 export class Topics {
-  fetchTask = task(this.fetchTopics);
+  fetchTask = debouncedTask(this.fetchTopics);
   @observable names: string[] = [];
-  @observable selectedTopicName: string = null;
-  @observable selectedSubscriptionName: string = null;
   @observable topicsMap = observable.map<string, Topic>();
   forGroup = (groupName: string) =>
     this.names
       ? this.names.filter((name) => name.indexOf(`${groupName}.`) === 0)
       : [];
-  @action.bound
-  changeSelectedTopic = (topicName: string) => {
-    this.selectedSubscriptionName = null;
-    this.selectedTopicName = topicName;
-  };
-  @action.bound
-  changeSelectedSubscription = (subscriptionName: string) => {
-    this.selectedSubscriptionName = subscriptionName;
-  };
 
   constructor(private readonly store: Store) {}
 
-  @computed get selectedTopic(): Topic {
-    return this.selectedTopicName === null
-      ? null
-      : this.topicsMap.get(this.selectedTopicName) || null;
+  getTopicDisplayName(topicName: string): string {
+    return this.topicsMap.get(topicName)?.displayName;
   }
 
-  @computed get selectedSubscription(): Subscription {
-    return (
-      this.selectedTopicName &&
-      this.selectedSubscriptionName &&
-      (this.selectedTopic.subscriptionsMap.get(this.selectedSubscriptionName) ||
-        null)
-    );
-  }
-
+  @action.bound
   private fetchTopics() {
     const url = `${Hosts.APP_API}/topics`;
     return fetchJson<string[]>(url, true).then(

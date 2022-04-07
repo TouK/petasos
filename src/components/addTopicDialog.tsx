@@ -1,4 +1,4 @@
-import { useObserver } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { TopicFormikValues } from "../models";
 import { useStore } from "../store/storeProvider";
@@ -17,45 +17,12 @@ export const DEFAULT_TOPIC_VALUES: TopicFormikValues = {
   description: "",
 };
 
-export const AddTopicDialog = () => {
+export const AddTopicDialog = observer(() => {
   const { groups, dialogs } = useStore();
-
-  return useObserver(() => {
-    const initialValues: TopicFormikValues = {
-      ...DEFAULT_TOPIC_VALUES,
-      group: groups.defaultGroup,
-    };
-    return <TopicDialog initialValues={initialValues} dialog={dialogs.topic} />;
+  const dialog = dialogs.topic;
+  const initialValues = (): TopicFormikValues => ({
+    ...DEFAULT_TOPIC_VALUES,
+    group: dialog.params?.group || groups.defaultGroup,
   });
-};
-
-export const AddClonedTopicDialog = () => {
-  const { groups, topics, dialogs } = useStore();
-
-  return useObserver(() => {
-    const initialValues: TopicFormikValues = topics.selectedTopic
-      ? {
-          advancedValues: {
-            acknowledgement: topics.selectedTopic.ack,
-            trackingEnabled: topics.selectedTopic.trackingEnabled,
-            maxMessageSize: topics.selectedTopic.maxMessageSize,
-            retentionTime: topics.selectedTopic.retentionTime.duration,
-          },
-          topic: "",
-          schema: topics.selectedTopic.schemaWithoutMetadata,
-          group: groups.groupOfSelectedTopic,
-          description: topics.selectedTopic.description,
-        }
-      : {
-          ...DEFAULT_TOPIC_VALUES,
-          group: groups.defaultGroup,
-        };
-
-    return (
-      <TopicDialog
-        initialValues={initialValues}
-        dialog={dialogs.addClonedTopic}
-      />
-    );
-  });
-};
+  return <TopicDialog initialValues={initialValues} dialog={dialog} />;
+});

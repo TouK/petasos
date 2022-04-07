@@ -16,12 +16,14 @@ import {
   TextField,
   ThemeProvider,
 } from "@mui/material";
-import { useObserver } from "mobx-react-lite";
+import { observer, useObserver } from "mobx-react-lite";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useCopyClipboard } from "../hooks/useCopyClipboard";
 import { SubscriptionInfo } from "../propertiesInfo";
 import { useStore } from "../store/storeProvider";
+import { Subscription } from "../store/subscription";
+import { Topic } from "../store/topic";
 import styles from "../styles/details.css";
 import layout from "../styles/layout.css";
 import { DetailsBox } from "./detailsBox";
@@ -39,169 +41,135 @@ import {
 } from "./styledMuiComponents";
 import { calendarTheme } from "./theme";
 
-export const SubscriptionDetails = () => {
-  const { topics, dialogs } = useStore();
-  const [showAdvanced, setShowAdvanced] = useState(false);
-  const [openStateChangeDialog, setOpenStateChangeDialog] = useState(false);
-  const [openRetransmissionDialog, setOpenRetransmissionDialog] =
-    useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [selectedDate, handleDateChange] = useState(moment());
-  const [isCopied, copy] = useCopyClipboard();
+export const SubscriptionDetails = observer(
+  (props: { topic: Topic; subscription: Subscription }) => {
+    const { dialogs } = useStore();
+    const { topic, subscription } = props;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await topics.selectedSubscription.fetchTask();
-      await topics.selectedSubscription.fetchMetricsTask();
-      await topics.selectedSubscription.fetchLastUndeliveredMsgTask();
-    };
-    fetchData();
-  }, [topics.selectedSubscription]);
+    const [showAdvanced, setShowAdvanced] = useState(false);
+    const [openStateChangeDialog, setOpenStateChangeDialog] = useState(false);
+    const [openRetransmissionDialog, setOpenRetransmissionDialog] =
+      useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [selectedDate, handleDateChange] = useState(moment());
+    const [isCopied, copy] = useCopyClipboard();
 
-  return useObserver(() => {
+    useEffect(() => {
+      const fetchData = async () => {
+        await subscription.fetchTask();
+        await subscription.fetchMetricsTask();
+        await subscription.fetchLastUndeliveredMsgTask();
+      };
+      fetchData();
+    }, [subscription]);
+
     const timeFormat = "dddd, MMMM Do, YYYY h:mm:ss A";
 
     const properties: PropertiesTableRow[] = [
-      createRow("Description", topics.selectedSubscription.description),
+      createRow("Description", subscription.description),
       createRow(
         "Creation date",
-        moment.unix(topics.selectedSubscription.createdAt).format(timeFormat)
+        moment.unix(subscription.createdAt).format(timeFormat)
       ),
       createRow(
         "Modification date",
-        moment.unix(topics.selectedSubscription.modifiedAt).format(timeFormat)
+        moment.unix(subscription.modifiedAt).format(timeFormat)
       ),
     ];
 
     const advancedProperties: PropertiesTableRow[] = [
-      createRow(
-        "Mode",
-        topics.selectedSubscription.mode,
-        SubscriptionInfo.mode
-      ),
+      createRow("Mode", subscription.mode, SubscriptionInfo.mode),
       createRow(
         "Rate limit",
-        `${topics.selectedSubscription.subscriptionPolicy.rate}`,
+        `${subscription.subscriptionPolicy.rate}`,
         SubscriptionInfo.subscriptionPolicy.rate
       ),
       createRow(
         "Sending delay",
-        `${topics.selectedSubscription.subscriptionPolicy.sendingDelay} milliseconds`,
+        `${subscription.subscriptionPolicy.sendingDelay} milliseconds`,
         SubscriptionInfo.subscriptionPolicy.sendingDelay
       ),
       createRow(
         "Message TTL",
-        `${topics.selectedSubscription.subscriptionPolicy.messageTtl} seconds`,
+        `${subscription.subscriptionPolicy.messageTtl} seconds`,
         SubscriptionInfo.subscriptionPolicy.messageTtl
       ),
-      createRow(
-        "Message delivery tracking",
-        topics.selectedSubscription.trackingMode
-      ),
+      createRow("Message delivery tracking", subscription.trackingMode),
       createRow(
         "Retry on 4xx status",
-        topics.selectedSubscription.subscriptionPolicy.retryClientErrors
-          ? "yes"
-          : "no",
+        subscription.subscriptionPolicy.retryClientErrors ? "yes" : "no",
         SubscriptionInfo.subscriptionPolicy.retryClientErrors
       ),
       createRow(
         "Retry backoff",
-        `${topics.selectedSubscription.subscriptionPolicy.messageBackoff} milliseconds`,
+        `${subscription.subscriptionPolicy.messageBackoff} milliseconds`,
         SubscriptionInfo.subscriptionPolicy.messageBackoff
       ),
       createRow(
         "Retry backoff multiplier",
-        `${topics.selectedSubscription.subscriptionPolicy.backoffMultiplier}`,
+        `${subscription.subscriptionPolicy.backoffMultiplier}`,
         SubscriptionInfo.subscriptionPolicy.backoffMultiplier
       ),
-      topics.selectedSubscription.subscriptionPolicy.backoffMultiplier > 1 &&
+      subscription.subscriptionPolicy.backoffMultiplier > 1 &&
         createRow(
           "Retry backoff max interval",
-          `${topics.selectedSubscription.subscriptionPolicy.backoffMaxIntervalInSec} seconds`,
+          `${subscription.subscriptionPolicy.backoffMaxIntervalInSec} seconds`,
           SubscriptionInfo.subscriptionPolicy.backoffMaxIntervalInSec
         ),
     ];
 
-    const metrics: PropertiesTableRow[] = topics.selectedSubscription.metrics
+    const metrics: PropertiesTableRow[] = subscription.metrics
       ? [
-          topics.selectedSubscription.metrics.rate !== "unavailable" &&
-            createRow(
-              "Delivery rate",
-              `${topics.selectedSubscription.metrics.rate}`
-            ),
-          createRow(
-            "Delivered messages",
-            `${topics.selectedSubscription.metrics.delivered}`
-          ),
-          createRow(
-            "Discarded messages",
-            `${topics.selectedSubscription.metrics.discarded}`
-          ),
-          topics.selectedSubscription.metrics.lag !== "-1" &&
+          subscription.metrics.rate !== "unavailable" &&
+            createRow("Delivery rate", `${subscription.metrics.rate}`),
+          createRow("Delivered messages", `${subscription.metrics.delivered}`),
+          createRow("Discarded messages", `${subscription.metrics.discarded}`),
+          subscription.metrics.lag !== "-1" &&
             createRow(
               "Lag",
-              `${topics.selectedSubscription.metrics.lag}`,
+              `${subscription.metrics.lag}`,
               SubscriptionInfo.metrics.lag
             ),
-          topics.selectedSubscription.metrics.codes2xx !== "unavailable" &&
-            createRow(
-              "Codes 2xx",
-              `${topics.selectedSubscription.metrics.codes2xx}`
-            ),
-          topics.selectedSubscription.metrics.codes4xx !== "unavailable" &&
-            createRow(
-              "Codes 4xx",
-              `${topics.selectedSubscription.metrics.codes4xx}`
-            ),
-          topics.selectedSubscription.metrics.codes5xx !== "unavailable" &&
-            createRow(
-              "Codes 5xx",
-              `${topics.selectedSubscription.metrics.codes5xx}`
-            ),
-          topics.selectedSubscription.metrics.timeouts !== "unavailable" &&
-            createRow(
-              "Network timeouts",
-              `${topics.selectedSubscription.metrics.timeouts}`
-            ),
-          topics.selectedSubscription.metrics.otherErrors !== "unavailable" &&
+          subscription.metrics.codes2xx !== "unavailable" &&
+            createRow("Codes 2xx", `${subscription.metrics.codes2xx}`),
+          subscription.metrics.codes4xx !== "unavailable" &&
+            createRow("Codes 4xx", `${subscription.metrics.codes4xx}`),
+          subscription.metrics.codes5xx !== "unavailable" &&
+            createRow("Codes 5xx", `${subscription.metrics.codes5xx}`),
+          subscription.metrics.timeouts !== "unavailable" &&
+            createRow("Network timeouts", `${subscription.metrics.timeouts}`),
+          subscription.metrics.otherErrors !== "unavailable" &&
             createRow(
               "Other network errors",
-              `${topics.selectedSubscription.metrics.otherErrors}`
+              `${subscription.metrics.otherErrors}`
             ),
         ]
       : [];
 
-    const undeliveredMessage: PropertiesTableRow[] = topics.selectedSubscription
-      .lastUndeliveredMessage
-      ? [
-          createRow(
-            "Date",
-            moment(
-              topics.selectedSubscription.lastUndeliveredMessage.timestamp
-            ).format(timeFormat)
-          ),
-          createRow(
-            "Reason",
-            topics.selectedSubscription.lastUndeliveredMessage.reason
-          ),
-          createRow(
-            "Message",
-            topics.selectedSubscription.lastUndeliveredMessage.message
-          ),
-        ]
-      : [];
+    const undeliveredMessage: PropertiesTableRow[] =
+      subscription.lastUndeliveredMessage
+        ? [
+            createRow(
+              "Date",
+              moment(subscription.lastUndeliveredMessage.timestamp).format(
+                timeFormat
+              )
+            ),
+            createRow("Reason", subscription.lastUndeliveredMessage.reason),
+            createRow("Message", subscription.lastUndeliveredMessage.message),
+          ]
+        : [];
 
     const changeSubscriptionState = async () => {
-      topics.selectedSubscription.state === "ACTIVE"
-        ? await topics.selectedSubscription.suspendTask()
-        : await topics.selectedSubscription.activateTask();
-      await topics.selectedSubscription.fetchTask();
+      subscription.state === "ACTIVE"
+        ? await subscription.suspendTask()
+        : await subscription.activateTask();
+      await subscription.fetchTask();
       setOpenStateChangeDialog(false);
     };
 
     const retransmitMessages = async () => {
-      await topics.selectedSubscription.retransmitMessagesTask(selectedDate);
+      await subscription.retransmitMessagesTask(selectedDate);
       setSnackbarOpen(true);
       setOpenRetransmissionDialog(false);
     };
@@ -219,9 +187,7 @@ export const SubscriptionDetails = () => {
             <Button
               variant="contained"
               size="small"
-              disabled={
-                !topics.selectedSubscription.retransmitMessagesTask.resolved
-              }
+              disabled={!subscription.retransmitMessagesTask.resolved}
               onClick={() => setOpenRetransmissionDialog(false)}
             >
               Cancel
@@ -231,9 +197,7 @@ export const SubscriptionDetails = () => {
               variant="contained"
               size="small"
               onClick={retransmitMessages}
-              loading={
-                topics.selectedSubscription.retransmitMessagesTask.pending
-              }
+              loading={subscription.retransmitMessagesTask.pending}
               text="Retransmit"
             />
           </DialogActions>
@@ -246,10 +210,8 @@ export const SubscriptionDetails = () => {
           <DialogContent>
             <DialogContentText>
               Are you sure you want to{" "}
-              {topics.selectedSubscription.state === "ACTIVE"
-                ? "suspend"
-                : "activate"}{" "}
-              subscription <b>{topics.selectedSubscriptionName}</b>?
+              {subscription.state === "ACTIVE" ? "suspend" : "activate"}{" "}
+              subscription <b>{subscription.name}</b>?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -267,8 +229,8 @@ export const SubscriptionDetails = () => {
               onClick={changeSubscriptionState}
               autoFocus
               disabled={
-                !topics.selectedSubscription.activateTask.resolved ||
-                !topics.selectedSubscription.suspendTask.resolved
+                !subscription.activateTask.resolved ||
+                !subscription.suspendTask.resolved
               }
             >
               Confirm
@@ -281,32 +243,32 @@ export const SubscriptionDetails = () => {
       <div>
         <ChangeSubscriptionStateDialog />
         <RetransmitMessageDialog />
-        {topics.selectedTopic && (
+        {topic && (
           <>
             <div className={styles.DetailsHeader}>
               <div className={layout.Row}>
                 <div className={layout.Column}>
                   <div className={styles.DetailsHeaderSubtitle}>
-                    Subscription to topic {topics.selectedTopic.name}
+                    Subscription to topic {topic.name}
                   </div>
                   <div className={styles.DetailsHeaderTitle}>
-                    {topics.selectedSubscription.name}{" "}
+                    {subscription.name}{" "}
                     <Chip
                       size="small"
                       color="secondary"
-                      label={`${topics.selectedSubscription.state}`}
+                      label={`${subscription.state}`}
                     />
                   </div>
                 </div>
                 <div className={layout.ColumnAlignRight}>
-                  {(topics.selectedSubscription.state === "ACTIVE" ||
-                    topics.selectedSubscription.state === "SUSPENDED") && (
+                  {(subscription.state === "ACTIVE" ||
+                    subscription.state === "SUSPENDED") && (
                     <>
                       <Button
                         variant={"contained"}
                         color={"primary"}
                         startIcon={
-                          topics.selectedSubscription.state === "ACTIVE" ? (
+                          subscription.state === "ACTIVE" ? (
                             <PauseIcon />
                           ) : (
                             <PlayArrowIcon />
@@ -314,7 +276,7 @@ export const SubscriptionDetails = () => {
                         }
                         onClick={() => setOpenStateChangeDialog(true)}
                       >
-                        {topics.selectedSubscription.state === "ACTIVE"
+                        {subscription.state === "ACTIVE"
                           ? "Suspend"
                           : "Activate"}
                       </Button>{" "}
@@ -324,7 +286,12 @@ export const SubscriptionDetails = () => {
                     variant={"contained"}
                     color={"primary"}
                     startIcon={<EditIcon />}
-                    onClick={() => dialogs.editSubscription.setOpen(true)}
+                    onClick={() =>
+                      dialogs.editSubscription.open({
+                        topic,
+                        subscription,
+                      })
+                    }
                   >
                     Edit
                   </Button>{" "}
@@ -332,7 +299,12 @@ export const SubscriptionDetails = () => {
                     variant={"contained"}
                     color={"primary"}
                     startIcon={<FileCopyIcon />}
-                    onClick={() => dialogs.addClonedSubscription.setOpen(true)}
+                    onClick={() =>
+                      dialogs.addClonedSubscription.open({
+                        topic,
+                        subscription,
+                      })
+                    }
                   >
                     Clone
                   </Button>{" "}
@@ -341,7 +313,10 @@ export const SubscriptionDetails = () => {
                     color={"primary"}
                     startIcon={<DeleteIcon />}
                     onClick={() =>
-                      dialogs.deleteSubscriptionDialog.setOpen(true)
+                      dialogs.deleteSubscriptionDialog.open({
+                        topic,
+                        subscription,
+                      })
                     }
                   >
                     Remove
@@ -356,7 +331,7 @@ export const SubscriptionDetails = () => {
                   color: "#B4C498",
                 }}
               >
-                {topics.selectedSubscription.endpoint}{" "}
+                {subscription.endpoint}{" "}
                 <DarkTooltip
                   title={isCopied ? "Copied!" : "Copy"}
                   placement="top"
@@ -365,7 +340,7 @@ export const SubscriptionDetails = () => {
                     size="small"
                     color="primary"
                     type="button"
-                    onClick={() => copy(topics.selectedSubscription.endpoint)}
+                    onClick={() => copy(subscription.endpoint)}
                   >
                     <FileCopyIcon />
                   </SmallIconButton>
@@ -391,10 +366,9 @@ export const SubscriptionDetails = () => {
                   </Button>
                 </DetailsBox>
                 <DetailsBox header="Last undelivered message">
-                  {topics.selectedSubscription.fetchLastUndeliveredMsgTask
-                    .resolved && (
+                  {subscription.fetchLastUndeliveredMsgTask.resolved && (
                     <>
-                      {topics.selectedSubscription.lastUndeliveredMessage ? (
+                      {subscription.lastUndeliveredMessage ? (
                         <PropertiesTable properties={undeliveredMessage} />
                       ) : (
                         <div className={layout.p}>
@@ -403,17 +377,19 @@ export const SubscriptionDetails = () => {
                       )}
                     </>
                   )}
-                  {topics.selectedSubscription.fetchLastUndeliveredMsgTask
-                    .pending && <CircularProgress />}
+                  {subscription.fetchLastUndeliveredMsgTask.pending && (
+                    <CircularProgress />
+                  )}
                 </DetailsBox>
               </div>
               <div className={layout.Column}>
                 <DetailsBox header="Metrics">
                   <div className={layout.Row}>
                     <div className={layout.Column}>
-                      {topics.selectedSubscription.fetchMetricsTask
-                        .resolved && <PropertiesTable properties={metrics} />}
-                      {topics.selectedSubscription.fetchMetricsTask.pending && (
+                      {subscription.fetchMetricsTask.resolved && (
+                        <PropertiesTable properties={metrics} />
+                      )}
+                      {subscription.fetchMetricsTask.pending && (
                         <CircularProgress />
                       )}
                     </div>
@@ -437,9 +413,7 @@ export const SubscriptionDetails = () => {
                         onChange={handleDateChange}
                         onError={console.log}
                         disableFuture
-                        minDate={moment.unix(
-                          topics.selectedSubscription.createdAt
-                        )}
+                        minDate={moment.unix(subscription.createdAt)}
                         inputFormat="yyyy/MM/DD HH:mm"
                       />
                     </ThemeProvider>
@@ -459,8 +433,7 @@ export const SubscriptionDetails = () => {
                       autoHideDuration={6000}
                       onClose={() => setSnackbarOpen(false)}
                     >
-                      {topics.selectedSubscription.retransmitMessagesTask
-                        .resolved ? (
+                      {subscription.retransmitMessagesTask.resolved ? (
                         <Alert
                           onClose={() => setSnackbarOpen(false)}
                           severity="success"
@@ -484,5 +457,5 @@ export const SubscriptionDetails = () => {
         )}
       </div>
     );
-  });
-};
+  }
+);

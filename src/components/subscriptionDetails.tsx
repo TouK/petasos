@@ -43,7 +43,7 @@ import { calendarTheme } from "./theme";
 
 export const SubscriptionDetails = observer(
   (props: { topic: Topic; subscription: Subscription }) => {
-    const { dialogs } = useStore();
+    const { dialogs, options } = useStore();
     const { topic, subscription } = props;
 
     const [showAdvanced, setShowAdvanced] = useState(false);
@@ -352,18 +352,20 @@ export const SubscriptionDetails = observer(
                 <DetailsBox header="Properties">
                   <PropertiesTable
                     properties={
-                      showAdvanced
+                      showAdvanced && options.allowAdvancedFields
                         ? properties.concat(advancedProperties)
                         : properties
                     }
                   />
-                  <Button
-                    size="small"
-                    color={"primary"}
-                    onClick={() => setShowAdvanced(!showAdvanced)}
-                  >
-                    {showAdvanced ? "Hide advanced" : "Show advanced"}
-                  </Button>
+                  {options.allowAdvancedFields && (
+                    <Button
+                      size="small"
+                      color={"primary"}
+                      onClick={() => setShowAdvanced(!showAdvanced)}
+                    >
+                      {showAdvanced ? "Hide advanced" : "Show advanced"}
+                    </Button>
+                  )}
                 </DetailsBox>
                 <DetailsBox header="Last undelivered message">
                   {subscription.fetchLastUndeliveredMsgTask.resolved && (

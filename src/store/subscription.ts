@@ -241,10 +241,12 @@ export class Subscription implements SubscriptionModel {
   @action.bound
   private async retransmitMessages(date: moment.Moment): Promise<void> {
     const retransmissionUrl = `${this.url}/retransmission`;
-    const body = date.format(moment.HTML5_FMT.DATETIME_LOCAL);
+    const body = {
+      retransmissionDate: date.toISOString(true),
+    };
     return await fetchFn<void>(retransmissionUrl, true, {
       method: "PUT",
-      body,
+      body: JSON.stringify(body),
     });
   }
 }

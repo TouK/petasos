@@ -13,8 +13,8 @@
     "prestart": "npm run clean-dist",
     "start": "npm run start-dev",
     "start-dev": "webpack serve --config=configs/webpack/dev.ts",
-    "docker-build": "docker build . -t carpinion-web",
-    "docker-run": "docker run -it -p 13011:80 carpinion-web:latest",
+    "docker-build": "docker build . -t touk/petasos:cloud",
+    "docker-run": "docker run -it -p 13011:80 touk/petasos:cloud",
     "helm-package": "./helm-package.sh"
   },
   "author": "",

@@ -1,6 +1,6 @@
 {
   "name": "petasos",
-  "version": "0.1.0-SNAPSHOT",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {

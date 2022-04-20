@@ -23,7 +23,7 @@
     [
       "@semantic-release/github",
       {
-        "assets": "release/*.tgz"
+        "assets": "dist/petasos.zip"
       }
     ],
     "@semantic-release/git"

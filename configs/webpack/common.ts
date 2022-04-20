@@ -2,7 +2,7 @@ import AddAssetHtmlPlugin from "add-asset-html-webpack-plugin";
 import dotenv from "dotenv";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import ZipPlugin from "zip-webpack-pluginĽ"
+import ZipPlugin from "zip-webpack-plugin"
 import { resolve } from "path";
 import { Configuration } from "webpack";
 import pkg from "../../package.json";

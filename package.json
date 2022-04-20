@@ -15,7 +15,8 @@
     "start-dev": "webpack serve --config=configs/webpack/dev.ts",
     "docker-build": "docker build . -t carpinion-web",
     "docker-run": "docker run -it -p 13011:80 carpinion-web:latest",
-    "helm-package": "./helm-package.sh"
+    "helm-package": "./helm-package.sh",
+    "semantic-release": "semantic-release"
   },
   "author": "",
   "license": "ISC",
@@ -43,6 +44,12 @@
     "@types/webpack-merge": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
+    "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/commit-analyzer": "^9.0.1",
+    "@semantic-release/git": "10.0.1",
+    "@semantic-release/github": "8.0.2",
+    "@semantic-release/npm": "^9.0.1",
+    "@semantic-release/release-notes-generator": "10.0.3",
     "add-asset-html-webpack-plugin": "^5.0.1",
     "babel-loader": "^8.2.4",
     "babel-runtime": "^6.26.0",

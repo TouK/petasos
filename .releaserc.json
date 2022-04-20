@@ -1,0 +1,37 @@
+{
+  "branches": [
+    "master",
+    {
+      "name": "dev",
+      "prerelease": "beta"
+    }
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "releaseRules": [
+          {
+            "scope": "deps",
+            "release": "patch"
+          }
+        ]
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/npm",
+      {
+        "tarballDir": "release"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": "release/*.tgz"
+      }
+    ],
+    "@semantic-release/git"
+  ]
+}

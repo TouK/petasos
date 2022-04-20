@@ -1,0 +1,38 @@
+{
+  "branches": [
+    "main",
+    {
+      "name": "dev",
+      "prerelease": "beta"
+    }
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "releaseRules": [
+          {
+            "scope": "deps",
+            "release": "patch"
+          }
+        ]
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false,
+        "tarballDir": "false"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": "dist/petasos.zip"
+      }
+    ],
+    "@semantic-release/git"
+  ]
+}

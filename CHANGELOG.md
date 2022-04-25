@@ -1,3 +1,16 @@
+# [1.1.0-beta.1](https://github.com/TouK/petasos/compare/v1.0.0...v1.1.0-beta.1) (2022-04-25)
+
+
+### Bug Fixes
+
+* hide more advanced properties ([eb1f9b2](https://github.com/TouK/petasos/commit/eb1f9b21744ef382d7f6d476223bbf9e11cfdaef))
+* retransmission reqest ([62624d2](https://github.com/TouK/petasos/commit/62624d237ebf927a53f71401deb48abe899c1110))
+
+
+### Features
+
+* refactor, rearrange, material, router ([39c4b19](https://github.com/TouK/petasos/commit/39c4b19722c9eca70b74e26de9cd281978b87198))
+
 # 1.0.0 (2022-04-20)
 
 

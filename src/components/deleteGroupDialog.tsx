@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
-import { DeleteDialog } from "./deleteDialog";
+import { ConfirmDialog } from "./confirmDialog";
 
 export const DeleteGroupDialog = observer(() => {
   const { dialogs, groups, topics } = useStore();
@@ -10,11 +10,11 @@ export const DeleteGroupDialog = observer(() => {
   const dialog = dialogs.deleteGroupDialog;
   const { group } = dialog.params;
   return (
-    <DeleteDialog
+    <ConfirmDialog
       dialog={dialog}
       taskOnSubmit={groups.deleteTask.wrap((fn) => () => fn(group))}
       text={`Are you sure you want to delete group ${group}?`}
-      deleteButtonText={"Remove topic"}
+      confirmText={"Remove topic"}
       onSubmitSuccess={async () => {
         groups.fetchTask();
         topics.fetchTask();

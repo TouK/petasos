@@ -1,4 +1,5 @@
 import { action, observable } from "mobx";
+import moment from "moment";
 import { Dialog } from "./dialog";
 import { Groups } from "./groups";
 import { Subscription } from "./subscription";
@@ -37,6 +38,13 @@ export class Store {
     }>(),
     deleteSubscriptionDialog: new Dialog<{
       topic: Topic;
+      subscription: Subscription;
+    }>(),
+    retransmitMessageDialog: new Dialog<{
+      subscription: Subscription;
+      selectedDate: moment.Moment;
+    }>(),
+    changeSubscriptionStateDialog: new Dialog<{
       subscription: Subscription;
     }>(),
   };

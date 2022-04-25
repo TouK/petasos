@@ -1,26 +1,31 @@
 import { observer } from "mobx-react-lite";
 import React, { PropsWithChildren } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
 import { EnsureFetched } from "./ensureFetched";
 import { GroupsList } from "./groupsList";
-import { LayoutBodyRow } from "./layoutBodyContent";
-import { TopicList } from "./topicList";
+import { LayoutColumn, LayoutRow } from "./layout";
+import { Topics } from "./topics";
 
-const GroupsView = observer(({ children }: PropsWithChildren<unknown>) => {
+const GroupsLayout = observer(({ children }: PropsWithChildren<unknown>) => {
   const { groups } = useStore();
-
   return (
-    <LayoutBodyRow>
-      <EnsureFetched task={groups.fetchTask}>
+    <EnsureFetched task={groups.fetchTask}>
+      <LayoutRow>
         {!groups.isGroupsListHidden && <GroupsList />}
-      </EnsureFetched>
-      {children}
-    </LayoutBodyRow>
+        <LayoutColumn>{children}</LayoutColumn>
+      </LayoutRow>
+    </EnsureFetched>
   );
 });
 
-export const TopicsListView = () => (
-  <GroupsView>
-    <TopicList />
-  </GroupsView>
-);
+export const TopicsListView = () => {
+  const [searchParams] = useSearchParams();
+  const group = searchParams.get("group");
+
+  return (
+    <GroupsLayout>
+      <Topics group={group} />
+    </GroupsLayout>
+  );
+};

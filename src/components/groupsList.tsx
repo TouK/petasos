@@ -1,11 +1,12 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
-  Chip,
-  Divider,
   IconButton,
   List,
+  ListItem,
+  ListItemButton,
   ListItemText,
+  Stack,
   styled,
   Tooltip,
 } from "@mui/material";
@@ -14,8 +15,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
-import styles from "../styles/layout.css";
-import { StyledListItem } from "./styledMuiComponents";
+import { ContentBox } from "./contentBox";
 
 export const GroupsList = observer(() => {
   const { groups, dialogs } = useStore();
@@ -29,79 +29,79 @@ export const GroupsList = observer(() => {
   const selectedGroup = searchParams.get("group");
 
   return (
-    <div className={styles.LayoutBodySidebar}>
-      <div className={styles.LayoutBodySidebarRow}>
-        <div className={styles.LayerSectionHeader}>Groups</div>
-        <List component="nav">
-          <StyledListItem
-            onClick={() => switchGroup(null)}
-            selected={selectedGroup === null}
+    <ContentBox>
+      <List component="nav" disablePadding>
+        <ListItem
+          disablePadding
+          sx={{ color: !selectedGroup && "text.disabled" }}
+        >
+          <ListItemButton onClick={() => switchGroup(null)}>
+            <ListItemText
+              primary={"All groups"}
+              secondary={<>{groups.allTopicsList.length} topics</>}
+              secondaryTypographyProps={{
+                variant: "caption",
+              }}
+            />
+          </ListItemButton>
+        </ListItem>
+        {groups.names.map((group: string) => (
+          <ListItem
+            key={group}
+            disablePadding
+            sx={{ color: selectedGroup === group && "primary.light" }}
           >
-            <ListItemText primary="All groups" />
-          </StyledListItem>
-          <Divider />
-          {groups.names.map((group: string) => (
-            <StyledListItem
-              key={group}
-              onClick={() => switchGroup(group)}
-              selected={selectedGroup === group}
-            >
-              <ListItemText primary={group} />
-              <span>
-                <Tooltip title="Number of topics" placement="top">
-                  <Chip
-                    size="small"
-                    color="secondary"
-                    label={groups.getTopicsForGroup(group).length}
-                  />
-                </Tooltip>{" "}
-                <Tooltip title="Add new topic to group" placement="top">
-                  <IconButton
-                    size="small"
-                    color="primary"
-                    onClick={() =>
-                      dialogs.topic.open({
-                        topic: null,
-                        group: group,
-                      })
-                    }
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </Tooltip>{" "}
+            <ListItemButton onClick={() => switchGroup(group)}>
+              <ListItemText
+                primary={group}
+                secondary={<>{groups.getTopicsForGroup(group).length} topics</>}
+                secondaryTypographyProps={{
+                  variant: "caption",
+                }}
+              />
+              <Stack direction="row" ml={2}>
+                <IconButtonWithTooltip
+                  size="small"
+                  onClick={() =>
+                    dialogs.topic.open({
+                      topic: null,
+                      group: group,
+                    })
+                  }
+                  tooltipText="Add new topic to group"
+                >
+                  <AddIcon fontSize="small" />
+                </IconButtonWithTooltip>
                 {groups.isGroupRemoveAllowed && (
                   <IconButtonWithTooltip
                     size="small"
-                    color="primary"
-                    disabled={groups.getTopicsForGroup(group).length > 0}
                     onClick={() => {
                       dialogs.deleteGroupDialog.open({ group });
                     }}
+                    disabled={groups.getTopicsForGroup(group).length > 0}
                     tooltipText={
                       groups.getTopicsForGroup(group).length > 0
                         ? "Only empty groups can be deleted"
                         : "Delete group"
                     }
                   >
-                    <DeleteIcon />
+                    <DeleteIcon fontSize="small" />
                   </IconButtonWithTooltip>
                 )}
-              </span>
-            </StyledListItem>
-          ))}
-        </List>
-      </div>
-    </div>
+              </Stack>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </ContentBox>
   );
 });
 
 // workaround for tooltip on disabled button from:
 // https://stackoverflow.com/questions/61115913/is-is-possible-to-render-a-tooltip-on-a-disabled-material-ui-button-within-a
-const AlteredIconButton = styled(IconButton)({
-  root: {
-    "&.Mui-disabled": {
-      pointerEvents: "auto",
-    },
+const IconButtonWithPointerEvents = styled(IconButton)({
+  "&.Mui-disabled": {
+    pointerEvents: "auto",
   },
 });
 
@@ -111,18 +111,15 @@ interface IconButtonWithTooltipProps extends IconButtonProps {
 
 const IconButtonWithTooltip = ({
   tooltipText,
-  disabled,
   onClick,
-  ...other
+  ...props
 }: IconButtonWithTooltipProps) => {
-  const adjustedButtonProps = {
-    disabled: disabled,
-    component: disabled ? "div" : undefined,
-    onClick: disabled ? undefined : onClick,
-  };
+  const adjustedButtonProps = props.disabled
+    ? { component: "div" }
+    : { onClick };
   return (
     <Tooltip title={tooltipText} placement="top">
-      <AlteredIconButton {...other} {...adjustedButtonProps} />
+      <IconButtonWithPointerEvents {...props} {...adjustedButtonProps} />
     </Tooltip>
   );
 };

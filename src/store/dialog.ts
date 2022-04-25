@@ -3,8 +3,7 @@ import { debouncedTask } from "../helpers/debouncedTask";
 
 export class Dialog<T = void, R = void> {
   open = debouncedTask.rejected(this.openFn, { wait: 0 });
-  private resolver: (value: R) => void;
-  @observable private _isOpen: boolean;
+  private _resolver: (value: R) => void;
   @observable private _params: T | null;
 
   @computed get params(): Partial<T> {
@@ -16,20 +15,21 @@ export class Dialog<T = void, R = void> {
   }
 
   @action.bound close(result?: R) {
-    this._isOpen = false;
+    this._resolver?.(result || null);
+    setTimeout(this.cleanup, 10);
+  }
+
+  @action.bound
+  private cleanup() {
+    this._resolver = null;
     this._params = null;
-    if (this.resolver) {
-      this.resolver(result || null);
-      this.resolver = null;
-    }
   }
 
   @action.bound
   private openFn(params: T): Promise<R | null> {
-    this._isOpen = true;
-    this._params = params;
     return new Promise<R | null>((resolve) => {
-      this.resolver = resolve;
+      this._params = params;
+      this._resolver = resolve;
     });
   }
 }

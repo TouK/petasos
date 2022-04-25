@@ -19,15 +19,15 @@ export class Subscription implements SubscriptionModel {
   @observable name: string;
   fetchTask = debouncedTask(this.fetchSubscription);
   putTask = debouncedTask(this.putSubscription);
-  suspendTask = debouncedTask.resolved(this.suspendSubscription);
-  activateTask = debouncedTask.resolved(this.activateSubscription);
+  suspendTask = debouncedTask.rejected(this.suspendSubscription);
+  activateTask = debouncedTask.rejected(this.activateSubscription);
   deleteTask = debouncedTask.rejected(this.deleteSubscription);
   fetchMetricsTask = debouncedTask(this.getMetrics);
   fetchLastUndeliveredMsgTask = debouncedTask(this.getLastUndeliveredMessage);
   fetch100LastUndeliveredMsgsTask = debouncedTask(
     this.get100LastUndeliveredMessages
   );
-  retransmitMessagesTask = debouncedTask.resolved(this.retransmitMessages);
+  retransmitMessagesTask = debouncedTask.rejected(this.retransmitMessages);
   @observable endpoint: string;
   @observable description: string;
   @observable owner: OwnerModel = new DefaultOwner();
@@ -176,10 +176,12 @@ export class Subscription implements SubscriptionModel {
     });
   }
 
+  @action.bound
   private suspendSubscription(): Promise<void> {
     return this.changeState("SUSPENDED");
   }
 
+  @action.bound
   private activateSubscription(): Promise<void> {
     return this.changeState("ACTIVE");
   }

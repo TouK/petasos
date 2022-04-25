@@ -33,7 +33,11 @@ export const devConfig = mergeWithRules({
   optimization: {
     moduleIds: "named",
   },
-  plugins: [new ReactRefreshWebpackPlugin()],
+  plugins: [
+    new ReactRefreshWebpackPlugin({
+      overlay: false,
+    }),
+  ],
   module: {
     rules: [
       {

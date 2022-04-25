@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
-import { DeleteDialog } from "./deleteDialog";
+import { ConfirmDialog } from "./confirmDialog";
 
 export const DeleteSubscriptionDialog = observer(() => {
   const { dialogs } = useStore();
@@ -15,11 +15,11 @@ export const DeleteSubscriptionDialog = observer(() => {
   }
 
   return (
-    <DeleteDialog
+    <ConfirmDialog
       dialog={dialog}
       taskOnSubmit={subscription.deleteTask}
       text={`Are you sure you want to delete subscription ${subscription.name}?`}
-      deleteButtonText={"Delete subscription"}
+      confirmText={"Delete subscription"}
       onSubmitSuccess={async () => {
         await topic.fetchSubscriptionsTask();
         navigate(`/${topic.name}`);

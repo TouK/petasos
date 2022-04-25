@@ -1,6 +1,8 @@
 import { action, computed, observable, runInAction, toJS } from "mobx";
+import moment from "moment";
+import urlJoin from "url-join";
 import { fetchFn, fetchJson } from "../api";
-import { Hosts } from "../config";
+import { HermesFrontendUrl, Hosts } from "../config";
 import { debouncedTask } from "../helpers/debouncedTask";
 import {
   Acknowledgement,
@@ -20,8 +22,11 @@ import { ValidationError } from "./topics";
 export class Topic implements TopicModel {
   static GROUP_NAME_SEPARATOR = ".";
 
+  @computed get reqUrl(): string {
+    return urlJoin(HermesFrontendUrl, "topics", this.name);
+  }
+
   createTask = debouncedTask(this.create);
-  test?: string;
   @observable name: string;
   fetchTask = debouncedTask(this.fetchTopic);
   fetchSubscriptionsTask = debouncedTask(this.fetchTopicSubscriptions);
@@ -68,7 +73,7 @@ export class Topic implements TopicModel {
       };
       return JSON.stringify(schemaWithoutMetadata, null, 2);
     } catch (err) {
-      return "";
+      return "{}";
     }
   };
   private addMetadataToSchema = (schema: string): string => {
@@ -154,18 +159,18 @@ export class Topic implements TopicModel {
     return this.prettifiedSchemaWithoutMetadata(this);
   }
 
-  @computed get filteredMessagePreview(): string[] {
-    return (
-      this.messagePreview &&
-      this.messagePreview.map((msg) => {
-        const jsonSchema = JSON.parse(msg.content);
-        const schemaWithoutMetadata = {
-          ...jsonSchema,
-          __metadata: undefined,
-        };
-        return JSON.stringify(schemaWithoutMetadata);
-      })
-    );
+  @computed get filteredMessagePreview(): [string, string][] {
+    return (this.messagePreview || []).map((msg) => {
+      const jsonSchema = JSON.parse(msg.content);
+      const schemaWithoutMetadata = {
+        ...jsonSchema,
+        __metadata: undefined,
+      };
+      return [
+        moment(parseInt(jsonSchema.__metadata.timestamp)).toISOString(),
+        JSON.stringify(schemaWithoutMetadata),
+      ];
+    });
   }
 
   static splitName(name: string): string[] {

@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { getTopicData } from "../devData";
 import { TopicFormikValues } from "../models";
 import { useStore } from "../store/storeProvider";
 import { TopicDialog } from "./topicDialog";
@@ -23,6 +24,7 @@ export const AddTopicDialog = observer(() => {
   const initialValues = (): TopicFormikValues => ({
     ...DEFAULT_TOPIC_VALUES,
     group: dialog.params?.group || groups.defaultGroup,
+    ...getTopicData(),
   });
   return <TopicDialog initialValues={initialValues} dialog={dialog} />;
 });

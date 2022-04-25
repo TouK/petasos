@@ -1,4 +1,11 @@
-import { FormControl, FormControlLabel, FormLabel, Radio } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+} from "@mui/material";
 import { Field, FormikErrors } from "formik";
 import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
 import { observer } from "mobx-react-lite";
@@ -10,7 +17,6 @@ import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
 import { DialogTemplate } from "./dialogTemplate";
 import { GroupsFormControl } from "./groupsFormControl";
-import { StyledButton } from "./styledMuiComponents";
 
 export const TopicDialog = observer(
   ({
@@ -86,13 +92,16 @@ export const TopicDialog = observer(
           errors={errors}
           addButton={
             groups.isGroupAddAllowed && (
-              <StyledButton
-                variant="contained"
-                color="secondary"
-                onClick={() => dialogs.group.open()}
-              >
-                Create new group
-              </StyledButton>
+              <Box display="flex" alignItems="stretch">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  sx={{ whiteSpace: "nowrap" }}
+                  onClick={() => dialogs.group.open()}
+                >
+                  Create new group
+                </Button>
+              </Box>
             )
           }
         />

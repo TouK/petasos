@@ -2,26 +2,36 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
-import { Button, CircularProgress } from "@mui/material";
-import { Observer, useObserver } from "mobx-react-lite";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { LoadingButton } from "@mui/lab";
+import {
+  Box,
+  Button,
+  Divider,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { ButtonProps } from "@mui/material/Button/Button";
+import { observer } from "mobx-react-lite";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
+import { JSONTree } from "react-json-tree";
 import { TopicInfo } from "../propertiesInfo";
 import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
-import styles from "../styles/details.css";
-import layout from "../styles/layout.css";
 import { DetailsBox } from "./detailsBox";
+import { ActionsRow } from "./layout";
 import {
   createRow,
   PropertiesTable,
   PropertiesTableRow,
 } from "./propertiesTable";
-import { StyledPaper } from "./styledMuiComponents";
 import { SubscriptionListElement } from "./subscriptionListElement";
-import { TopicFrontendUrl } from "./topicFrontendUrl";
+import { TextWithCopy } from "./textWithCopy";
 
-function MessagePreview({ topic }: { topic: Topic }) {
+const MessagesPreview = observer(({ topic }: { topic: Topic }) => {
   useEffect(() => {
     topic.fetchMessagePreviewTask();
     const interval = setInterval(() => topic.fetchMessagePreviewTask(), 10000);
@@ -29,156 +39,341 @@ function MessagePreview({ topic }: { topic: Topic }) {
   }, [topic]);
 
   return (
-    <DetailsBox header="Message preview">
-      <Observer>
-        {() => (
-          <>
-            {topic.fetchMessagePreviewTask.pending && <CircularProgress />}
-            {topic.messagePreview?.length > 0 ? (
-              <StyledPaper style={{ padding: "10px" }}>
-                <div>
-                  {topic.filteredMessagePreview.map((msg, i) => (
-                    <pre key={i}>{msg}</pre>
-                  ))}
-                </div>
-              </StyledPaper>
-            ) : (
-              <div className={layout.p}>There are no messages available.</div>
-            )}
-          </>
-        )}
-      </Observer>
+    <DetailsBox
+      header="Last messages preview"
+      actions={[
+        {
+          Icon: <RefreshIcon />,
+          action: () => topic.fetchMessagePreviewTask(),
+          label: "Refresh",
+          pending: topic.fetchMessagePreviewTask.pending,
+        },
+      ]}
+    >
+      {topic.filteredMessagePreview?.length > 0 ? (
+        topic.filteredMessagePreview.map(([timestamp, json]) => (
+          <Stack key={json} direction="row" alignItems="baseline">
+            <JsonTree jsonText={json} />
+            <Divider
+              textAlign="right"
+              sx={{
+                flex: 1,
+                mx: 2,
+                alignItems: "center",
+                "::before, ::after": {
+                  borderTopStyle: "solid",
+                },
+                "::before": {
+                  width: "100%",
+                  borderImageSlice: 1,
+                  borderImageSource: (t) =>
+                    `linear-gradient(to left, ${t.palette.divider}, rgba(0, 0, 0, 0))`,
+                },
+                "::after": {
+                  width: (t) => t.spacing(8),
+                },
+              }}
+            >
+              <Typography variant="caption" color="action.disabled">
+                {timestamp}
+              </Typography>
+            </Divider>
+          </Stack>
+        ))
+      ) : (
+        <Typography variant="body2" color="text.disabled">
+          There are no messages available
+        </Typography>
+      )}
     </DetailsBox>
+  );
+});
+
+export interface ActionButtonProps
+  extends Omit<ButtonProps, "onClick" | "children" | "startIcon"> {
+  Icon: ReactNode;
+  action: () => void;
+  label: string;
+  pending?: boolean;
+}
+
+export function DetailsHeaderActions(props: { actions: ActionButtonProps[] }) {
+  return (
+    <ActionsRow>
+      {props.actions
+        .filter(Boolean)
+        .map(({ label, action, Icon, pending = null, ...props }) =>
+          pending === null ? (
+            <Button
+              key={label}
+              variant="outlined"
+              color="inherit"
+              startIcon={Icon}
+              onClick={action}
+              {...props}
+            >
+              {label}
+            </Button>
+          ) : (
+            <LoadingButton
+              key={label}
+              variant="outlined"
+              color="inherit"
+              startIcon={Icon}
+              onClick={action}
+              loading={pending}
+              loadingPosition="start"
+              {...props}
+            >
+              {label}
+            </LoadingButton>
+          )
+        )}
+    </ActionsRow>
   );
 }
 
-export const TopicDetails = ({ topic }: { topic: Topic }) => {
+const TopicDetailsHeader = observer(({ topic }: { topic: Topic }) => {
   const { dialogs } = useStore();
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  return (
+    <DetailsHeader
+      actions={[
+        {
+          Icon: <EditIcon />,
+          action: () => dialogs.editTopic.open({ topic }),
+          label: "Edit",
+        },
+        {
+          Icon: <FileCopyIcon />,
+          action: () => dialogs.addClonedTopic.open({ topic }),
+          label: "Clone",
+        },
+        {
+          Icon: <DeleteIcon />,
+          action: () => dialogs.deleteTopicDialog.open({ topic }),
+          label: "Remove",
+        },
+      ]}
+      label={topic.displayName}
+      textToCopy={topic.reqUrl}
+      description={topic.description}
+    />
+  );
+});
 
-  return useObserver(() => {
-    const timeFormat = "dddd, MMMM Do, YYYY h:mm:ss A";
+export function DetailsHeader({
+  label,
+  textToCopy,
+  description,
+  actions,
+}: {
+  actions: ActionButtonProps[];
+  label: string;
+  textToCopy?: string;
+  description?: string;
+}) {
+  return (
+    <Stack
+      direction="row-reverse"
+      alignItems="flex-start"
+      justifyContent="flex-start"
+      flexWrap="wrap-reverse"
+      rowGap={2}
+      spacing={2}
+      m={2}
+    >
+      <DetailsHeaderActions actions={actions} />
+      <Stack flex={1}>
+        <Stack
+          direction="row-reverse"
+          alignItems="baseline"
+          flexWrap="wrap-reverse"
+          spacing={1}
+        >
+          {textToCopy && (
+            <TextWithCopy
+              flex={10}
+              variant="caption"
+              color="text.disabled"
+              value={textToCopy}
+            />
+          )}
+          <Typography flex={1} variant="h4">
+            {label}
+          </Typography>
+        </Stack>
+        {description && <Typography>{description}</Typography>}
+      </Stack>
+    </Stack>
+  );
+}
 
-    const properties: PropertiesTableRow[] = [
-      createRow("Description", topic.description),
-      createRow(
-        "Creation date",
-        moment.unix(topic.createdAt).format(timeFormat)
-      ),
-      createRow(
-        "Modification date",
-        moment.unix(topic.modifiedAt).format(timeFormat)
-      ),
-    ];
+const TopicProperties = observer(({ topic }: { topic: Topic }) => {
+  const timeFormat = "dddd, MMMM Do, YYYY h:mm:ss A";
 
-    const advancedProperties: PropertiesTableRow[] = [
-      createRow("Acknowledgement", topic.ack, TopicInfo.ack),
-      createRow(
-        "Retention time",
-        `${topic.retentionTime.duration} days`,
-        TopicInfo.retentionTime.duration
-      ),
-      createRow("Tracking enabled", `${topic.trackingEnabled}`),
-      createRow("Max message size", `${topic.maxMessageSize}`),
-    ];
+  const properties: PropertiesTableRow[] = [
+    createRow("Creation date", moment.unix(topic.createdAt).format(timeFormat)),
+    createRow(
+      "Modification date",
+      moment.unix(topic.modifiedAt).format(timeFormat)
+    ),
+  ];
+
+  const advancedProperties: PropertiesTableRow[] = [
+    createRow("Acknowledgement", topic.ack, TopicInfo.ack),
+    createRow(
+      "Retention time",
+      `${topic.retentionTime.duration} days`,
+      TopicInfo.retentionTime.duration
+    ),
+    createRow("Tracking enabled", `${topic.trackingEnabled}`),
+    createRow("Max message size", `${topic.maxMessageSize}`),
+  ];
+
+  return (
+    <DetailsProperties
+      properties={properties}
+      advancedProperties={advancedProperties}
+    />
+  );
+});
+
+export const DetailsProperties = observer(
+  ({
+    header,
+    actions = [],
+    properties,
+    advancedProperties,
+  }: {
+    header?: string;
+    actions?: ActionButtonProps[];
+    properties: PropertiesTableRow[];
+    advancedProperties?: PropertiesTableRow[];
+  }) => {
+    const { options } = useStore();
+    const [showAdvanced, setShowAdvanced] = useState(false);
 
     return (
-      <>
-        <div className={styles.DetailsHeader}>
-          <div className={layout.Row}>
-            <div className={layout.Column}>
-              <div className={styles.DetailsHeaderSubtitle}>topic</div>
-              <div className={styles.DetailsHeaderTitle}>
-                {topic.displayName}
-              </div>
-              <TopicFrontendUrl topic={topic.name} />
-            </div>
-            <div className={layout.ColumnAlignRight}>
-              <Button
-                variant={"contained"}
-                color={"primary"}
-                startIcon={<EditIcon />}
-                onClick={() => dialogs.editTopic.open({ topic })}
-              >
-                Edit
-              </Button>{" "}
-              <Button
-                variant={"contained"}
-                color={"primary"}
-                startIcon={<FileCopyIcon />}
-                onClick={() => dialogs.addClonedTopic.open({ topic })}
-              >
-                Clone
-              </Button>{" "}
-              <Button
-                variant={"contained"}
-                color={"primary"}
-                startIcon={<DeleteIcon />}
-                onClick={() => dialogs.deleteTopicDialog.open({ topic })}
-              >
-                Remove
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        <div className={layout.Row}>
-          <div className={layout.Column}>
-            <DetailsBox header="Properties">
-              {showAdvanced ? (
-                <PropertiesTable
-                  properties={properties.concat(advancedProperties)}
-                />
-              ) : (
-                <PropertiesTable properties={properties} />
-              )}
-              <Button
-                size="small"
-                color={"primary"}
-                onClick={() => setShowAdvanced(!showAdvanced)}
-              >
-                {showAdvanced ? "Hide advanced" : "Show advanced"}
-              </Button>
-            </DetailsBox>
-            <DetailsBox
-              header={
-                <>
-                  Subscriptions{" "}
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    size="small"
-                    onClick={() => dialogs.subscription.open({ topic })}
-                  >
-                    Add subscription
-                  </Button>
-                </>
-              }
-            >
-              {topic.subscriptionsMap.size > 0 ? (
-                Array.from(topic.subscriptionsMap).map(([name, sub]) => (
-                  <SubscriptionListElement key={name} subscription={sub} />
-                ))
-              ) : (
-                <div className={layout.p}>No subscriptions yet</div>
-              )}
-            </DetailsBox>
-          </div>
-          <div className={layout.Column}>
-            <DetailsBox header="Message schema">
-              <StyledPaper style={{ padding: "10px" }}>
-                {topic.contentType !== "AVRO" ? (
-                  <div className={layout.p}>Not an AVRO schema</div>
-                ) : (
-                  <pre>{topic.schemaWithoutMetadata}</pre>
-                )}
-              </StyledPaper>
-            </DetailsBox>
-            <MessagePreview topic={topic} />
-          </div>
-        </div>
-      </>
+      <DetailsBox
+        header={header || "Properties"}
+        actions={[
+          ...actions,
+          advancedProperties?.length &&
+            options.allowAdvancedFields && {
+              Icon: <SettingsIcon />,
+              action: () => setShowAdvanced(!showAdvanced),
+              label: showAdvanced ? "Hide advanced" : "Show advanced",
+            },
+        ]}
+      >
+        <PropertiesTable
+          properties={properties}
+          advancedProperties={
+            showAdvanced && options.allowAdvancedFields
+              ? advancedProperties
+              : null
+          }
+        />
+      </DetailsBox>
     );
-  });
-};
+  }
+);
+
+const TopicSubscriptionsList = observer(({ topic }: { topic: Topic }) => {
+  const { dialogs } = useStore();
+  return (
+    <DetailsBox
+      header="Subscriptions"
+      actions={[
+        {
+          color: "secondary",
+          Icon: <AddIcon />,
+          action: () => dialogs.subscription.open({ topic }),
+          label: "Add subscription",
+        },
+      ]}
+    >
+      {topic.subscriptionsMap.size > 0 ? (
+        Array.from(topic.subscriptionsMap).map(([name, sub]) => (
+          <SubscriptionListElement key={name} subscription={sub} />
+        ))
+      ) : (
+        <Typography variant="body2" color="text.disabled">
+          No subscriptions yet
+        </Typography>
+      )}
+    </DetailsBox>
+  );
+});
+
+function JsonTree({
+  override,
+  jsonText,
+  rootLabel,
+}: {
+  override?: JSX.Element;
+  jsonText: string;
+  rootLabel?: string;
+}) {
+  const { palette } = useTheme();
+  return (
+    <Typography
+      component={Box}
+      variant="body2"
+      sx={{ fontFamily: "Roboto Mono, monospace" }}
+    >
+      {override || (
+        <JSONTree
+          data={JSON.parse(jsonText) || {}}
+          shouldExpandNode={(keyPath, data, level) => level <= 3}
+          theme={{
+            base00: "transparent",
+            base03: "transparent",
+            base07: "inherit",
+            base08: palette.text.disabled,
+            base09: palette.success.light,
+            base0B: palette.secondary.main,
+            base0D: palette.primary[palette.mode === "dark" ? "light" : "dark"],
+          }}
+          invertTheme={false}
+          hideRoot={!rootLabel}
+          labelRenderer={([key, ...path]) =>
+            `${path.length > 0 ? key : rootLabel || key}:`
+          }
+        />
+      )}
+    </Typography>
+  );
+}
+
+const TopicSchema = observer(({ topic }: { topic: Topic }) => {
+  return (
+    <DetailsBox header="Message schema">
+      <JsonTree
+        jsonText={topic.schemaWithoutMetadata}
+        override={
+          topic.contentType !== "AVRO" && <span>Not an AVRO schema</span>
+        }
+      />
+    </DetailsBox>
+  );
+});
+
+export const TopicDetails = observer(({ topic }: { topic: Topic }) => {
+  return (
+    <>
+      <TopicDetailsHeader topic={topic} />
+      <Divider />
+      <Stack mx={2} my={4} spacing={8}>
+        <Stack spacing={4} direction="row">
+          <TopicProperties topic={topic} />
+          <TopicSchema topic={topic} />
+        </Stack>
+        <Stack spacing={4} direction="row">
+          <TopicSubscriptionsList topic={topic} />
+          <MessagesPreview topic={topic} />
+        </Stack>
+      </Stack>
+    </>
+  );
+});

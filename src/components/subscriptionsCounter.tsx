@@ -1,4 +1,4 @@
-import { Chip, CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { Topic } from "../store/topic";
@@ -8,17 +8,21 @@ export const SubscriptionsCounter = observer(({ topic }: { topic: Topic }) => {
     topic.fetchSubscriptionsTask();
   }, [topic]);
 
+  const size = topic.subscriptionsMap.size;
   return (
-    <Chip
-      size="small"
-      color="secondary"
-      label={
-        topic.fetchSubscriptionsTask.resolved ? (
-          `Subscriptions: ${topic.subscriptionsMap.size}`
+    <Typography
+      variant="caption"
+      color={size < 1 ? "text.disabled" : "inherit"}
+    >
+      {topic.fetchSubscriptionsTask.resolved ? (
+        size === 1 ? (
+          "1 subscription"
         ) : (
-          <CircularProgress size={15} />
+          `${size || "no"} subscriptions`
         )
-      }
-    />
+      ) : (
+        <CircularProgress size={15} color="inherit" />
+      )}
+    </Typography>
   );
 });

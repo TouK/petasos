@@ -1,95 +1,25 @@
+import { deepPurple, lightGreen } from "@mui/material/colors";
 import { createTheme as createMuiTheme } from "@mui/material/styles";
 
 export const theme = createMuiTheme({
   palette: {
+    mode: "dark",
     primary: {
-      main: "#CCCCCC",
+      main: lightGreen["300"],
     },
     secondary: {
-      main: "#536436",
-      dark: "#4A5930",
+      main: deepPurple["200"],
     },
-    info: {
-      main: "#717171",
-      light: "#6E6E6E",
-      dark: "#5C5C5C",
+    error: {
+      main: `#F25C6E`,
     },
-  },
-});
-
-export const formTheme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#B4C498",
+    success: {
+      main: `#5CB85C`,
+      contrastText: `#FFFFFF`,
     },
-    secondary: {
-      main: "#536436",
-      dark: "#4A5930",
-    },
-  },
-  components: {
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: {
-          color: "#BBBBBB",
-        },
-      },
-    },
-    MuiInputBase: {
-      styleOverrides: {
-        input: {
-          color: "#BBBBBB",
-        },
-      },
-    },
-    MuiFormLabel: {
-      styleOverrides: {
-        root: {
-          color: "#AAAAAA",
-        },
-      },
-    },
-    MuiInput: {
-      styleOverrides: {
-        underline: {
-          "&&&&:before": {
-            borderBottom: "1px solid #8D8D8D",
-          },
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "#585858",
-          color: "#CCCCCC",
-          "& .MuiTableCell-body": {
-            color: "#CCCCCC",
-          },
-          boxShadow: "none",
-        },
-      },
-    },
-  },
-});
-
-export const calendarTheme = createMuiTheme({
-  ...formTheme,
-  components: {
-    ...formTheme.components,
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "#6D6D6D",
-        },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "#454545",
-        },
-      },
+    background: {
+      default: "#B3B3B3",
+      paper: "#4D4D4D",
     },
   },
 });

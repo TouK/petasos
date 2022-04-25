@@ -1,7 +1,7 @@
 import Env from "../_env";
 import { StoreOptions } from "./store/store";
 
-const isDev = process.env.NODE_ENV === "development";
+export const isDev = process.env.NODE_ENV === "development";
 
 const domainName = window.location.href.match(
   new RegExp(Env.HERMES_DOMAIN_PATTERN)

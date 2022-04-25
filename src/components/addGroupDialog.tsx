@@ -2,6 +2,7 @@ import { Field, FormikErrors } from "formik";
 import { TextField } from "formik-mui";
 import { useObserver } from "mobx-react-lite";
 import React from "react";
+import { getGroupData } from "../devData";
 import { GroupFormValues } from "../models";
 import { useStore } from "../store/storeProvider";
 import { ValidationError } from "../store/topics";
@@ -49,6 +50,7 @@ export const AddGroupDialog = () => {
 
     const initialValues = (): GroupFormValues => ({
       name: "",
+      ...getGroupData(),
     });
 
     const dialog = dialogs.group;

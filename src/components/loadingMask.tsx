@@ -1,8 +1,9 @@
 import { Backdrop, CircularProgress } from "@mui/material";
 import React from "react";
+import { createPortal } from "react-dom";
 
 export function LoadingMask({ open }: { open: boolean }) {
-  return (
+  return createPortal(
     <Backdrop
       open={open}
       style={{
@@ -11,6 +12,7 @@ export function LoadingMask({ open }: { open: boolean }) {
       }}
     >
       <CircularProgress color="inherit" />
-    </Backdrop>
+    </Backdrop>,
+    document.body
   );
 }

@@ -7,6 +7,7 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
+import { MainLayout } from "./mainLayout";
 import { RootView } from "./rootView";
 import { SubscriptionView } from "./subscriptionView";
 import { TopicDetailsView } from "./topicDetailsView";
@@ -38,16 +39,18 @@ function NoMatch() {
 export function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<RootView />}>
-          <Route index element={<TopicsListView />} />
-          <Route path=":topic" element={<TopicView />}>
-            <Route index element={<TopicDetailsView />} />
-            <Route path=":subscription" element={<SubscriptionView />} />
+      <MainLayout>
+        <Routes>
+          <Route path="/" element={<RootView />}>
+            <Route index element={<TopicsListView />} />
+            <Route path=":topic" element={<TopicView />}>
+              <Route index element={<TopicDetailsView />} />
+              <Route path=":subscription" element={<SubscriptionView />} />
+            </Route>
           </Route>
-        </Route>
-        <Route path="*" element={<NoMatch />} />
-      </Routes>
+          <Route path="*" element={<NoMatch />} />
+        </Routes>
+      </MainLayout>
     </Router>
   );
 }

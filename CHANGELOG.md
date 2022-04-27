@@ -1,3 +1,15 @@
+# [1.1.0-beta.3](https://github.com/TouK/petasos/compare/v1.1.0-beta.2...v1.1.0-beta.3) (2022-04-27)
+
+
+### Bug Fixes
+
+* some flickering on initial loading ([6fab4d2](https://github.com/TouK/petasos/commit/6fab4d258283bf17cf500fe41924b303a6961e76))
+
+
+### Features
+
+* cleaner loading indicator ([24b7ca3](https://github.com/TouK/petasos/commit/24b7ca3e077e316f31116ddf079eeed679472da2))
+
 # [1.1.0-beta.2](https://github.com/TouK/petasos/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2022-04-27)
 
 

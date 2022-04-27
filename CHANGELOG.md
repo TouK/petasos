@@ -1,3 +1,17 @@
+# [1.1.0-beta.2](https://github.com/TouK/petasos/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2022-04-27)
+
+
+### Bug Fixes
+
+* **env:** parse env bools right ([1e585d5](https://github.com/TouK/petasos/commit/1e585d55e9a34e0c213200a760453fd4e1cd62c9))
+
+
+### Features
+
+* better topic/subscription layout ([6436277](https://github.com/TouK/petasos/commit/643627710bf6a974150eb2b5624b8e01ce26e282))
+* display version in footer ([b234181](https://github.com/TouK/petasos/commit/b234181e48f2e9b155871705761781c4f901cecd))
+* removed header, padding added, footer added ([0414093](https://github.com/TouK/petasos/commit/0414093594430f5b1a24d4cef14cf4c489100608))
+
 # [1.1.0-beta.1](https://github.com/TouK/petasos/compare/v1.0.0...v1.1.0-beta.1) (2022-04-25)
 
 

@@ -11,8 +11,11 @@ export const Footer = () => {
         spacing={0.5}
         sx={{ opacity: 0.4, filter: "saturate(0)" }}
       >
-        <Typography variant="overline" color="background.paper">
-          POWERED BY
+        <Typography variant="caption" color="background.paper" flex={1}>
+          {_VERSION_}
+        </Typography>
+        <Typography variant="caption" color="background.paper">
+          powered by
         </Typography>
         <Img src="https://hermes-pubsub.readthedocs.io/en/latest/img/hermes.png" />
       </Stack>
@@ -20,4 +23,4 @@ export const Footer = () => {
   );
 };
 
-const Img = styled("img")({ height: "3.2em" });
+const Img = styled("img")({ height: "2.6em" });

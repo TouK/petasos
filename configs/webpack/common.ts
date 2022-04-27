@@ -2,9 +2,9 @@ import AddAssetHtmlPlugin from "add-asset-html-webpack-plugin";
 import dotenv from "dotenv";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import ZipPlugin from "zip-webpack-plugin"
+import ZipPlugin from "zip-webpack-plugin";
 import { resolve } from "path";
-import { Configuration } from "webpack";
+import { Configuration, DefinePlugin } from "webpack";
 import pkg from "../../package.json";
 
 dotenv.config();
@@ -74,7 +74,7 @@ export const commonConfig: Configuration = {
   },
   entry: ["./src/index.tsx"],
   plugins: [
-    new ZipPlugin({filename: 'petasos.zip'}),
+    new ZipPlugin({ filename: "petasos.zip" }),
     new ForkTsCheckerWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: `${pkg.name} ${pkg.version}`,
@@ -83,6 +83,9 @@ export const commonConfig: Configuration = {
     new AddAssetHtmlPlugin({
       filepath: resolve(__dirname, "../../_env.js"),
       publicPath: "/",
+    }),
+    new DefinePlugin({
+      _VERSION_: JSON.stringify(`${pkg.name} v${pkg.version}`),
     }),
   ],
   performance: {

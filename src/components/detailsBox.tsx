@@ -19,7 +19,7 @@ function HeadElement(props: {
   const { text, onClick, collapsed } = props;
   return (
     <Typography
-      variant="subtitle2"
+      variant="subtitle1"
       color={collapsed ? "text.secondary" : "text.primary"}
       onClick={onClick}
     >
@@ -42,7 +42,7 @@ export function DetailsBox(
   return (
     <Stack spacing={1} flex={1}>
       {actions.filter(Boolean).length ? (
-        <LayoutRow justifyContent="space-between" alignItems="baseline">
+        <LayoutRow justifyContent="space-between" alignItems="center">
           <HeadElement text={header} onClick={toggle} collapsed={collapsed} />
           <Fade in={!collapsed} unmountOnExit>
             <div>
@@ -82,9 +82,6 @@ export function DetailsBox(
       ) : (
         <HeadElement text={header} onClick={toggle} collapsed={collapsed} />
       )}
-      <Fade in={!collapsed}>
-        <Divider light />
-      </Fade>
       <Collapse in={!collapsed} timeout="auto" unmountOnExit>
         {children}
       </Collapse>

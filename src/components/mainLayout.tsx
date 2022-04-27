@@ -1,5 +1,5 @@
 //TODO: not this way
-import { Box, Container, ThemeProvider } from "@mui/material";
+import { Box, Container, Divider, Stack, ThemeProvider } from "@mui/material";
 import React, { PropsWithChildren } from "react";
 import { AddClonedTopicDialog } from "./addClonedTopicDialog";
 import { AddGroupDialog } from "./addGroupDialog";
@@ -9,7 +9,7 @@ import { DeleteGroupDialog } from "./deleteGroupDialog";
 import { DeleteSubscriptionDialog } from "./deleteSubscriptionDialog";
 import { DeleteTopicDialog } from "./deleteTopicDialog";
 import { EditTopicDialog } from "./editTopicDialog";
-import { Header } from "./header";
+import { Footer } from "./footer";
 import { LayoutColumn } from "./layout";
 import { NavigationBar } from "./navigationBar";
 import { RetransmitMessageDialog } from "./retransmitMessageDialog";
@@ -42,21 +42,28 @@ export const MainLayout = ({ children }: PropsWithChildren<unknown>) => {
   return (
     <ThemeProvider theme={theme}>
       <Box
-        sx={{
-          bgcolor: "background.default",
-          color: "text.primary",
-          minHeight: "100vh",
-        }}
+        bgcolor="background.default"
+        color="text.primary"
+        minHeight="100vh"
+        display="flex"
       >
         <Dialogs />
-        <Header />
-
-        <Container maxWidth="lg">
-          <LayoutColumn alignItems="stretch">
-            <NavigationBar />
-            {children}
-          </LayoutColumn>
-        </Container>
+        <Stack
+          spacing={2}
+          paddingTop={2}
+          paddingBottom={1}
+          flex={1}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Container maxWidth="lg">
+            <LayoutColumn alignItems="stretch">
+              <NavigationBar />
+              {children}
+            </LayoutColumn>
+          </Container>
+          <Footer />
+        </Stack>
       </Box>
     </ThemeProvider>
   );

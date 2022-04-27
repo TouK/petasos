@@ -7,6 +7,7 @@ import {
   ListItemText,
   Pagination,
   Paper,
+  Skeleton,
   Stack,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
@@ -42,7 +43,21 @@ const TopicListElement = observer(({ topic }: { topic: Topic }) => {
       <ListItemIcon>
         <TopicIcon />
       </ListItemIcon>
-      <ListItemText primary={topic.displayName} secondary={topic.description} />
+      <ListItemText
+        primary={topic.displayName}
+        secondary={
+          topic.description || !topic.fetchTask.pending ? (
+            topic.description
+          ) : (
+            <Skeleton
+              variant="rectangular"
+              width="15em"
+              height="1.5em"
+              animation="wave"
+            />
+          )
+        }
+      />
       <SubscriptionsCounter topic={topic} />
     </ListItemButton>
   );

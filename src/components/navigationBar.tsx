@@ -55,7 +55,7 @@ export const NavigationBar = observer(() => {
         {pathnames.length ? (
           <LinkRouter to="/">{homeText}</LinkRouter>
         ) : (
-          <Typography fontWeight="bold">{homeText}</Typography>
+          <Typography>{homeText}</Typography>
         )}
 
         {pathnames.map((value, index) => {

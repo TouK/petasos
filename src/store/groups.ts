@@ -78,7 +78,11 @@ export class Groups {
   @computed
   get isGroupAddAllowed() {
     const { groupsHidden } = this.store.options;
-    return !groupsHidden || this.groupsMap.size < 1 || this.needsForcedGroup;
+    return (
+      !groupsHidden ||
+      (!this.fetchTask.pending &&
+        (this.groupsMap.size < 1 || this.needsForcedGroup))
+    );
   }
 
   @computed

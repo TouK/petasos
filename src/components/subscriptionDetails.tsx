@@ -4,7 +4,14 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { Button, Divider, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
@@ -39,16 +46,22 @@ export const SubscriptionDetails = observer(
           />
         )}
         <Divider />
-        <Stack mx={2} my={4} spacing={8}>
+
+        <Box mx={2} my={4}>
           <Stack spacing={4} direction="row">
-            <SubscriptionProperties subscription={subscription} />
-            <SubscriptionMetrics subscription={subscription} />
+            <Stack spacing={4} flex={1}>
+              <SubscriptionProperties subscription={subscription} />
+              <Divider flexItem />
+              <LastUndeliveredMessage subscription={subscription} />
+            </Stack>
+            <Divider flexItem orientation="vertical" />
+            <Stack spacing={4} flex={1}>
+              <SubscriptionMetrics subscription={subscription} />
+              <Divider flexItem />
+              <MessageRetransmission subscription={subscription} />
+            </Stack>
           </Stack>
-          <Stack spacing={4} direction="row">
-            <LastUndeliveredMessage subscription={subscription} />
-            <MessageRetransmission subscription={subscription} />
-          </Stack>
-        </Stack>
+        </Box>
       </>
     );
   }

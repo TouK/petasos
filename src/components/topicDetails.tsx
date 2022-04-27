@@ -364,16 +364,21 @@ export const TopicDetails = observer(({ topic }: { topic: Topic }) => {
     <>
       <TopicDetailsHeader topic={topic} />
       <Divider />
-      <Stack mx={2} my={4} spacing={8}>
+      <Box mx={2} my={4}>
         <Stack spacing={4} direction="row">
-          <TopicProperties topic={topic} />
-          <TopicSchema topic={topic} />
+          <Stack spacing={4} flex={6}>
+            <TopicSubscriptionsList topic={topic} />
+            <Divider flexItem />
+            <MessagesPreview topic={topic} />
+          </Stack>
+          <Divider flexItem orientation="vertical" />
+          <Stack spacing={4} flex={5}>
+            <TopicProperties topic={topic} />
+            <Divider flexItem />
+            <TopicSchema topic={topic} />
+          </Stack>
         </Stack>
-        <Stack spacing={4} direction="row">
-          <TopicSubscriptionsList topic={topic} />
-          <MessagesPreview topic={topic} />
-        </Stack>
-      </Stack>
+      </Box>
     </>
   );
 });

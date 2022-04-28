@@ -7,8 +7,9 @@ import {
   Typography,
   TypographyProps,
 } from "@mui/material";
-import React from "react";
+import React, { ReactNode } from "react";
 import { InfoPopover } from "./InfoPopover";
+import { LinePlaceholder } from "./topics";
 
 const TBody = ({
   properties,
@@ -59,18 +60,18 @@ export const PropertiesTable = ({
 
 export const createRow = (
   name: string,
-  value: string,
+  value: ReactNode,
   info: string = undefined
 ): PropertiesTableRow => {
   return {
     name,
-    value,
+    value: value || <LinePlaceholder />,
     info,
   };
 };
 
 export class PropertiesTableRow {
   name: string;
-  value: string;
+  value: ReactNode;
   info: string;
 }

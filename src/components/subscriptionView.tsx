@@ -6,17 +6,16 @@ import { EnsureFetched } from "./ensureFetched";
 import { SubscriptionDetails } from "./subscriptionDetails";
 
 export const SubscriptionView = observer(() => {
-  const params = useParams<"subscription" | "topic">();
-  return (
-    <Subscription subscription={params.subscription} topic={params.topic} />
-  );
+  const { subscription, topic } = useParams<"subscription" | "topic">();
+  return <Subscription subscriptionName={subscription} topicName={topic} />;
 });
 
 const Subscription = observer(
-  (props: { subscription: string; topic: string }) => {
+  (props: { subscriptionName: string; topicName: string }) => {
+    const { subscriptionName, topicName } = props;
     const { topics } = useStore();
-    const topic = topics.topicsMap.get(props.topic);
-    const subscription = topic.subscriptionsMap.get(props.subscription);
+    const topic = topics.getByName(topicName);
+    const subscription = topic.subscriptionsMap.get(subscriptionName);
     return (
       <EnsureFetched task={topic.fetchSubscriptionsTask}>
         {topic && subscription && (

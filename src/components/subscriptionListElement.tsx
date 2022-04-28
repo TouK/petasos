@@ -10,6 +10,7 @@ import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Subscription } from "../store/subscription";
+import { LinePlaceholder } from "./topics";
 
 export const SubscriptionListElement = observer(
   ({ subscription }: { subscription: Subscription }) => {
@@ -26,18 +27,31 @@ export const SubscriptionListElement = observer(
         </ListItemIcon>
         <ListItemText
           primary={subscription.name}
-          secondary={subscription.description}
+          secondary={
+            subscription.description || !subscription.fetchTask.pending ? (
+              subscription.description
+            ) : (
+              <LinePlaceholder />
+            )
+          }
         />
         <Chip
           size="small"
-          color={subscription.state === "ACTIVE" ? "success" : "warning"}
+          color={
+            subscription.fetchTask.resolved
+              ? subscription.state === "ACTIVE"
+                ? "success"
+                : "warning"
+              : "default"
+          }
           variant="outlined"
           label={
-            subscription.fetchTask.resolved ? (
-              `${subscription.state}`
-            ) : (
-              <CircularProgress size={15} />
-            )
+            subscription.fetchTask.resolved ? `${subscription.state}` : "•••"
+          }
+          icon={
+            !subscription.fetchTask.resolved ? (
+              <CircularProgress size="1em" />
+            ) : null
           }
         />
       </ListItemButton>

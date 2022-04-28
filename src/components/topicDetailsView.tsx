@@ -6,7 +6,7 @@ import { TopicDetails } from "./topicDetails";
 
 export const TopicDetailsView = observer(() => {
   const { topics } = useStore();
-  const { topic } = useParams<"topic">();
+  const { topic: topicName } = useParams<"topic">();
 
-  return <TopicDetails topic={topics.topicsMap.get(topic)} />;
+  return <TopicDetails topic={topics.getByName(topicName)} />;
 });

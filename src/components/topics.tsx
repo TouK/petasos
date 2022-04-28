@@ -23,13 +23,20 @@ const TopicsList = observer(({ names }: { names: string[] }) => {
   return (
     <Box component={Paper}>
       <List>
-        {names.map((name) => (
-          <TopicListElement key={name} topic={topics.topicsMap.get(name)} />
+        {names.map((topicName) => (
+          <TopicListElement
+            key={topicName}
+            topic={topics.getByName(topicName)}
+          />
         ))}
       </List>
     </Box>
   );
 });
+
+export function LinePlaceholder() {
+  return <Skeleton variant="text" width="15em" animation="wave" />;
+}
 
 const TopicListElement = observer(({ topic }: { topic: Topic }) => {
   const navigate = useNavigate();
@@ -49,12 +56,7 @@ const TopicListElement = observer(({ topic }: { topic: Topic }) => {
           topic.description || !topic.fetchTask.pending ? (
             topic.description
           ) : (
-            <Skeleton
-              variant="rectangular"
-              width="15em"
-              height="1.5em"
-              animation="wave"
-            />
+            <LinePlaceholder />
           )
         }
       />

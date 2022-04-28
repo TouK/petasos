@@ -1,7 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Breadcrumbs, Button, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Button, Link, Skeleton, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, ReactNode } from "react";
 import {
   Link as RouterLink,
   matchPath,
@@ -27,12 +27,27 @@ function LinkRouter(
 }
 
 const displayNameGet =
-  (matchers: Record<string, (match: PathMatch) => string>) => (to: string) => {
+  (matchers: Record<string, (match: PathMatch) => ReactNode>) =>
+  (to: string) => {
     const [match] = Object.keys(matchers)
       .map((pattern) => matchPath(pattern, to))
       .filter(Boolean);
     return matchers[match?.pattern.path]?.(match);
   };
+
+function Placeholder({ length }: { length: number }) {
+  return (
+    <Skeleton
+      variant="text"
+      width={`${length}ex`}
+      animation="wave"
+      sx={{
+        bgcolor: "background.paper",
+        opacity: (t) => t.palette.action.selectedOpacity,
+      }}
+    />
+  );
+}
 
 export const NavigationBar = observer(() => {
   const { topics, groups, dialogs } = useStore();
@@ -42,7 +57,14 @@ export const NavigationBar = observer(() => {
   const homeText = groups.areGroupsHidden ? "Topics list" : "Groups and topics";
 
   const nameGetter = displayNameGet({
-    "/:topic": (match) => topics.getTopicDisplayName(match?.params.topic),
+    "/:topic": (match) => {
+      return (
+        topics.getTopicDisplayName?.(match?.params.topic) || (
+          <Placeholder length={match?.params.topic.length} />
+        )
+      );
+    },
+    "/:topic/:subscription": (match) => match?.params.subscription,
   });
 
   return (
@@ -63,11 +85,11 @@ export const NavigationBar = observer(() => {
           const to = `/${pathnames.slice(0, index + 1).join("/")}`;
           return last ? (
             <Typography key={to} fontWeight="bold">
-              {nameGetter(to) || value}
+              {nameGetter(to)}
             </Typography>
           ) : (
             <LinkRouter to={to} key={to}>
-              {nameGetter(to) || value}
+              {nameGetter(to)}
             </LinkRouter>
           );
         })}

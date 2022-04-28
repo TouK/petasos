@@ -1,3 +1,4 @@
+import { CssBaseline } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import React from "react";
@@ -8,7 +9,7 @@ import { App } from "./app";
 
 export const Root = () => {
   return (
-    <StoreProvider options={Options}>
+    <>
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -24,16 +25,13 @@ export const Root = () => {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
         />
-        <style type="text/css">
-          {`
-            html {overflow: hidden; height: 100%}
-            body {height: 100%; overflow: auto; margin: 0}
-          `}
-        </style>
       </Helmet>
-      <LocalizationProvider dateAdapter={AdapterMoment}>
-        <App />
-      </LocalizationProvider>
-    </StoreProvider>
+      <CssBaseline />
+      <StoreProvider options={Options}>
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <App />
+        </LocalizationProvider>
+      </StoreProvider>
+    </>
   );
 };

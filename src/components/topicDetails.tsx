@@ -212,10 +212,13 @@ const TopicProperties = observer(({ topic }: { topic: Topic }) => {
   const timeFormat = "dddd, MMMM Do, YYYY h:mm:ss A";
 
   const properties: PropertiesTableRow[] = [
-    createRow("Creation date", moment.unix(topic.createdAt).format(timeFormat)),
+    createRow(
+      "Creation date",
+      topic.createdAt && moment.unix(topic.createdAt).format(timeFormat)
+    ),
     createRow(
       "Modification date",
-      moment.unix(topic.modifiedAt).format(timeFormat)
+      topic.modifiedAt && moment.unix(topic.modifiedAt).format(timeFormat)
     ),
   ];
 
@@ -320,7 +323,7 @@ function JsonTree({
     <Typography
       component={Box}
       variant="body2"
-      sx={{ fontFamily: "Roboto Mono, monospace" }}
+      sx={{ fontFamily: "'Roboto Mono', monospace" }}
     >
       {override || (
         <JSONTree

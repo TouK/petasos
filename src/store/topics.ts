@@ -17,7 +17,11 @@ export class Topics {
   constructor(private readonly store: Store) {}
 
   getTopicDisplayName(topicName: string): string {
-    return this.topicsMap.get(topicName)?.displayName;
+    return this.getByName(topicName)?.displayName;
+  }
+
+  getByName(name: string): Topic {
+    return this.topicsMap.get(name);
   }
 
   @action.bound
@@ -28,11 +32,12 @@ export class Topics {
         this.names = data;
         data.forEach(
           (topicName) =>
-            this.topicsMap.get(topicName) ||
+            this.getByName(topicName) ||
             this.topicsMap.set(topicName, new Topic(topicName, this.store))
         );
         [...this.topicsMap.keys()].forEach(
-          (topic) => data.includes(topic) || this.topicsMap.delete(topic)
+          (topicName) =>
+            data.includes(topicName) || this.topicsMap.delete(topicName)
         );
       })
     );

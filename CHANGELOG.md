@@ -1,3 +1,10 @@
+# [1.1.0-beta.4](https://github.com/TouK/petasos/compare/v1.1.0-beta.3...v1.1.0-beta.4) (2022-04-28)
+
+
+### Features
+
+* cleanup & some better loading indicators / placeholders to avoid flickering ([d1da874](https://github.com/TouK/petasos/commit/d1da8749d4bf1317bdbe784981980b94b51f3e72))
+
 # [1.1.0-beta.3](https://github.com/TouK/petasos/compare/v1.1.0-beta.2...v1.1.0-beta.3) (2022-04-27)
 
 

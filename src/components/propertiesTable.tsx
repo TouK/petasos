@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import React, { ReactNode } from "react";
 import { InfoPopover } from "./InfoPopover";
-import { LinePlaceholder } from "./topics";
+import { LinePlaceholder } from "./linePlaceholder";
 
 const TBody = ({
   properties,

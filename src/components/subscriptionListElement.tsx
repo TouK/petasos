@@ -10,7 +10,7 @@ import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Subscription } from "../store/subscription";
-import { LinePlaceholder } from "./topics";
+import { LinePlaceholder } from "./linePlaceholder";
 
 export const SubscriptionListElement = observer(
   ({ subscription }: { subscription: Subscription }) => {

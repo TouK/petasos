@@ -7,7 +7,6 @@ import {
   ListItemText,
   Pagination,
   Paper,
-  Skeleton,
   Stack,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
@@ -16,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
 import { EmptyListPlaceholder } from "./emptyListPlaceholder";
+import { LinePlaceholder } from "./linePlaceholder";
 import { SubscriptionsCounter } from "./subscriptionsCounter";
 
 const TopicsList = observer(({ names }: { names: string[] }) => {
@@ -33,10 +33,6 @@ const TopicsList = observer(({ names }: { names: string[] }) => {
     </Box>
   );
 });
-
-export function LinePlaceholder() {
-  return <Skeleton variant="text" width="15em" animation="wave" />;
-}
 
 const TopicListElement = observer(({ topic }: { topic: Topic }) => {
   const navigate = useNavigate();

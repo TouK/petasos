@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Breadcrumbs, Button, Link, Skeleton, Typography } from "@mui/material";
+import { Breadcrumbs, Button, Link, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React, { PropsWithChildren, ReactNode } from "react";
 import {
@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
 import { LayoutRow } from "./layout";
+import { LinePlaceholder } from "./linePlaceholder";
 
 function LinkRouter(
   props: PropsWithChildren<{
@@ -35,20 +36,6 @@ const displayNameGet =
     return matchers[match?.pattern.path]?.(match);
   };
 
-function Placeholder({ length }: { length: number }) {
-  return (
-    <Skeleton
-      variant="text"
-      width={`${length}ex`}
-      animation="wave"
-      sx={{
-        bgcolor: "background.paper",
-        opacity: (t) => t.palette.action.selectedOpacity,
-      }}
-    />
-  );
-}
-
 export const NavigationBar = observer(() => {
   const { topics, groups, dialogs } = useStore();
   const location = useLocation();
@@ -60,7 +47,7 @@ export const NavigationBar = observer(() => {
     "/:topic": (match) => {
       return (
         topics.getTopicDisplayName?.(match?.params.topic) || (
-          <Placeholder length={match?.params.topic.length} />
+          <LinePlaceholder dark length={match?.params.topic.length} />
         )
       );
     },

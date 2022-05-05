@@ -5,28 +5,6 @@
 
 * release config, wrong version in ui ([497747d](https://github.com/TouK/petasos/commit/497747d15bdbaef0ad29cf5ecd36d49f21f368a9))
 
-# [1.1.0-beta.8](https://github.com/TouK/petasos/compare/v1.1.0-beta.7...v1.1.0-beta.8) (2022-05-05)
-
-
-### Bug Fixes
-
-* release config, wrong version in ui ([991af10](https://github.com/TouK/petasos/commit/991af10a4e058ea6ae17a5692960e22611a2aa34))
-* release config, wrong version in ui ([fa3147b](https://github.com/TouK/petasos/commit/fa3147bb593920ddb58e81b6f26458d4fbe45c5c))
-
-# [1.1.0-beta.8](https://github.com/TouK/petasos/compare/v1.1.0-beta.7...v1.1.0-beta.8) (2022-05-05)
-
-
-### Bug Fixes
-
-* release config, wrong version in ui ([fa3147b](https://github.com/TouK/petasos/commit/fa3147bb593920ddb58e81b6f26458d4fbe45c5c))
-
-# [1.1.0-beta.7](https://github.com/TouK/petasos/compare/v1.1.0-beta.6...v1.1.0-beta.7) (2022-05-05)
-
-
-### Bug Fixes
-
-* release config, wrong version in ui ([53e78c2](https://github.com/TouK/petasos/commit/53e78c25e04cf1eb13da609fe1ab866d697b70b6))
-
 # [1.1.0-beta.6](https://github.com/TouK/petasos/compare/v1.1.0-beta.5...v1.1.0-beta.6) (2022-05-05)
 
 

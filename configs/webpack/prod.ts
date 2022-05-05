@@ -6,7 +6,7 @@ import { commonConfig } from "./common";
 export const prodConfig = merge(commonConfig, {
   mode: "production",
   output: {
-    filename: "js/bundle.min.js",
+    filename: "js/[name]_[contenthash].min.js",
     path: resolve(__dirname, "../../dist"),
   },
   devtool: "source-map",

@@ -5,11 +5,6 @@ import { useStore } from "../store/storeProvider";
 import { EnsureFetched } from "./ensureFetched";
 import { SubscriptionDetails } from "./subscriptionDetails";
 
-export const SubscriptionView = observer(() => {
-  const { subscription, topic } = useParams<"subscription" | "topic">();
-  return <Subscription subscriptionName={subscription} topicName={topic} />;
-});
-
 const Subscription = observer(
   (props: { subscriptionName: string; topicName: string }) => {
     const { subscriptionName, topicName } = props;
@@ -25,3 +20,10 @@ const Subscription = observer(
     );
   }
 );
+
+const SubscriptionView = observer(() => {
+  const { subscription, topic } = useParams<"subscription" | "topic">();
+  return <Subscription subscriptionName={subscription} topicName={topic} />;
+});
+
+export default SubscriptionView;

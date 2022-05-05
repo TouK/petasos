@@ -2,10 +2,10 @@ import AddAssetHtmlPlugin from "add-asset-html-webpack-plugin";
 import dotenv from "dotenv";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
+import MomentLocalesPlugin from "moment-locales-webpack-plugin";
 import { resolve } from "path";
 import { Configuration, DefinePlugin } from "webpack";
 import pkg from "../../package.json";
-import MomentLocalesPlugin from "moment-locales-webpack-plugin";
 
 dotenv.config();
 
@@ -103,5 +103,8 @@ export const commonConfig: Configuration = {
     runtimeChunk: false,
     mergeDuplicateChunks: true,
     concatenateModules: true,
+    splitChunks: {
+      chunks: "all",
+    },
   },
 };

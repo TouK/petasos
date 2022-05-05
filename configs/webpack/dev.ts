@@ -32,6 +32,7 @@ export const devConfig = mergeWithRules({
   devtool: "eval-cheap-module-source-map",
   optimization: {
     moduleIds: "named",
+    chunkIds: "named",
   },
   plugins: [
     new ReactRefreshWebpackPlugin({

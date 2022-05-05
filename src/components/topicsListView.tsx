@@ -1,3 +1,4 @@
+import loadable from "@loadable/component";
 import { observer } from "mobx-react-lite";
 import React, { PropsWithChildren } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -19,7 +20,7 @@ const GroupsLayout = observer(({ children }: PropsWithChildren<unknown>) => {
   );
 });
 
-export const TopicsListView = () => {
+const TopicsListView = () => {
   const [searchParams] = useSearchParams();
   const group = searchParams.get("group");
 
@@ -29,3 +30,5 @@ export const TopicsListView = () => {
     </GroupsLayout>
   );
 };
+
+export default TopicsListView;

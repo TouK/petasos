@@ -5,11 +5,6 @@ import { useStore } from "../store/storeProvider";
 import { ContentBox } from "./contentBox";
 import { EnsureFetched } from "./ensureFetched";
 
-export const TopicView = observer(() => {
-  const { topic } = useParams<"topic">();
-  return <Topic topicName={topic} />;
-});
-
 const Topic = observer(({ topicName }: { topicName: string }) => {
   const { topics } = useStore();
   const topic = topics.getByName(topicName);
@@ -26,3 +21,10 @@ const Topic = observer(({ topicName }: { topicName: string }) => {
     </EnsureFetched>
   );
 });
+
+const TopicView = observer(() => {
+  const { topic } = useParams<"topic">();
+  return <Topic topicName={topic} />;
+});
+
+export default TopicView;

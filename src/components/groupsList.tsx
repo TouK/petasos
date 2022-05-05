@@ -1,5 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import {
   IconButton,
   List,
@@ -10,7 +9,7 @@ import {
   styled,
   Tooltip,
 } from "@mui/material";
-import { IconButtonProps } from "@mui/material/IconButton/IconButton";
+import type { IconButtonProps } from "@mui/material/IconButton/IconButton";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { useSearchParams } from "react-router-dom";

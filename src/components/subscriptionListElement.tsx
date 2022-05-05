@@ -1,4 +1,4 @@
-import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
+import { Subscriptions as SubscriptionsIcon } from "@mui/icons-material";
 import {
   Chip,
   CircularProgress,

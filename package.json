@@ -65,6 +65,7 @@
     "fork-ts-checker-webpack-plugin": "^7.2.1",
     "html-webpack-plugin": "^5.5.0",
     "image-webpack-loader": "^8.1.0",
+    "moment-locales-webpack-plugin": "^1.2.0",
     "prettier": "2.6.1",
     "react-refresh": "^0.11.0",
     "rimraf": "3.0.2",

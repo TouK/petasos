@@ -5,6 +5,7 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import { resolve } from "path";
 import { Configuration, DefinePlugin } from "webpack";
 import pkg from "../../package.json";
+import MomentLocalesPlugin from "moment-locales-webpack-plugin";
 
 dotenv.config();
 
@@ -79,6 +80,9 @@ export const commonConfig: Configuration = {
   },
   entry: ["./src/index.tsx"],
   plugins: [
+    new MomentLocalesPlugin({
+      localesToKeep: ["en"],
+    }),
     new ForkTsCheckerWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: `${pkg.name} ${pkg.version}`,

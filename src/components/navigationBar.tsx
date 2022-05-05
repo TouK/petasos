@@ -1,4 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
+import { Add as AddIcon } from "@mui/icons-material";
 import { Breadcrumbs, Button, Link, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React, { PropsWithChildren, ReactNode } from "react";

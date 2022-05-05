@@ -8,7 +8,8 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "target": "es5",
     "jsx": "react",
     "lib": [
@@ -40,5 +41,10 @@
         "classnameTransform": "camelCase"
       }
     }
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
 }

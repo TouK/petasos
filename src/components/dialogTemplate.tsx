@@ -5,7 +5,7 @@ import {
   LinearProgress,
   Stack,
 } from "@mui/material";
-import { DialogProps } from "@mui/material/Dialog/Dialog";
+import type { DialogProps } from "@mui/material/Dialog/Dialog";
 import { Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";

@@ -1,4 +1,4 @@
-import TopicIcon from "@mui/icons-material/Topic";
+import { Topic as TopicIcon } from "@mui/icons-material";
 import {
   Box,
   List,

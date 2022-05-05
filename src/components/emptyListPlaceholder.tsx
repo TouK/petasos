@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { TypographyProps } from "@mui/material/Typography/Typography";
+import type { TypographyProps } from "@mui/material/Typography/Typography";
 import React from "react";
 
 export const EmptyListPlaceholder = (props: TypographyProps) => (

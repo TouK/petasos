@@ -1,9 +1,11 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import PauseIcon from "@mui/icons-material/Pause";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import RefreshIcon from "@mui/icons-material/Refresh";
+import {
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  FileCopy as FileCopyIcon,
+  Pause as PauseIcon,
+  PlayArrow as PlayArrowIcon,
+  Refresh as RefreshIcon,
+} from "@mui/icons-material";
 import {
   Box,
   Button,

@@ -1,4 +1,4 @@
-import HelpIcon from "@mui/icons-material/Help";
+import { Help as HelpIcon } from "@mui/icons-material";
 import React from "react";
 import { DarkTooltip, SmallIconButton } from "./styledMuiComponents";
 

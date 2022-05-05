@@ -1,9 +1,11 @@
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import SettingsIcon from "@mui/icons-material/Settings";
+import {
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  FileCopy as FileCopyIcon,
+  Refresh as RefreshIcon,
+  Settings as SettingsIcon,
+} from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
@@ -13,7 +15,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { ButtonProps } from "@mui/material/Button/Button";
+import type { ButtonProps } from "@mui/material/Button/Button";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
 import React, { ReactNode, useEffect, useState } from "react";

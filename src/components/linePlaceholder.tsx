@@ -1,5 +1,5 @@
 import { Skeleton } from "@mui/material";
-import { SkeletonProps } from "@mui/material/Skeleton/Skeleton";
+import type { SkeletonProps } from "@mui/material/Skeleton/Skeleton";
 import React from "react";
 
 interface Props extends Pick<SkeletonProps, "sx"> {

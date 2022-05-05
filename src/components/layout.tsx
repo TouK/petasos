@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { StackProps } from "@mui/material/Stack/Stack";
+import type { StackProps } from "@mui/material/Stack/Stack";
 import React from "react";
 
 export const LayoutRow = (props: StackProps) => (

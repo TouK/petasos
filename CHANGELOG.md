@@ -1,3 +1,18 @@
+# [1.1.0-beta.5](https://github.com/TouK/petasos/compare/v1.1.0-beta.4...v1.1.0-beta.5) (2022-05-05)
+
+
+### Bug Fixes
+
+* allways display backend validation error, some api cleanup ([7b6a9ee](https://github.com/TouK/petasos/commit/7b6a9eeb42cabd0f8bb22da889e17c77e73bc885))
+* minor problems ([4c80120](https://github.com/TouK/petasos/commit/4c8012066a0d113f9c15144d052db4bea279edec))
+
+
+### Features
+
+* cleaner dialogs and backend error message ([5e09058](https://github.com/TouK/petasos/commit/5e09058ae59b3a20943719ce632f67acb4a1f1c6))
+* highlight in schema editor ([c1690be](https://github.com/TouK/petasos/commit/c1690be97a8fd18a26d70751a2ced8cda5405030))
+* validators refactor, simple schema validation ([720b32b](https://github.com/TouK/petasos/commit/720b32bf2ef04008dfb4039bc17e5416491a23dd))
+
 # [1.1.0-beta.4](https://github.com/TouK/petasos/compare/v1.1.0-beta.3...v1.1.0-beta.4) (2022-04-28)
 
 

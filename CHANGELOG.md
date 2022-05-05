@@ -1,3 +1,10 @@
+# [1.1.0-beta.8](https://github.com/TouK/petasos/compare/v1.1.0-beta.7...v1.1.0-beta.8) (2022-05-05)
+
+
+### Bug Fixes
+
+* release config, wrong version in ui ([fa3147b](https://github.com/TouK/petasos/commit/fa3147bb593920ddb58e81b6f26458d4fbe45c5c))
+
 # [1.1.0-beta.7](https://github.com/TouK/petasos/compare/v1.1.0-beta.6...v1.1.0-beta.7) (2022-05-05)
 
 

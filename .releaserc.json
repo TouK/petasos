@@ -30,7 +30,10 @@
     [
       "@semantic-release/github",
       {
-        "assets": "dist/petasos.zip"
+        "assets": ["dist/petasos.zip", {
+          "path": "dist",
+          "name": "petasos_test.zip"
+        }]
       }
     ],
     "@semantic-release/git"

@@ -1,3 +1,17 @@
+# [1.1.0-beta.10](https://github.com/TouK/petasos/compare/v1.1.0-beta.9...v1.1.0-beta.10) (2022-05-05)
+
+
+### Bug Fixes
+
+* **build:** don't make zip for dev builds ([3511591](https://github.com/TouK/petasos/commit/3511591d9c14b6fc5a3674fd2f8fcd3507377631))
+* json editor disabled after backend error ([ca77436](https://github.com/TouK/petasos/commit/ca77436b563194686e6ea8d6dd72dfcbca4b9350))
+
+
+### Performance Improvements
+
+* code split ([3240ed9](https://github.com/TouK/petasos/commit/3240ed9fcbdded940785f5138eaa1ef9841a9a69))
+* optimize imports ([c8c0401](https://github.com/TouK/petasos/commit/c8c0401579ec4f945be982a42582cce51a44a5ce))
+
 # [1.1.0-beta.9](https://github.com/TouK/petasos/compare/v1.1.0-beta.8...v1.1.0-beta.9) (2022-05-05)
 
 

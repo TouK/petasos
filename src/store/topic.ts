@@ -1,7 +1,7 @@
 import { action, computed, observable, runInAction, toJS } from "mobx";
 import moment from "moment";
 import urlJoin from "url-join";
-import { fetchFn, fetchJson } from "../api";
+import { fetchFn } from "../api";
 import { HermesFrontendUrl, Hosts } from "../config";
 import { debouncedTask } from "../helpers/debouncedTask";
 import {
@@ -193,41 +193,41 @@ export class Topic implements TopicModel {
   private async create(
     object: TopicFormikValues
   ): Promise<ValidationError | void> {
-    this.assignValuesFromForm(object);
+    const model = this.getModelFromForm(object);
     const url = `${Hosts.APP_API}/topics`;
-    const fetchFn = fetchJson;
-    const body = JSON.stringify(this.model);
-    return await fetchFn<ValidationError | void>(url, false, {
+    const body = JSON.stringify(model);
+    return await fetchFn<ValidationError | void>(url, {
       method: "POST",
       body,
     });
   }
 
-  @action
-  private assignValuesFromForm(object: TopicFormikValues) {
+  private getModelFromForm(object: TopicFormikValues): TopicModel {
+    const value = this.model;
     if (object.schema) {
-      this.schema = this.addMetadataToSchema(object.schema);
+      value.schema = this.addMetadataToSchema(object.schema);
     }
     if (object.description) {
-      this.description = object.description;
+      value.description = object.description;
     }
     if (object.advancedValues) {
       if (object.advancedValues.retentionTime) {
-        this.retentionTime = new DefaultStorageRetentionTimeModel(
+        value.retentionTime = new DefaultStorageRetentionTimeModel(
           object.advancedValues.retentionTime,
           false
         );
         if (object.advancedValues.maxMessageSize) {
-          this.maxMessageSize = object.advancedValues.maxMessageSize;
+          value.maxMessageSize = object.advancedValues.maxMessageSize;
         }
       }
       if (object.advancedValues.trackingEnabled) {
-        this.trackingEnabled = object.advancedValues.trackingEnabled;
+        value.trackingEnabled = object.advancedValues.trackingEnabled;
       }
       if (object.advancedValues.acknowledgement) {
-        this.ack = object.advancedValues.acknowledgement;
+        value.ack = object.advancedValues.acknowledgement;
       }
     }
+    return toJS(value);
   }
 
   @action.bound
@@ -237,7 +237,7 @@ export class Topic implements TopicModel {
       return;
     }
     const url = `${Hosts.APP_API}/topics/${this.name}`;
-    const result = fetchFn<TopicModel>(url, true).then(
+    const result = fetchFn<TopicModel>(url).then(
       action((data) => {
         this.model = data;
       })
@@ -253,7 +253,7 @@ export class Topic implements TopicModel {
       return;
     }
     const url = `${Hosts.APP_API}/topics/${this.name}/subscriptions`;
-    return fetchFn<string[]>(url, true).then(
+    return fetchFn<string[]>(url).then(
       action((data = []) =>
         this.subscriptionsMap.replace(
           data.reduce(
@@ -281,7 +281,7 @@ export class Topic implements TopicModel {
       },
       this.replacer
     );
-    return await fetchFn<ValidationError | void>(url, false, {
+    return await fetchFn<ValidationError | void>(url, {
       method: "POST",
       body,
     });
@@ -291,19 +291,21 @@ export class Topic implements TopicModel {
   private async update(
     object: TopicFormikValues
   ): Promise<ValidationError | void> {
-    this.assignValuesFromForm(object);
     const url = `${Hosts.APP_API}/topics/${this.name}`;
-    const body = JSON.stringify(this.model);
-    return await fetchFn<ValidationError | void>(url, false, {
+    const model = this.getModelFromForm(object);
+    const body = JSON.stringify(model);
+    const response = await fetchFn<ValidationError | void>(url, {
       method: "PUT",
       body,
     });
+    this.model = model;
+    return response;
   }
 
   @action.bound
   private async removeTopic(): Promise<ValidationError | void> {
     const url = `${Hosts.APP_API}/topics/${this.name}`;
-    return await fetchFn<ValidationError | null>(url, false, {
+    return await fetchFn<ValidationError | null>(url, {
       method: "DELETE",
     });
   }
@@ -313,7 +315,6 @@ export class Topic implements TopicModel {
     const messagePreviewUrl = `${Hosts.APP_API}/topics/${this.name}/preview`;
     const messagePreview = await fetchFn<MessagePreviewModel[]>(
       messagePreviewUrl,
-      false,
       { method: "GET" }
     );
     runInAction(() => (this.messagePreview = messagePreview));

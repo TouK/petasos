@@ -1,5 +1,5 @@
 import { action, observable } from "mobx";
-import { fetchJson } from "../api";
+import { fetchFn } from "../api";
 import { Hosts } from "../config";
 import { debouncedTask } from "../helpers/debouncedTask";
 import { Store } from "./store";
@@ -27,7 +27,7 @@ export class Topics {
   @action.bound
   private fetchTopics() {
     const url = `${Hosts.APP_API}/topics`;
-    return fetchJson<string[]>(url, true).then(
+    return fetchFn<string[]>(url).then(
       action((data) => {
         this.names = data;
         data.forEach(

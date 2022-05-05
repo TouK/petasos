@@ -154,7 +154,7 @@ export class Subscription implements SubscriptionModel {
       console.error("Something is off");
       return;
     }
-    return fetchFn<SubscriptionModel>(this.url, true).then(
+    return fetchFn<SubscriptionModel>(this.url).then(
       action((data: SubscriptionModel) => {
         this.update(data);
       })
@@ -170,7 +170,7 @@ export class Subscription implements SubscriptionModel {
       return value;
     };
     const body = JSON.stringify({ ...this }, replacer);
-    return await fetchFn<ValidationError | void>(this.url, false, {
+    return await fetchFn<ValidationError | void>(this.url, {
       method: "PUT",
       body,
     });
@@ -189,7 +189,7 @@ export class Subscription implements SubscriptionModel {
   @action.bound
   private async changeState(state: string): Promise<void> {
     const body = JSON.stringify(state);
-    return await fetchFn<void>(`${this.url}/state`, false, {
+    return await fetchFn<void>(`${this.url}/state`, {
       method: "PUT",
       body,
     });
@@ -198,7 +198,7 @@ export class Subscription implements SubscriptionModel {
   @action
   private async getMetrics(): Promise<SubscriptionMetrics> {
     const metricsUrl = `${this.url}/metrics`;
-    const metrics = await fetchFn<SubscriptionMetrics>(metricsUrl, false, {
+    const metrics = await fetchFn<SubscriptionMetrics>(metricsUrl, {
       method: "GET",
     });
     runInAction(() => (this.metrics = metrics));
@@ -210,7 +210,7 @@ export class Subscription implements SubscriptionModel {
     const undeliveredUrl = `${this.url}/undelivered/last`;
     let message = null;
     try {
-      message = await fetchFn<UndeliveredMessage>(undeliveredUrl, true, {
+      message = await fetchFn<UndeliveredMessage>(undeliveredUrl, {
         method: "GET",
       });
     } catch (err) {
@@ -227,7 +227,6 @@ export class Subscription implements SubscriptionModel {
     const undeliveredUrl = `${this.url}/undelivered`;
     const lastUndeliveredMessages = await fetchFn<UndeliveredMessage[]>(
       undeliveredUrl,
-      true,
       { method: "GET" }
     );
     runInAction(() => (this.lastUndeliveredMessages = lastUndeliveredMessages));
@@ -237,7 +236,7 @@ export class Subscription implements SubscriptionModel {
   @action.bound
   private deleteSubscription(): Promise<void> {
     const deleteUrl = `${Hosts.APP_API}/topics/${this.parent.name}/subscriptions/${this.name}`;
-    return fetchFn(deleteUrl, true, { method: "DELETE" });
+    return fetchFn(deleteUrl, { method: "DELETE" });
   }
 
   @action.bound
@@ -246,7 +245,7 @@ export class Subscription implements SubscriptionModel {
     const body = {
       retransmissionDate: date.toISOString(true),
     };
-    return await fetchFn<void>(retransmissionUrl, true, {
+    return await fetchFn<void>(retransmissionUrl, {
       method: "PUT",
       body: JSON.stringify(body),
     });

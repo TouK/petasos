@@ -107,7 +107,7 @@ export class Groups {
 
   @action.bound
   private fetchGroups() {
-    return fetchFn<string[]>(this.url, true).then(
+    return fetchFn<string[]>(this.url).then(
       action((data = []) =>
         this.groupsMap.replace(
           data.reduce(
@@ -133,7 +133,7 @@ export class Groups {
       };
     }
 
-    return await fetchFn<ValidationError>(this.url, false, {
+    return await fetchFn<ValidationError>(this.url, {
       method: "POST",
       body,
     });
@@ -142,6 +142,6 @@ export class Groups {
   @action.bound
   private async deleteGroup(name: string): Promise<void | ValidationError> {
     const deleteUrl = `${this.url}/${name}`;
-    return await fetchFn(deleteUrl, true, { method: "DELETE" });
+    return await fetchFn(deleteUrl, { method: "DELETE" });
   }
 }

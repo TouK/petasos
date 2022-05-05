@@ -16,7 +16,8 @@
     "docker-build": "docker build . -t carpinion-web",
     "docker-run": "docker run -it -p 13011:80 carpinion-web:latest",
     "helm-package": "./helm-package.sh",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepack": "npm run build"
   },
   "author": "",
   "license": "ISC",

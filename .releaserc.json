@@ -23,17 +23,13 @@
     [
       "@semantic-release/npm",
       {
-        "npmPublish": false,
-        "tarballDir": "false"
+        "npmPublish": false
       }
     ],
     [
       "@semantic-release/github",
       {
-        "assets": ["dist/petasos.zip", {
-          "path": "dist/**/*",
-          "name": "petasos_test.zip"
-        }]
+        "assets": "dist/petasos.zip"
       }
     ],
     "@semantic-release/git"

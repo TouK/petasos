@@ -65,25 +65,25 @@ export const CodeEditor = forwardRef<
       editorRef.current.focus();
     }
     jarRef.current = jar;
+    if (disabled) {
+      editorRef.current.contentEditable = "false";
+    }
     return () => jar.destroy();
-  }, [autoFocus]);
+  }, [autoFocus, disabled]);
 
   //update value from outside
   useEffect(() => {
-    if (jarRef.current) {
-      jarRef.current.updateCode(value);
-      if (disabled) {
-        editorRef.current.contentEditable = "false";
-      } else {
-        positionRef.current && jarRef.current.restore(positionRef.current);
-      }
+    jarRef.current?.updateCode(value);
+    if (positionRef.current) {
+      jarRef.current?.restore(positionRef.current);
     }
-  }, [disabled, value]);
+  }, [value]);
 
   //call change callback
   useEffect(() => {
-    if (!disabled) {
-      code && code !== value && onChange(code);
+    const isCodeChanged = code !== null && code !== value;
+    if (!disabled && isCodeChanged) {
+      onChange(code);
     }
   }, [disabled, code, onChange, value]);
 

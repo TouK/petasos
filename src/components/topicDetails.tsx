@@ -309,7 +309,7 @@ const TopicSubscriptionsList = observer(({ topic }: { topic: Topic }) => {
   );
 });
 
-function JsonTree({
+export function JsonTree({
   override,
   jsonText,
   rootLabel,

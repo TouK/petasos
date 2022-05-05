@@ -27,7 +27,7 @@ import {
   PropertiesTable,
   PropertiesTableRow,
 } from "./propertiesTable";
-import { DetailsHeader, DetailsProperties } from "./topicDetails";
+import { DetailsHeader, DetailsProperties, JsonTree } from "./topicDetails";
 
 export const SubscriptionDetails = observer(
   (props: { topic: Topic; subscription: Subscription }) => {
@@ -240,7 +240,12 @@ const LastUndeliveredMessage = observer(
               )
             ),
             createRow("Reason", subscription.lastUndeliveredMessage.reason),
-            createRow("Message", subscription.lastUndeliveredMessage.message),
+            createRow(
+              "Message",
+              <JsonTree
+                jsonText={subscription.lastUndeliveredMessage.message}
+              />
+            ),
           ]
         : [];
 

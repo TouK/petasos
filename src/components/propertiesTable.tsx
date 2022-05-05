@@ -17,7 +17,7 @@ const TBody = ({
 }: { properties: PropertiesTableRow[] } & Pick<TypographyProps, "color">) => (
   <TableBody>
     {properties.filter(Boolean).map((row) => (
-      <TableRow key={row.name}>
+      <TableRow key={row.name} sx={{ verticalAlign: "baseline" }}>
         <TableCell align="right" width="35%">
           <Typography {...props} color="text.disabled" variant="subtitle2">
             {row.name}

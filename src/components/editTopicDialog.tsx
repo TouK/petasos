@@ -8,6 +8,7 @@ import { useStore } from "../store/storeProvider";
 import { ValidationError } from "../store/topics";
 import { DEFAULT_TOPIC_VALUES } from "./addTopicDialog";
 import { DialogTemplate } from "./dialogTemplate";
+import { JsonTextField } from "./jsonTextField";
 import { GroupsFormControl } from "./groupsFormControl";
 
 export const EditTopicDialog = observer(() => {
@@ -99,7 +100,7 @@ export const EditTopicDialog = observer(() => {
       fullWidth
     />,
     <Field
-      component={TextField}
+      component={JsonTextField}
       label="Avro schema"
       name="schema"
       key="schema"

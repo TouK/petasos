@@ -18,7 +18,7 @@ const findEnvModule = ({ request }, callback) => {
 
 export const commonConfig: Configuration = {
   resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js"],
+    extensions: [".jsx", ".js", ".tsx", ".ts"],
     symlinks: false,
   },
   context: resolve(__dirname, "../.."),
@@ -33,6 +33,7 @@ export const commonConfig: Configuration = {
       },
       {
         test: /\.css$/,
+        exclude: /node_modules/,
         use: [
           { loader: "style-loader" },
           {
@@ -46,6 +47,11 @@ export const commonConfig: Configuration = {
             },
           },
         ],
+      },
+      {
+        test: /\.css$/,
+        include: /node_modules/,
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }],
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,

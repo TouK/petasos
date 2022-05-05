@@ -16,6 +16,7 @@ import { Dialog } from "../store/dialog";
 import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
 import { DialogTemplate } from "./dialogTemplate";
+import { JsonTextField } from "./jsonTextField";
 import { GroupsFormControl } from "./groupsFormControl";
 
 export const TopicDialog = observer(
@@ -124,7 +125,7 @@ export const TopicDialog = observer(
         fullWidth
       />,
       <Field
-        component={TextField}
+        component={JsonTextField}
         label="Avro schema"
         name="schema"
         key="schema"

@@ -31,7 +31,7 @@
       "@semantic-release/github",
       {
         "assets": ["dist/petasos.zip", {
-          "path": "dist",
+          "path": "dist/**/*",
           "name": "petasos_test.zip"
         }]
       }

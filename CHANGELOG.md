@@ -1,3 +1,10 @@
+# [1.1.0-beta.6](https://github.com/TouK/petasos/compare/v1.1.0-beta.5...v1.1.0-beta.6) (2022-05-05)
+
+
+### Features
+
+* colorize last undelivered message ([e029296](https://github.com/TouK/petasos/commit/e0292961d57976f2a4a01b83d2d5ec47866e8afd))
+
 # [1.1.0-beta.5](https://github.com/TouK/petasos/compare/v1.1.0-beta.4...v1.1.0-beta.5) (2022-05-05)
 
 

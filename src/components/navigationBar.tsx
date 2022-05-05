@@ -44,13 +44,10 @@ export const NavigationBar = observer(() => {
   const homeText = groups.areGroupsHidden ? "Topics list" : "Groups and topics";
 
   const nameGetter = displayNameGet({
-    "/:topic": (match) => {
-      return (
-        topics.getTopicDisplayName?.(match?.params.topic) || (
-          <LinePlaceholder dark length={match?.params.topic.length} />
-        )
-      );
-    },
+    "/:topic": (match) =>
+      topics.getTopicDisplayName?.(match?.params.topic) || (
+        <LinePlaceholder dark length={match?.params.topic.length} />
+      ),
     "/:topic/:subscription": (match) => match?.params.subscription,
   });
 

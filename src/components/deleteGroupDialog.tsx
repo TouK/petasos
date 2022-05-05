@@ -14,7 +14,7 @@ export const DeleteGroupDialog = observer(() => {
       dialog={dialog}
       taskOnSubmit={groups.deleteTask.wrap((fn) => () => fn(group))}
       text={`Are you sure you want to delete group ${group}?`}
-      confirmText={"Remove topic"}
+      confirmText={"Remove group"}
       onSubmitSuccess={async () => {
         groups.fetchTask();
         topics.fetchTask();

@@ -86,16 +86,17 @@ export const EditTopicDialog = observer(() => {
       label="Topic name"
       name="topic"
       key="topic"
-      style={{ width: "100%" }}
+      fullWidth
       disabled
     />,
     <Field
       required
       component={TextField}
+      autoFocus
       label="Topic description"
       name="description"
       key="description"
-      style={{ width: "100%" }}
+      fullWidth
     />,
     <Field
       component={TextField}
@@ -103,7 +104,7 @@ export const EditTopicDialog = observer(() => {
       name="schema"
       key="schema"
       id="schema"
-      style={{ width: "100%" }}
+      fullWidth
       variant="outlined"
       multiline
       rows={15}

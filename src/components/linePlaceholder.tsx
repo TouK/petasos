@@ -3,16 +3,16 @@ import { SkeletonProps } from "@mui/material/Skeleton/Skeleton";
 import React from "react";
 
 interface Props extends Pick<SkeletonProps, "sx"> {
-  length?: number | string;
+  length?: number;
   dark?: boolean;
 }
 
 export function LinePlaceholder(props: Props) {
-  const { length = "15em", dark, ...passProps } = props;
+  const { length = 15, dark, ...passProps } = props;
   return (
     <Skeleton
       variant="text"
-      width={length}
+      width={`${length}ex`}
       animation="wave"
       sx={
         dark && {

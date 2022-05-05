@@ -107,12 +107,13 @@ export const TopicDialog = observer(
         />
       ),
       <Field
+        autoFocus
         required
         component={TextField}
         label="Topic name"
         name="topic"
         key="topic"
-        style={{ width: "100%" }}
+        fullWidth
       />,
       <Field
         required
@@ -120,7 +121,7 @@ export const TopicDialog = observer(
         label="Topic description"
         name="description"
         key="description"
-        style={{ width: "100%" }}
+        fullWidth
       />,
       <Field
         component={TextField}
@@ -128,7 +129,7 @@ export const TopicDialog = observer(
         name="schema"
         key="schema"
         id="schema"
-        style={{ width: "100%" }}
+        fullWidth
         variant="outlined"
         multiline
         rows={15}

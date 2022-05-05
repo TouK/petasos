@@ -36,7 +36,7 @@ export const fetchJson = async <R>(
   return json as R;
 };
 
-export function withToken(
+function withToken(
   fetchFn: typeof fetchJson,
   tokenGetter: () => Promise<string>
 ): typeof fetchJson {

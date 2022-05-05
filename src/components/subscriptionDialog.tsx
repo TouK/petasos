@@ -201,7 +201,6 @@ export const SubscriptionDialog = ({
         onSubmitSuccess={onSubmitSuccess}
         taskOnSubmit={taskOnSubmit}
         validateFunc={validateFunc}
-        wider={true}
       />
     );
   });

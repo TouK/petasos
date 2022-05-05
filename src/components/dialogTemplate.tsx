@@ -1,4 +1,11 @@
-import { DialogContent, DialogTitle, LinearProgress } from "@mui/material";
+import {
+  Dialog as MuiDialog,
+  DialogContent,
+  DialogTitle,
+  LinearProgress,
+  Stack,
+} from "@mui/material";
+import { DialogProps } from "@mui/material/Dialog/Dialog";
 import { Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
@@ -8,9 +15,9 @@ import { ValidationError } from "../store/topics";
 import { BackendValidation } from "./backendValidation";
 import { DialogActions } from "./dialogActions";
 import { DialogFormFields } from "./dialogFormFields";
-import { StyledDialog } from "./styledMuiComponents";
 
-function DialogTemplateComponent<T extends FormValues, R = void>(props: {
+interface DialogTemplateComponentProps<T extends FormValues, R = void>
+  extends Omit<DialogProps, "open" | "onClose"> {
   dialog: Dialog<unknown, R>;
   validateFunc: (FormValues, boolean) => void;
   taskOnSubmit: (
@@ -23,8 +30,11 @@ function DialogTemplateComponent<T extends FormValues, R = void>(props: {
   initialValues: T;
   basicFields: (FormikErrors) => JSX.Element[];
   advancedFields: (FormikErrors) => JSX.Element[];
-  wider: boolean;
-}) {
+}
+
+function DialogTemplateComponent<T extends FormValues, R = void>(
+  props: DialogTemplateComponentProps<T, R>
+) {
   const {
     dialog,
     validateFunc,
@@ -36,7 +46,7 @@ function DialogTemplateComponent<T extends FormValues, R = void>(props: {
     initialValues,
     basicFields,
     advancedFields,
-    wider,
+    ...passProps
   } = props;
   const [backendValidationError, setBackendValidationError] =
     useState<string>(null);
@@ -73,7 +83,12 @@ function DialogTemplateComponent<T extends FormValues, R = void>(props: {
   }
 
   return (
-    <StyledDialog open={dialog.isOpen} onClose={() => dialog.close()}>
+    <MuiDialog
+      open={dialog.isOpen}
+      onClose={() => dialog.close()}
+      fullWidth
+      {...passProps}
+    >
       <Formik
         initialValues={initialValues}
         enableReinitialize={true}
@@ -87,15 +102,16 @@ function DialogTemplateComponent<T extends FormValues, R = void>(props: {
               <DialogTitle>{dialogTitle}</DialogTitle>
               <DialogContent>
                 <Form>
-                  <BackendValidation text={backendValidationError} />
-                  <DialogFormFields
-                    basicFields={basicFields(errors).filter(Boolean)}
-                    advancedFields={advancedFields(errors).filter(Boolean)}
-                    showAdvanced={showAdvanced}
-                    toggleAdvanced={() => setShowAdvanced(!showAdvanced)}
-                    validateForm={() => validateForm(values)}
-                    wider={wider}
-                  />
+                  <Stack spacing={2} my={1}>
+                    <BackendValidation text={backendValidationError} />
+                    <DialogFormFields
+                      basicFields={basicFields(errors).filter(Boolean)}
+                      advancedFields={advancedFields(errors).filter(Boolean)}
+                      showAdvanced={showAdvanced}
+                      toggleAdvanced={() => setShowAdvanced(!showAdvanced)}
+                      validateForm={() => validateForm(values)}
+                    />
+                  </Stack>
                 </Form>
               </DialogContent>
               <DialogActions
@@ -108,7 +124,7 @@ function DialogTemplateComponent<T extends FormValues, R = void>(props: {
           );
         }}
       </Formik>
-    </StyledDialog>
+    </MuiDialog>
   );
 }
 

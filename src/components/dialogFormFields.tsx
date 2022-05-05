@@ -1,12 +1,32 @@
-import { Button, Divider } from "@mui/material";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { useStore } from "../store/storeProvider";
-import dialogStyles from "../styles/dialog.css";
+
+function ToggleButton({
+  toggleAdvanced,
+  validateForm,
+  showAdvanced,
+}: {
+  toggleAdvanced: () => void;
+  validateForm: () => void;
+  showAdvanced: boolean;
+}) {
+  return (
+    <Button
+      size="small"
+      onClick={async () => {
+        toggleAdvanced();
+        await validateForm();
+      }}
+    >
+      {showAdvanced ? "Hide advanced options" : "Show advanced options"}
+    </Button>
+  );
+}
 
 export const DialogFormFields = observer(
   (props: {
-    wider: boolean;
     basicFields: JSX.Element[];
     advancedFields: JSX.Element[];
     showAdvanced: boolean;
@@ -14,7 +34,6 @@ export const DialogFormFields = observer(
     validateForm: () => void;
   }) => {
     const {
-      wider,
       basicFields,
       advancedFields,
       showAdvanced,
@@ -23,55 +42,26 @@ export const DialogFormFields = observer(
     } = props;
     const { options } = useStore();
 
+    const toggleButton = (
+      <ToggleButton
+        toggleAdvanced={toggleAdvanced}
+        validateForm={validateForm}
+        showAdvanced={showAdvanced}
+      />
+    );
     return (
-      <div className={dialogStyles.DialogRow}>
-        <div
-          className={
-            wider
-              ? dialogStyles.DialogColumnWider
-              : dialogStyles.DialogColumnWide
-          }
-        >
-          <div className={dialogStyles.DialogRow}>
-            <div className={dialogStyles.DialogColumn}>
-              {basicFields.map((field, i) => (
-                <div key={i} style={{ marginBottom: "10px" }}>
-                  {field}
-                </div>
-              ))}
-            </div>
-          </div>
-          {options.allowAdvancedFields && advancedFields.length > 0 && (
-            <>
-              {showAdvanced && (
-                <>
-                  <Divider />
-                  <div className={dialogStyles.DetailsSectionHeader}>
-                    Advanced options
-                  </div>
-                  {advancedFields.map((field, i) => (
-                    <div key={i} style={{ marginBottom: "10px" }}>
-                      {field}
-                    </div>
-                  ))}
-                </>
-              )}
-              <Divider />
-              <Button
-                size="small"
-                onClick={async () => {
-                  toggleAdvanced();
-                  await validateForm();
-                }}
-              >
-                {showAdvanced
-                  ? "Hide advanced options"
-                  : "Show advanced options"}
-              </Button>
-            </>
-          )}
-        </div>
-      </div>
+      <>
+        {basicFields.map((field, i) => (
+          <Box key={i}>{field}</Box>
+        ))}
+        {options.allowAdvancedFields && advancedFields.length > 0 && (
+          <>
+            <Divider>{toggleButton}</Divider>
+            {showAdvanced &&
+              advancedFields.map((field, i) => <Box key={i}>{field}</Box>)}
+          </>
+        )}
+      </>
     );
   }
 );

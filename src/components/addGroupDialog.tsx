@@ -65,7 +65,7 @@ export const AddGroupDialog = () => {
         onSubmitSuccess={onSubmitSuccess}
         taskOnSubmit={taskOnSubmit}
         validateFunc={validateFunc}
-        wider={false}
+        maxWidth="xs"
       />
     );
   });

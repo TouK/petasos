@@ -1,15 +1,13 @@
 import { Alert } from "@mui/lab";
+import { Slide } from "@mui/material";
 import React from "react";
-import dialogStyles from "../styles/dialog.css";
 
-export function BackendValidation({ text }: { text?: string }) {
+export function BackendValidation({ text }: { text?: string }): JSX.Element {
   return (
-    <div className={dialogStyles.DialogRow} style={{ marginBottom: "10px" }}>
-      {text && (
-        <Alert severity="error" style={{ width: "100%" }}>
-          {text}
-        </Alert>
-      )}
-    </div>
+    <Slide in={!!text} unmountOnExit mountOnEnter direction="up">
+      <Alert variant="outlined" severity="error">
+        {text}
+      </Alert>
+    </Slide>
   );
 }

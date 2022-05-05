@@ -144,7 +144,6 @@ export const TopicDialog = observer(
         onSubmitSuccess={onSubmitSuccess}
         taskOnSubmit={taskOnSubmit}
         validateFunc={validateTopicForm}
-        wider={true}
       />
     );
   }

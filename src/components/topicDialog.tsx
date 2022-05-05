@@ -18,6 +18,7 @@ import { Topic } from "../store/topic";
 import { DialogTemplate } from "./dialogTemplate";
 import { JsonTextField } from "./jsonTextField";
 import { GroupsFormControl } from "./groupsFormControl";
+import { validateTopicForm } from "./validateTopicForm";
 
 export const TopicDialog = observer(
   ({
@@ -29,46 +30,6 @@ export const TopicDialog = observer(
   }) => {
     const store = useStore();
     const { dialogs, groups, topics } = store;
-
-    const validateFunc = (
-      values: TopicFormikValues,
-      includeAdvanced: boolean
-    ) => {
-      const errors: FormikErrors<TopicFormikValues> = {};
-      if (!values.topic) {
-        errors.topic = "Required";
-      } else if (Topic.splitName(values.topic).length > 1) {
-        errors.topic = `Name cannot contain "${Topic.GROUP_NAME_SEPARATOR}"`;
-      } else if (!/^[a-zA-Z0-9_.-]+$/i.test(values.topic)) {
-        errors.topic = "Invalid topic name";
-      }
-      const requiredFields = ["description", "schema", "group"];
-      requiredFields.forEach((field) => {
-        if (!values[field]) {
-          errors[field] = "Required";
-        }
-      });
-
-      if (includeAdvanced) {
-        if (
-          !/^[0-9]*$/i.test(values.advancedValues.maxMessageSize.toString())
-        ) {
-          if (!errors.advancedValues) {
-            errors.advancedValues = {};
-          }
-          errors.advancedValues.maxMessageSize =
-            "Value must be positive integer";
-        }
-        if (!/^[0-9]*$/i.test(values.advancedValues.retentionTime.toString())) {
-          if (!errors.advancedValues) {
-            errors.advancedValues = {};
-          }
-          errors.advancedValues.retentionTime =
-            "Value must be positive integer";
-        }
-      }
-      return errors;
-    };
 
     const taskOnSubmit = (values) => Topic.create(values, store);
 
@@ -182,7 +143,7 @@ export const TopicDialog = observer(
         submitButtonText={"Add topic"}
         onSubmitSuccess={onSubmitSuccess}
         taskOnSubmit={taskOnSubmit}
-        validateFunc={validateFunc}
+        validateFunc={validateTopicForm}
         wider={true}
       />
     );

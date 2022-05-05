@@ -10,40 +10,12 @@ import { DEFAULT_TOPIC_VALUES } from "./addTopicDialog";
 import { DialogTemplate } from "./dialogTemplate";
 import { JsonTextField } from "./jsonTextField";
 import { GroupsFormControl } from "./groupsFormControl";
+import { validateTopicForm } from "./validateTopicForm";
 
 export const EditTopicDialog = observer(() => {
   const { dialogs, groups, topics } = useStore();
   const dialog = dialogs.editTopic;
   const { topic } = dialog.params;
-
-  const validateFunc = (
-    values: TopicFormikValues,
-    includeAdvanced: boolean
-  ) => {
-    const errors: FormikErrors<TopicFormikValues> = {};
-    const requiredFields = ["description", "schema"];
-    requiredFields.forEach((field) => {
-      if (!values[field]) {
-        errors[field] = "Required";
-      }
-    });
-
-    if (includeAdvanced) {
-      if (!/^[0-9]*$/i.test(values.advancedValues.maxMessageSize.toString())) {
-        if (!errors.advancedValues) {
-          errors.advancedValues = {};
-        }
-        errors.advancedValues.maxMessageSize = "Value must be integer";
-      }
-      if (!/^[0-9]*$/i.test(values.advancedValues.retentionTime.toString())) {
-        if (!errors.advancedValues) {
-          errors.advancedValues = {};
-        }
-        errors.advancedValues.retentionTime = "Value must be integer";
-      }
-    }
-    return errors;
-  };
 
   const taskOnSubmit = async (
     values: TopicFormikValues
@@ -153,7 +125,7 @@ export const EditTopicDialog = observer(() => {
       submitButtonText={"Update topic"}
       onSubmitSuccess={onSubmitSuccess}
       taskOnSubmit={taskOnSubmit}
-      validateFunc={validateFunc}
+      validateFunc={validateTopicForm}
       wider={true}
     />
   );

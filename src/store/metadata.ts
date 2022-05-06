@@ -39,10 +39,19 @@ export const addMetadata = (schemaString: string): string => {
   }
 };
 
-export function withoutMetadata(schemaJson: Schema) {
+export function withoutMetadataFields(schemaJson: Schema) {
   const { fields = [], ...jsonSchema } = schemaJson;
   return {
     ...jsonSchema,
     fields: fields.filter(notMetadata),
   };
+}
+
+export function withoutMetadata(jsonString: string): string {
+  try {
+    const { __metadata, ...jsonSchema } = JSON.parse(jsonString);
+    return JSON.stringify(jsonSchema);
+  } catch {
+    return jsonString;
+  }
 }

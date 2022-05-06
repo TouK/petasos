@@ -15,7 +15,11 @@ import {
   TopicFormikValues,
   TopicModel,
 } from "../models";
-import { addMetadata, withoutMetadata } from "./metadata";
+import {
+  addMetadata,
+  withoutMetadata,
+  withoutMetadataFields,
+} from "./metadata";
 import { Store } from "./store";
 import { Subscription } from "./subscription";
 import { ValidationError } from "./topics";
@@ -66,7 +70,7 @@ export class Topic implements TopicModel {
   private jsonPrettify = (schema: string): string => {
     try {
       const jsonSchema = JSON.parse(schema);
-      return JSON.stringify(withoutMetadata(jsonSchema), null, 2);
+      return JSON.stringify(withoutMetadataFields(jsonSchema), null, 2);
     } catch (err) {
       return "{}";
     }
@@ -131,14 +135,22 @@ export class Topic implements TopicModel {
   }
 
   @computed get filteredMessagePreview(): [string, string][] {
-    return (this.messagePreview || []).map((msg) => {
-      const { __metadata, ...jsonSchema } = JSON.parse(msg.content);
-      return [
-        __metadata?.timestamp &&
-          moment(parseInt(__metadata.timestamp)).toISOString(),
-        JSON.stringify(jsonSchema),
-      ];
-    });
+    return (this.messagePreview || []).map(
+      ({ content }: MessagePreviewModel): [string, string] => [
+        Topic.getMessageTimestamp(content),
+        withoutMetadata(content),
+      ]
+    );
+  }
+
+  private static getMessageTimestamp(content: string): string | null {
+    try {
+      const data = JSON.parse(content);
+      const timestamp = data.__metadata.timestamp;
+      return timestamp ? moment(parseInt(timestamp)).toISOString() : null;
+    } catch {
+      return null;
+    }
   }
 
   static splitName(name: string): string[] {

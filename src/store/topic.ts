@@ -1,5 +1,4 @@
 import { action, computed, observable, runInAction, toJS } from "mobx";
-import moment from "moment";
 import urlJoin from "url-join";
 import { fetchFn } from "../api";
 import { HermesFrontendUrl, Hosts } from "../config";
@@ -15,11 +14,7 @@ import {
   TopicFormikValues,
   TopicModel,
 } from "../models";
-import {
-  addMetadata,
-  withoutMetadata,
-  withoutMetadataFields,
-} from "./metadata";
+import { addMetadata, withoutMetadataFields } from "./metadata";
 import { Store } from "./store";
 import { Subscription } from "./subscription";
 import { ValidationError } from "./topics";
@@ -132,25 +127,6 @@ export class Topic implements TopicModel {
 
   @computed get schemaPrettified() {
     return this.jsonPrettify(this.schema);
-  }
-
-  @computed get filteredMessagePreview(): [string, string][] {
-    return (this.messagePreview || []).map(
-      ({ content }: MessagePreviewModel): [string, string] => [
-        Topic.getMessageTimestamp(content),
-        withoutMetadata(content),
-      ]
-    );
-  }
-
-  private static getMessageTimestamp(content: string): string | null {
-    try {
-      const data = JSON.parse(content);
-      const timestamp = data.__metadata.timestamp;
-      return timestamp ? moment(parseInt(timestamp)).toISOString() : null;
-    } catch {
-      return null;
-    }
   }
 
   static splitName(name: string): string[] {

@@ -20,7 +20,9 @@ import { observer } from "mobx-react-lite";
 import moment from "moment";
 import React, { ReactNode, useEffect, useState } from "react";
 import { JSONTree } from "react-json-tree";
+import { MessagePreviewModel } from "../models";
 import { TopicInfo } from "../propertiesInfo";
+import { withoutMetadata } from "../store/metadata";
 import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
 import { DetailsBox } from "./detailsBox";
@@ -32,6 +34,7 @@ import {
 } from "./propertiesTable";
 import { SubscriptionListElement } from "./subscriptionListElement";
 import { TextWithCopy } from "./textWithCopy";
+import { Timestamp } from "./timestamp";
 
 const MessagesPreview = observer(({ topic }: { topic: Topic }) => {
   useEffect(() => {
@@ -52,36 +55,11 @@ const MessagesPreview = observer(({ topic }: { topic: Topic }) => {
         },
       ]}
     >
-      {topic.filteredMessagePreview?.length > 0 ? (
-        topic.filteredMessagePreview.map(([timestamp, json]) => (
-          <Stack key={json} direction="row" alignItems="baseline">
-            <JsonTree jsonText={json} />
-            {timestamp && (
-              <Divider
-                textAlign="right"
-                sx={{
-                  flex: 1,
-                  mx: 2,
-                  alignItems: "center",
-                  "::before, ::after": {
-                    borderTopStyle: "solid",
-                  },
-                  "::before": {
-                    width: "100%",
-                    borderImageSlice: 1,
-                    borderImageSource: (t) =>
-                      `linear-gradient(to left, ${t.palette.divider}, rgba(0, 0, 0, 0))`,
-                  },
-                  "::after": {
-                    width: (t) => t.spacing(8),
-                  },
-                }}
-              >
-                <Typography variant="caption" color="action.disabled">
-                  {timestamp}
-                </Typography>
-              </Divider>
-            )}
+      {topic.messagePreview?.length > 0 ? (
+        topic.messagePreview.map(({ content }: MessagePreviewModel) => (
+          <Stack key={content} direction="row" alignItems="baseline">
+            <JsonTree jsonText={withoutMetadata(content)} />
+            <Timestamp message={content} />
           </Stack>
         ))
       ) : (

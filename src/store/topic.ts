@@ -15,7 +15,6 @@ import {
   TopicFormikValues,
   TopicModel,
 } from "../models";
-import { addMetadata, withoutMetadata } from "./metadata";
 import { Store } from "./store";
 import { Subscription } from "./subscription";
 import { ValidationError } from "./topics";
@@ -66,7 +65,7 @@ export class Topic implements TopicModel {
   private jsonPrettify = (schema: string): string => {
     try {
       const jsonSchema = JSON.parse(schema);
-      return JSON.stringify(withoutMetadata(jsonSchema), null, 2);
+      return JSON.stringify(jsonSchema, null, 2);
     } catch (err) {
       return "{}";
     }
@@ -173,7 +172,7 @@ export class Topic implements TopicModel {
   private getModelFromForm(object: TopicFormikValues): TopicModel {
     const value = this.model;
     if (object.schema) {
-      value.schema = addMetadata(object.schema);
+      value.schema = object.schema;
     }
     if (object.description) {
       value.description = object.description;

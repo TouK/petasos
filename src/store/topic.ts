@@ -15,6 +15,7 @@ import {
   TopicFormikValues,
   TopicModel,
 } from "../models";
+import { addMetadata, withoutMetadata } from "./metadata";
 import { Store } from "./store";
 import { Subscription } from "./subscription";
 import { ValidationError } from "./topics";
@@ -62,42 +63,12 @@ export class Topic implements TopicModel {
     }
     return value;
   };
-  private prettifiedSchemaWithoutMetadata = (data: TopicModel): string => {
-    try {
-      const jsonSchema = JSON.parse(data.schema);
-      const schemaWithoutMetadata = {
-        ...jsonSchema,
-        fields: [
-          ...jsonSchema.fields.filter((field) => field.name !== "__metadata"),
-        ],
-      };
-      return JSON.stringify(schemaWithoutMetadata, null, 2);
-    } catch (err) {
-      return "{}";
-    }
-  };
-  private addMetadataToSchema = (schema: string): string => {
-    const metadataField = {
-      name: "__metadata",
-      type: [
-        "null",
-        {
-          type: "map",
-          values: "string",
-        },
-      ],
-      default: null,
-      doc: "Field used in Hermes internals to propagate metadata like hermes-id",
-    };
+  private jsonPrettify = (schema: string): string => {
     try {
       const jsonSchema = JSON.parse(schema);
-      const schemaWithMetadata = {
-        ...jsonSchema,
-        fields: [...jsonSchema.fields, metadataField],
-      };
-      return JSON.stringify(schemaWithMetadata);
-    } catch {
-      return schema;
+      return JSON.stringify(withoutMetadata(jsonSchema), null, 2);
+    } catch (err) {
+      return "{}";
     }
   };
 
@@ -155,20 +126,17 @@ export class Topic implements TopicModel {
     this.schema = topicData.schema;
   }
 
-  @computed get schemaWithoutMetadata() {
-    return this.prettifiedSchemaWithoutMetadata(this);
+  @computed get schemaPrettified() {
+    return this.jsonPrettify(this.schema);
   }
 
   @computed get filteredMessagePreview(): [string, string][] {
     return (this.messagePreview || []).map((msg) => {
-      const jsonSchema = JSON.parse(msg.content);
-      const schemaWithoutMetadata = {
-        ...jsonSchema,
-        __metadata: undefined,
-      };
+      const { __metadata, ...jsonSchema } = JSON.parse(msg.content);
       return [
-        moment(parseInt(jsonSchema.__metadata.timestamp)).toISOString(),
-        JSON.stringify(schemaWithoutMetadata),
+        __metadata?.timestamp &&
+          moment(parseInt(__metadata.timestamp)).toISOString(),
+        JSON.stringify(jsonSchema),
       ];
     });
   }
@@ -205,7 +173,7 @@ export class Topic implements TopicModel {
   private getModelFromForm(object: TopicFormikValues): TopicModel {
     const value = this.model;
     if (object.schema) {
-      value.schema = this.addMetadataToSchema(object.schema);
+      value.schema = addMetadata(object.schema);
     }
     if (object.description) {
       value.description = object.description;

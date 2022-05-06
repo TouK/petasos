@@ -38,7 +38,7 @@ export const EditTopicDialog = observer(() => {
             retentionTime: topic.retentionTime.duration,
           },
           topic: topic.displayName,
-          schema: topic.schemaWithoutMetadata,
+          schema: topic.schemaPrettified,
           group: groups.getGroupOfTopic(topic.name),
           description: topic.description,
         }

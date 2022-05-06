@@ -56,30 +56,32 @@ const MessagesPreview = observer(({ topic }: { topic: Topic }) => {
         topic.filteredMessagePreview.map(([timestamp, json]) => (
           <Stack key={json} direction="row" alignItems="baseline">
             <JsonTree jsonText={json} />
-            <Divider
-              textAlign="right"
-              sx={{
-                flex: 1,
-                mx: 2,
-                alignItems: "center",
-                "::before, ::after": {
-                  borderTopStyle: "solid",
-                },
-                "::before": {
-                  width: "100%",
-                  borderImageSlice: 1,
-                  borderImageSource: (t) =>
-                    `linear-gradient(to left, ${t.palette.divider}, rgba(0, 0, 0, 0))`,
-                },
-                "::after": {
-                  width: (t) => t.spacing(8),
-                },
-              }}
-            >
-              <Typography variant="caption" color="action.disabled">
-                {timestamp}
-              </Typography>
-            </Divider>
+            {timestamp && (
+              <Divider
+                textAlign="right"
+                sx={{
+                  flex: 1,
+                  mx: 2,
+                  alignItems: "center",
+                  "::before, ::after": {
+                    borderTopStyle: "solid",
+                  },
+                  "::before": {
+                    width: "100%",
+                    borderImageSlice: 1,
+                    borderImageSource: (t) =>
+                      `linear-gradient(to left, ${t.palette.divider}, rgba(0, 0, 0, 0))`,
+                  },
+                  "::after": {
+                    width: (t) => t.spacing(8),
+                  },
+                }}
+              >
+                <Typography variant="caption" color="action.disabled">
+                  {timestamp}
+                </Typography>
+              </Divider>
+            )}
           </Stack>
         ))
       ) : (
@@ -355,7 +357,7 @@ const TopicSchema = observer(({ topic }: { topic: Topic }) => {
   return (
     <DetailsBox header="Message schema">
       <JsonTree
-        jsonText={topic.schemaWithoutMetadata}
+        jsonText={topic.schemaPrettified}
         override={
           topic.contentType !== "AVRO" && <span>Not an AVRO schema</span>
         }

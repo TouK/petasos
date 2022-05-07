@@ -1,3 +1,11 @@
+# [1.1.0-beta.11](https://github.com/TouK/petasos/compare/v1.1.0-beta.10...v1.1.0-beta.11) (2022-05-07)
+
+
+### Features
+
+* format json in editor ([717c5bb](https://github.com/TouK/petasos/commit/717c5bb74ce55a70695cb970181f7c583e685ed2))
+* get and use avroContentTypeMetadataRequired ([659c6cc](https://github.com/TouK/petasos/commit/659c6cc831727cbf31100977c5265c153fe22c61))
+
 # [1.1.0-beta.10](https://github.com/TouK/petasos/compare/v1.1.0-beta.9...v1.1.0-beta.10) (2022-05-05)
 
 

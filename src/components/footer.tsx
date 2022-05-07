@@ -1,4 +1,4 @@
-import { Container, Stack, styled, Typography } from "@mui/material";
+import { Container, Link, Stack, styled, Typography } from "@mui/material";
 import React from "react";
 
 export const Footer = () => {
@@ -9,15 +9,21 @@ export const Footer = () => {
         justifyContent="flex-end"
         direction="row"
         spacing={0.5}
-        sx={{ opacity: 0.4, filter: "saturate(0)" }}
       >
-        <Typography variant="caption" color="background.paper" flex={1}>
-          {_VERSION_}
+        <Typography
+          variant="caption"
+          color="background.paper"
+          sx={{ opacity: 0.5, fontSize: ".6em" }}
+        >
+          {_VERSION_} powered by{" "}
+          <Link
+            href="https://hermes-pubsub.readthedocs.io"
+            color="inherit"
+            underline="hover"
+          >
+            hermes
+          </Link>
         </Typography>
-        <Typography variant="caption" color="background.paper">
-          powered by
-        </Typography>
-        <Img src="https://hermes-pubsub.readthedocs.io/en/latest/img/hermes.png" />
       </Stack>
     </Container>
   );

@@ -2,7 +2,13 @@ import { styled, useForkRef } from "@mui/material";
 import { CodeJar, Position } from "codejar";
 import hljs from "highlight.js/lib/core";
 import json from "highlight.js/lib/languages/json";
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 hljs.registerLanguage("json", json);
 
@@ -37,9 +43,18 @@ export const CodeEditor = forwardRef<
     rows: number | string;
     disabled?: boolean;
     autoFocus?: boolean;
+    formatter?: (code: string) => string;
   }
 >(function CodeEditor(props, forwardedRef) {
-  const { value, onChange, rows, disabled, autoFocus, ...passProps } = props;
+  const {
+    value,
+    onChange,
+    rows,
+    disabled,
+    autoFocus,
+    formatter,
+    ...passProps
+  } = props;
 
   const editorRef = useRef<HTMLDivElement>(null);
   const ref = useForkRef<HTMLDivElement, HTMLDivElement>(
@@ -71,13 +86,17 @@ export const CodeEditor = forwardRef<
     return () => jar.destroy();
   }, [autoFocus, disabled]);
 
-  //update value from outside
-  useEffect(() => {
+  const update = useCallback((value: string) => {
     jarRef.current?.updateCode(value);
     if (positionRef.current) {
       jarRef.current?.restore(positionRef.current);
     }
-  }, [value]);
+  }, []);
+
+  //update value from outside
+  useEffect(() => {
+    update(value);
+  }, [update, value]);
 
   //call change callback
   useEffect(() => {
@@ -94,6 +113,9 @@ export const CodeEditor = forwardRef<
       sx={{
         maxHeight: rows && `${parseInt(rows.toString()) * 1.45}em`,
       }}
+      onBlurCapture={
+        formatter && ((event) => jarRef.current?.updateCode(formatter(value)))
+      }
     >
       {value}
     </CodeBox>

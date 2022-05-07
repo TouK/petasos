@@ -3,6 +3,14 @@ import { TextFieldProps } from "formik-mui/dist/TextField";
 import React, { useMemo } from "react";
 import { CodeEditor } from "./codeEditor";
 
+function formatJson(value: string): string {
+  try {
+    return JSON.stringify(JSON.parse(value), null, 2);
+  } catch {
+    return value;
+  }
+}
+
 export function JsonTextField(props: TextFieldProps) {
   const {
     field: { name },
@@ -13,7 +21,6 @@ export function JsonTextField(props: TextFieldProps) {
     () => ({
       inputComponent: CodeEditor as any,
       onChange: (code) => setFieldValue(name, code),
-      className: "language-json",
     }),
     [name, setFieldValue]
   );
@@ -25,6 +32,10 @@ export function JsonTextField(props: TextFieldProps) {
       {...props}
       InputProps={inputProps}
       InputLabelProps={inputLabelProps}
+      inputProps={{
+        className: "language-json",
+        formatter: formatJson,
+      }}
     />
   );
 }

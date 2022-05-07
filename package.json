@@ -67,7 +67,7 @@
     "html-webpack-plugin": "^5.5.0",
     "image-webpack-loader": "^8.1.0",
     "moment-locales-webpack-plugin": "^1.2.0",
-    "prettier": "2.6.1",
+    "prettier": "2.6.2",
     "react-refresh": "^0.11.0",
     "rimraf": "3.0.2",
     "style-loader": "^3.3.1",

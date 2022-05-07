@@ -158,10 +158,18 @@ export class Topic implements TopicModel {
     });
   }
 
+  @computed
+  private get metadataRequired() {
+    return this.store.hermesConsoleSettings?.topic
+      .avroContentTypeMetadataRequired;
+  }
+
   private getModelFromForm(object: TopicFormikValues): TopicModel {
     const value = this.model;
     if (object.schema) {
-      value.schema = addMetadata(object.schema);
+      value.schema = this.metadataRequired
+        ? addMetadata(object.schema)
+        : object.schema;
     }
     if (object.description) {
       value.description = object.description;

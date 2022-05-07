@@ -1,5 +1,6 @@
-import { action, observable } from "mobx";
+import { action, computed, observable, runInAction } from "mobx";
 import moment from "moment";
+import { Hosts } from "../config";
 import { Dialog } from "./dialog";
 import { Groups } from "./groups";
 import { Subscription } from "./subscription";
@@ -10,6 +11,15 @@ export interface StoreOptions {
   forcedGroupName?: string;
   groupsHidden?: boolean;
   allowAdvancedFields?: boolean;
+}
+
+interface HermesConsoleSettings {
+  topic: {
+    avroContentTypeMetadataRequired: boolean;
+    [key: string]: unknown;
+  };
+
+  [key: string]: unknown;
 }
 
 export class Store {
@@ -55,7 +65,27 @@ export class Store {
     this.setOptions(options);
   }
 
-  setOptions = action((options: StoreOptions = {}) => {
+  @action setOptions(options: StoreOptions) {
     this.options = options;
-  });
+  }
+
+  @computed
+  get hermesConsoleSettings(): HermesConsoleSettings {
+    if (!this._hermesConsoleSettings) {
+      this.fetchHermesConsoleSettings();
+    }
+    return this._hermesConsoleSettings;
+  }
+
+  @observable private _hermesConsoleSettings: HermesConsoleSettings;
+
+  private async fetchHermesConsoleSettings(): Promise<void> {
+    const res = await fetch(`${Hosts.APP_API}/console`);
+    const value = await res.text();
+    const json = value.replace(/^.+=/, "");
+    const hermesConsoleSettings = JSON.parse(json);
+    runInAction(() => {
+      this._hermesConsoleSettings = hermesConsoleSettings;
+    });
+  }
 }

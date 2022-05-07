@@ -1,6 +1,12 @@
 import { useLocalStore } from "mobx-react-lite";
 import * as React from "react";
-import { createContext, PropsWithChildren, useContext, useEffect } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import { Store, StoreOptions } from "./store";
 
 const StoreContext = createContext<Store>(null);
@@ -10,8 +16,14 @@ export function StoreProvider({
   options,
 }: PropsWithChildren<{ options?: StoreOptions }>) {
   const store = useLocalStore(() => new Store(options));
+  const initialized = useRef(false);
 
   useEffect(() => {
+    //ignore first effect call
+    if (!initialized.current) {
+      initialized.current = true;
+      return;
+    }
     store.setOptions(options);
   }, [options, store]);
 

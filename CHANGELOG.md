@@ -1,3 +1,10 @@
+# [1.1.0-beta.15](https://github.com/TouK/petasos/compare/v1.1.0-beta.14...v1.1.0-beta.15) (2022-05-07)
+
+
+### Features
+
+* more discreet version ([3aa7d31](https://github.com/TouK/petasos/commit/3aa7d31872bae75efeed4998c95e232f126e8689))
+
 # [1.1.0-beta.14](https://github.com/TouK/petasos/compare/v1.1.0-beta.13...v1.1.0-beta.14) (2022-05-07)
 
 # [1.1.0-beta.13](https://github.com/TouK/petasos/compare/v1.1.0-beta.12...v1.1.0-beta.13) (2022-05-07)

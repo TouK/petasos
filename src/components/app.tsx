@@ -1,3 +1,5 @@
+import loadable from "@loadable/component";
+import { Box, CircularProgress, Skeleton } from "@mui/material";
 import * as React from "react";
 import {
   BrowserRouter as Router,
@@ -7,11 +9,8 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
+import { MainLayout } from "./mainLayout";
 import { RootView } from "./rootView";
-import { SubscriptionView } from "./subscriptionView";
-import { TopicDetailsView } from "./topicDetailsView";
-import { TopicsListView } from "./topicsListView";
-import { TopicView } from "./topicView";
 
 function RouteTester({ path }: { path?: string }) {
   const params = useParams();
@@ -35,19 +34,36 @@ function NoMatch() {
   );
 }
 
+const Loading = () => (
+  <Box flex={1} display="flex" justifyContent="center" alignItems="center">
+    <CircularProgress />
+  </Box>
+);
+
+const opts = {
+  fallback: <Loading />,
+};
+
+const TopicsListView = loadable(() => import("./topicsListView"), opts);
+const SubscriptionView = loadable(() => import("./subscriptionView"), opts);
+const TopicDetailsView = loadable(() => import("./topicDetailsView"), opts);
+const TopicView = loadable(() => import("./topicView"), opts);
+
 export function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<RootView />}>
-          <Route index element={<TopicsListView />} />
-          <Route path=":topic" element={<TopicView />}>
-            <Route index element={<TopicDetailsView />} />
-            <Route path=":subscription" element={<SubscriptionView />} />
+      <MainLayout>
+        <Routes>
+          <Route path="/" element={<RootView />}>
+            <Route index element={<TopicsListView />} />
+            <Route path=":topic" element={<TopicView />}>
+              <Route index element={<TopicDetailsView />} />
+              <Route path=":subscription" element={<SubscriptionView />} />
+            </Route>
           </Route>
-        </Route>
-        <Route path="*" element={<NoMatch />} />
-      </Routes>
+          <Route path="*" element={<NoMatch />} />
+        </Routes>
+      </MainLayout>
     </Router>
   );
 }

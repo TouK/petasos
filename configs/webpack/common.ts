@@ -2,9 +2,9 @@ import AddAssetHtmlPlugin from "add-asset-html-webpack-plugin";
 import dotenv from "dotenv";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import ZipPlugin from "zip-webpack-plugin"
+import MomentLocalesPlugin from "moment-locales-webpack-plugin";
 import { resolve } from "path";
-import { Configuration } from "webpack";
+import { Configuration, DefinePlugin } from "webpack";
 import pkg from "../../package.json";
 
 dotenv.config();
@@ -18,7 +18,7 @@ const findEnvModule = ({ request }, callback) => {
 
 export const commonConfig: Configuration = {
   resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js"],
+    extensions: [".jsx", ".js", ".tsx", ".ts"],
     symlinks: false,
   },
   context: resolve(__dirname, "../.."),
@@ -33,6 +33,7 @@ export const commonConfig: Configuration = {
       },
       {
         test: /\.css$/,
+        exclude: /node_modules/,
         use: [
           { loader: "style-loader" },
           {
@@ -46,6 +47,11 @@ export const commonConfig: Configuration = {
             },
           },
         ],
+      },
+      {
+        test: /\.css$/,
+        include: /node_modules/,
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }],
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
@@ -74,7 +80,9 @@ export const commonConfig: Configuration = {
   },
   entry: ["./src/index.tsx"],
   plugins: [
-    new ZipPlugin({filename: 'petasos.zip'}),
+    new MomentLocalesPlugin({
+      localesToKeep: ["en"],
+    }),
     new ForkTsCheckerWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: `${pkg.name} ${pkg.version}`,
@@ -84,6 +92,9 @@ export const commonConfig: Configuration = {
       filepath: resolve(__dirname, "../../_env.js"),
       publicPath: "/",
     }),
+    new DefinePlugin({
+      _VERSION_: JSON.stringify(`${pkg.name} v${pkg.version}`),
+    }),
   ],
   performance: {
     hints: false,
@@ -92,5 +103,8 @@ export const commonConfig: Configuration = {
     runtimeChunk: false,
     mergeDuplicateChunks: true,
     concatenateModules: true,
+    splitChunks: {
+      chunks: "all",
+    },
   },
 };

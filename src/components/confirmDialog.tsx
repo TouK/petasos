@@ -13,19 +13,19 @@ import { Dialog } from "../store/dialog";
 import { ValidationError } from "../store/topics";
 import { StyledDialog } from "./styledMuiComponents";
 
-export const DeleteDialog = observer(
+export const ConfirmDialog = observer(
   ({
     dialog,
     taskOnSubmit,
     text,
-    deleteButtonText,
+    confirmText = "Confirm",
     onSubmitSuccess,
   }: {
     dialog: Dialog<unknown>;
     taskOnSubmit: Task<[], Promise<void | ValidationError>>;
     text: string;
-    deleteButtonText: string;
-    onSubmitSuccess: () => Promise<void>;
+    confirmText?: string;
+    onSubmitSuccess?: () => Promise<void>;
   }) => {
     const loading = taskOnSubmit.pending;
     const backendValidationError = taskOnSubmit.rejected
@@ -36,7 +36,7 @@ export const DeleteDialog = observer(
 
     useEffect(() => {
       if (taskOnSubmit.resolved) {
-        onSubmitSuccess();
+        onSubmitSuccess?.();
         dialog.close();
       }
     }, [dialog, onSubmitSuccess, taskOnSubmit.resolved]);
@@ -49,6 +49,7 @@ export const DeleteDialog = observer(
 
     return (
       <StyledDialog open={dialog.isOpen}>
+        {loading && <LinearProgress color="secondary" />}
         <DialogContent>
           {backendValidationError && (
             <div style={{ marginBottom: "10px" }}>
@@ -56,26 +57,24 @@ export const DeleteDialog = observer(
             </div>
           )}
           <DialogContentText>{text}</DialogContentText>
-          {loading && <LinearProgress color="secondary" />}
         </DialogContent>
         <DialogActions>
           <Button
-            variant="contained"
-            size="small"
+            variant="outlined"
+            color="inherit"
             disabled={loading}
             onClick={cancelForm}
           >
             Cancel
           </Button>
           <Button
-            color="secondary"
-            variant="contained"
-            size="small"
+            variant="outlined"
+            color="inherit"
             onClick={taskOnSubmit}
             disabled={loading}
             autoFocus
           >
-            {deleteButtonText}
+            {confirmText}
           </Button>
         </DialogActions>
       </StyledDialog>

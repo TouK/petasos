@@ -1,8 +1,8 @@
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { Task } from "mobx-task/lib/task";
 import React, { PropsWithChildren, useEffect } from "react";
-import { LayoutBodyContent } from "./layoutBodyContent";
+import { ContentBox } from "./contentBox";
 import { LoadingMask } from "./loadingMask";
 
 type FetchFn = () => Promise<unknown>;
@@ -10,16 +10,21 @@ type FetchFn = () => Promise<unknown>;
 const ReFetchButton = ({
   fetchFn,
 }: PropsWithChildren<{ fetchFn: FetchFn }>) => (
-  <Button variant="contained" color="primary" onClick={fetchFn}>
+  <Button color="inherit" size="small" onClick={fetchFn}>
     Try again
   </Button>
 );
 
 const ErrorView = ({ fetchFn }: PropsWithChildren<{ fetchFn: FetchFn }>) => (
-  <LayoutBodyContent>
-    <p>Error when fetching data</p>
-    <ReFetchButton fetchFn={fetchFn} />
-  </LayoutBodyContent>
+  <ContentBox>
+    <Alert
+      variant="filled"
+      severity="error"
+      action={<ReFetchButton fetchFn={fetchFn} />}
+    >
+      Error when fetching data.
+    </Alert>
+  </ContentBox>
 );
 
 export const EnsureFetched = observer(

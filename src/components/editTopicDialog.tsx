@@ -8,41 +8,14 @@ import { useStore } from "../store/storeProvider";
 import { ValidationError } from "../store/topics";
 import { DEFAULT_TOPIC_VALUES } from "./addTopicDialog";
 import { DialogTemplate } from "./dialogTemplate";
+import { JsonTextField } from "./jsonTextField";
 import { GroupsFormControl } from "./groupsFormControl";
+import { validateTopicForm } from "./validateTopicForm";
 
 export const EditTopicDialog = observer(() => {
   const { dialogs, groups, topics } = useStore();
   const dialog = dialogs.editTopic;
   const { topic } = dialog.params;
-
-  const validateFunc = (
-    values: TopicFormikValues,
-    includeAdvanced: boolean
-  ) => {
-    const errors: FormikErrors<TopicFormikValues> = {};
-    const requiredFields = ["description", "schema"];
-    requiredFields.forEach((field) => {
-      if (!values[field]) {
-        errors[field] = "Required";
-      }
-    });
-
-    if (includeAdvanced) {
-      if (!/^[0-9]*$/i.test(values.advancedValues.maxMessageSize.toString())) {
-        if (!errors.advancedValues) {
-          errors.advancedValues = {};
-        }
-        errors.advancedValues.maxMessageSize = "Value must be integer";
-      }
-      if (!/^[0-9]*$/i.test(values.advancedValues.retentionTime.toString())) {
-        if (!errors.advancedValues) {
-          errors.advancedValues = {};
-        }
-        errors.advancedValues.retentionTime = "Value must be integer";
-      }
-    }
-    return errors;
-  };
 
   const taskOnSubmit = async (
     values: TopicFormikValues
@@ -65,7 +38,7 @@ export const EditTopicDialog = observer(() => {
             retentionTime: topic.retentionTime.duration,
           },
           topic: topic.displayName,
-          schema: topic.schemaWithoutMetadata,
+          schema: topic.schemaPrettified,
           group: groups.getGroupOfTopic(topic.name),
           description: topic.description,
         }
@@ -86,24 +59,25 @@ export const EditTopicDialog = observer(() => {
       label="Topic name"
       name="topic"
       key="topic"
-      style={{ width: "100%" }}
+      fullWidth
       disabled
     />,
     <Field
       required
       component={TextField}
+      autoFocus
       label="Topic description"
       name="description"
       key="description"
-      style={{ width: "100%" }}
+      fullWidth
     />,
     <Field
-      component={TextField}
+      component={JsonTextField}
       label="Avro schema"
       name="schema"
       key="schema"
       id="schema"
-      style={{ width: "100%" }}
+      fullWidth
       variant="outlined"
       multiline
       rows={15}
@@ -151,8 +125,7 @@ export const EditTopicDialog = observer(() => {
       submitButtonText={"Update topic"}
       onSubmitSuccess={onSubmitSuccess}
       taskOnSubmit={taskOnSubmit}
-      validateFunc={validateFunc}
-      wider={true}
+      validateFunc={validateTopicForm}
     />
   );
 });

@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { getTopicData } from "../devData";
 import { TopicFormikValues } from "../models";
 import { useStore } from "../store/storeProvider";
 import { DEFAULT_TOPIC_VALUES } from "./addTopicDialog";
@@ -20,9 +21,10 @@ export const AddClonedTopicDialog = observer(() => {
             retentionTime: topic.retentionTime.duration,
           },
           topic: "",
-          schema: topic.schemaWithoutMetadata,
+          schema: topic.schemaPrettified,
           group: groups.getGroupOfTopic(topic.name),
           description: topic.description,
+          ...getTopicData(topic),
         }
       : {
           ...DEFAULT_TOPIC_VALUES,

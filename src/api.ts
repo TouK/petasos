@@ -15,13 +15,10 @@ const withContentType = addHeaders({ "Content-Type": "application/json" });
 
 export const fetchJson = async <R>(
   url: string,
-  failIfResponseNotOk: boolean,
   init: RequestInit = {}
 ): Promise<R> => {
   const response = await fetch(url, withContentType(init));
-  if (!response.ok && failIfResponseNotOk) {
-    throw new Error("Not 2xx response");
-  }
+
   let json: R & { error?: unknown; message?: unknown };
 
   try {
@@ -36,14 +33,14 @@ export const fetchJson = async <R>(
   return json as R;
 };
 
-export function withToken(
+function withToken(
   fetchFn: typeof fetchJson,
   tokenGetter: () => Promise<string>
 ): typeof fetchJson {
-  return async (url, failIfResponseNotOk, init = {}) => {
+  return async (url, init = {}) => {
     const token = await tokenGetter();
     const withAuth = addTokenHeader(token);
-    return await fetchFn(url, false, withAuth(init));
+    return await fetchFn(url, withAuth(init));
   };
 }
 

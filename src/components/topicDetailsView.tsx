@@ -4,9 +4,11 @@ import { useParams } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
 import { TopicDetails } from "./topicDetails";
 
-export const TopicDetailsView = observer(() => {
+const TopicDetailsView = observer(() => {
   const { topics } = useStore();
-  const params = useParams<"topic">();
+  const { topic: topicName } = useParams<"topic">();
 
-  return <TopicDetails topic={topics.topicsMap.get(params.topic)} />;
+  return <TopicDetails topic={topics.getByName(topicName)} />;
 });
+
+export default TopicDetailsView;

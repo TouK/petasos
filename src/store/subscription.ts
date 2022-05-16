@@ -19,15 +19,15 @@ export class Subscription implements SubscriptionModel {
   @observable name: string;
   fetchTask = debouncedTask(this.fetchSubscription);
   putTask = debouncedTask(this.putSubscription);
-  suspendTask = debouncedTask.resolved(this.suspendSubscription);
-  activateTask = debouncedTask.resolved(this.activateSubscription);
+  suspendTask = debouncedTask.rejected(this.suspendSubscription);
+  activateTask = debouncedTask.rejected(this.activateSubscription);
   deleteTask = debouncedTask.rejected(this.deleteSubscription);
   fetchMetricsTask = debouncedTask(this.getMetrics);
   fetchLastUndeliveredMsgTask = debouncedTask(this.getLastUndeliveredMessage);
   fetch100LastUndeliveredMsgsTask = debouncedTask(
     this.get100LastUndeliveredMessages
   );
-  retransmitMessagesTask = debouncedTask.resolved(this.retransmitMessages);
+  retransmitMessagesTask = debouncedTask.rejected(this.retransmitMessages);
   @observable endpoint: string;
   @observable description: string;
   @observable owner: OwnerModel = new DefaultOwner();
@@ -154,7 +154,7 @@ export class Subscription implements SubscriptionModel {
       console.error("Something is off");
       return;
     }
-    return fetchFn<SubscriptionModel>(this.url, true).then(
+    return fetchFn<SubscriptionModel>(this.url).then(
       action((data: SubscriptionModel) => {
         this.update(data);
       })
@@ -170,16 +170,18 @@ export class Subscription implements SubscriptionModel {
       return value;
     };
     const body = JSON.stringify({ ...this }, replacer);
-    return await fetchFn<ValidationError | void>(this.url, false, {
+    return await fetchFn<ValidationError | void>(this.url, {
       method: "PUT",
       body,
     });
   }
 
+  @action.bound
   private suspendSubscription(): Promise<void> {
     return this.changeState("SUSPENDED");
   }
 
+  @action.bound
   private activateSubscription(): Promise<void> {
     return this.changeState("ACTIVE");
   }
@@ -187,7 +189,7 @@ export class Subscription implements SubscriptionModel {
   @action.bound
   private async changeState(state: string): Promise<void> {
     const body = JSON.stringify(state);
-    return await fetchFn<void>(`${this.url}/state`, false, {
+    return await fetchFn<void>(`${this.url}/state`, {
       method: "PUT",
       body,
     });
@@ -196,7 +198,7 @@ export class Subscription implements SubscriptionModel {
   @action
   private async getMetrics(): Promise<SubscriptionMetrics> {
     const metricsUrl = `${this.url}/metrics`;
-    const metrics = await fetchFn<SubscriptionMetrics>(metricsUrl, false, {
+    const metrics = await fetchFn<SubscriptionMetrics>(metricsUrl, {
       method: "GET",
     });
     runInAction(() => (this.metrics = metrics));
@@ -208,7 +210,7 @@ export class Subscription implements SubscriptionModel {
     const undeliveredUrl = `${this.url}/undelivered/last`;
     let message = null;
     try {
-      message = await fetchFn<UndeliveredMessage>(undeliveredUrl, true, {
+      message = await fetchFn<UndeliveredMessage>(undeliveredUrl, {
         method: "GET",
       });
     } catch (err) {
@@ -225,7 +227,6 @@ export class Subscription implements SubscriptionModel {
     const undeliveredUrl = `${this.url}/undelivered`;
     const lastUndeliveredMessages = await fetchFn<UndeliveredMessage[]>(
       undeliveredUrl,
-      true,
       { method: "GET" }
     );
     runInAction(() => (this.lastUndeliveredMessages = lastUndeliveredMessages));
@@ -235,16 +236,18 @@ export class Subscription implements SubscriptionModel {
   @action.bound
   private deleteSubscription(): Promise<void> {
     const deleteUrl = `${Hosts.APP_API}/topics/${this.parent.name}/subscriptions/${this.name}`;
-    return fetchFn(deleteUrl, true, { method: "DELETE" });
+    return fetchFn(deleteUrl, { method: "DELETE" });
   }
 
   @action.bound
   private async retransmitMessages(date: moment.Moment): Promise<void> {
     const retransmissionUrl = `${this.url}/retransmission`;
-    const body = date.format(moment.HTML5_FMT.DATETIME_LOCAL);
-    return await fetchFn<void>(retransmissionUrl, true, {
+    const body = {
+      retransmissionDate: date.toISOString(true),
+    };
+    return await fetchFn<void>(retransmissionUrl, {
       method: "PUT",
-      body,
+      body: JSON.stringify(body),
     });
   }
 }

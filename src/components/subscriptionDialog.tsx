@@ -4,6 +4,7 @@ import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
 import { observer, useObserver } from "mobx-react-lite";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { getSubscriptionData } from "../devData";
 import {
   AdvancedSubscriptionFormikValues,
   SubscriptionFormikValues,
@@ -200,7 +201,6 @@ export const SubscriptionDialog = ({
         onSubmitSuccess={onSubmitSuccess}
         taskOnSubmit={taskOnSubmit}
         validateFunc={validateFunc}
-        wider={true}
       />
     );
   });
@@ -211,6 +211,7 @@ const getDefaultSubscriptionValues = () => ({
   endpoint: "",
   description: "",
   advancedValues: new AdvancedSubscriptionFormikValues(),
+  ...getSubscriptionData(),
 });
 
 export const AddSubscriptionDialog = observer(() => {
@@ -249,6 +250,7 @@ export const AddClonedSubscriptionDialog = observer(() => {
       ? {
           ...subscription.toForm,
           name: "",
+          ...getSubscriptionData(subscription),
         }
       : getDefaultSubscriptionValues();
 

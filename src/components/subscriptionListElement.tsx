@@ -1,67 +1,60 @@
-import { NavigateNext } from "@mui/icons-material";
-import { CardContent, Chip, CircularProgress, IconButton } from "@mui/material";
-import { useObserver } from "mobx-react-lite";
+import { Subscriptions as SubscriptionsIcon } from "@mui/icons-material";
+import {
+  Chip,
+  CircularProgress,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useStore } from "../store/storeProvider";
 import { Subscription } from "../store/subscription";
-import styles from "../styles/details.css";
-import layout from "../styles/layout.css";
-import { StyledTopicCard } from "./styledMuiComponents";
+import { LinePlaceholder } from "./linePlaceholder";
 
-export const SubscriptionListElement = ({
-  subscription,
-}: {
-  subscription: Subscription;
-}) => {
-  const { topics } = useStore();
-  const navigate = useNavigate();
-  useEffect(() => {
-    subscription.fetchTask();
-  }, [subscription]);
+export const SubscriptionListElement = observer(
+  ({ subscription }: { subscription: Subscription }) => {
+    const navigate = useNavigate();
 
-  return useObserver(() => {
+    useEffect(() => {
+      subscription.fetchTask();
+    }, [subscription]);
+
     return (
-      <StyledTopicCard key={subscription.name}>
-        <CardContent>
-          <div className={layout.Row}>
-            <div className={layout.Column}>
-              <div className={styles.DetailsName}>{subscription.name}</div>
-              <div className={styles.DetailsUrl}>
-                Endpoint:{" "}
-                <b>
-                  {subscription.fetchTask.resolved ? (
-                    subscription.endpoint
-                  ) : (
-                    <CircularProgress size={15} />
-                  )}
-                </b>
-              </div>
-            </div>
-            <div className={layout.ColumnAlignRight}>
-              <Chip
-                size="small"
-                color="secondary"
-                label={
-                  subscription.fetchTask.resolved ? (
-                    `${subscription.state}`
-                  ) : (
-                    <CircularProgress size={15} />
-                  )
-                }
-              />
-              <IconButton
-                size="small"
-                onClick={() => {
-                  navigate(subscription.name);
-                }}
-              >
-                <NavigateNext />
-              </IconButton>
-            </div>
-          </div>
-        </CardContent>
-      </StyledTopicCard>
+      <ListItemButton onClick={() => navigate(subscription.name)}>
+        <ListItemIcon>
+          <SubscriptionsIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary={subscription.name}
+          secondary={
+            subscription.description || !subscription.fetchTask.pending ? (
+              subscription.description
+            ) : (
+              <LinePlaceholder />
+            )
+          }
+        />
+        <Chip
+          size="small"
+          color={
+            subscription.fetchTask.resolved
+              ? subscription.state === "ACTIVE"
+                ? "success"
+                : "warning"
+              : "default"
+          }
+          variant="outlined"
+          label={
+            subscription.fetchTask.resolved ? `${subscription.state}` : "•••"
+          }
+          icon={
+            !subscription.fetchTask.resolved ? (
+              <CircularProgress size="1em" />
+            ) : null
+          }
+        />
+      </ListItemButton>
     );
-  });
-};
+  }
+);

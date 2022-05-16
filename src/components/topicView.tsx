@@ -1,24 +1,30 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Outlet, useParams } from "react-router-dom";
+import { Navigate, Outlet, useParams } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
+import { ContentBox } from "./contentBox";
 import { EnsureFetched } from "./ensureFetched";
-import { LayoutBodyContent, LayoutBodyRow } from "./layoutBodyContent";
 
-export const TopicView = observer(() => {
+const Topic = observer(({ topicName }: { topicName: string }) => {
   const { topics } = useStore();
-  const params = useParams<"topic">();
-  const topic = topics.topicsMap.get(params.topic);
+  const topic = topics.getByName(topicName);
+
   if (!topic?.name) {
-    return null;
+    return topics.fetchTask.resolved ? <Navigate to="/" /> : null;
   }
+
   return (
     <EnsureFetched task={topic.fetchTask}>
-      <LayoutBodyRow>
-        <LayoutBodyContent>
-          <Outlet />
-        </LayoutBodyContent>
-      </LayoutBodyRow>
+      <ContentBox>
+        <Outlet />
+      </ContentBox>
     </EnsureFetched>
   );
 });
+
+const TopicView = observer(() => {
+  const { topic } = useParams<"topic">();
+  return <Topic topicName={topic} />;
+});
+
+export default TopicView;

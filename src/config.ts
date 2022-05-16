@@ -1,7 +1,7 @@
 import Env from "../_env";
 import { StoreOptions } from "./store/store";
 
-const isDev = process.env.NODE_ENV === "development";
+export const isDev = process.env.NODE_ENV === "development";
 
 const domainName = window.location.href.match(
   new RegExp(Env.HERMES_DOMAIN_PATTERN)
@@ -21,10 +21,10 @@ export const Hosts = {
     : Env.HERMES_MANAGEMENT_DEFAULT,
 };
 
-const parse = <T>(value: string): T => JSON.parse(JSON.stringify(value)) as T;
+const parseBool = (value: string): boolean => value === "true";
 
 export const Options: StoreOptions = {
   forcedGroupName: Env.FORCED_GROUP_NAME,
-  groupsHidden: parse(Env.GROUPS_HIDDEN),
-  allowAdvancedFields: parse(Env.ALLOW_ADVANCED_FIELDS),
+  groupsHidden: parseBool(Env.GROUPS_HIDDEN),
+  allowAdvancedFields: parseBool(Env.ALLOW_ADVANCED_FIELDS),
 };

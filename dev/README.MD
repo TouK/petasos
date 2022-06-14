@@ -1,0 +1,1 @@
+For local development setup you can use [file with iframe](iframe.html) for validation of iframe nesting

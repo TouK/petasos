@@ -1,3 +1,10 @@
+# [1.2.0-beta.1](https://github.com/TouK/petasos/compare/v1.1.0...v1.2.0-beta.1) (2022-06-14)
+
+
+### Features
+
+* add fetch secured ([ae7645b](https://github.com/TouK/petasos/commit/ae7645b1853d1d4b24ae9f03c8580b8d1869c86f))
+
 # [1.1.0](https://github.com/TouK/petasos/compare/v1.0.0...v1.1.0) (2022-05-16)
 
 

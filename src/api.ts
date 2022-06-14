@@ -13,6 +13,15 @@ const addTokenHeader = (token: string) =>
 
 const withContentType = addHeaders({ "Content-Type": "application/json" });
 
+export const fetchSecured = async <R>(
+  url: string,
+  init: RequestInit = {}
+): Promise<R> => {
+  const token = getQueryParameters()["accessToken"];
+  const withAuth = addTokenHeader(token);
+  return await fetchJson(url, withAuth(init));
+};
+
 export const fetchJson = async <R>(
   url: string,
   init: RequestInit = {}
@@ -33,18 +42,19 @@ export const fetchJson = async <R>(
   return json as R;
 };
 
-function withToken(
-  fetchFn: typeof fetchJson,
-  tokenGetter: () => Promise<string>
-): typeof fetchJson {
-  return async (url, init = {}) => {
-    const token = await tokenGetter();
-    const withAuth = addTokenHeader(token);
-    return await fetchFn(url, withAuth(init));
-  };
-}
+export const getQueryParameters = () => {
+  const queryStringKeyValue = window.location.search
+    .replace("?", "")
+    .split("&");
+  return queryStringKeyValue.reduce((acc, curr) => {
+    const [key, value] = curr.split("=");
+    return {
+      ...acc,
+      [key]: value,
+    };
+  }, {});
+};
 
-// this is the fetch function used in store, so far no authorization is in use,
-// this should be addressed in the future
-
-export const fetchFn = fetchJson;
+export const fetchFn = Object.keys(getQueryParameters()).length
+  ? fetchSecured
+  : fetchJson;

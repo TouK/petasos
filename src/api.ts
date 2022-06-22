@@ -24,6 +24,7 @@ export const fetchSecured = async <R>(
   const token = queryParamToken ? queryParamToken : storageToken;
   if (queryParamToken) {
     localStorage.setItem(ACCESS_TOKEN_NAMESPACE, queryParamToken);
+    window.history.replaceState(null, null, window.location.pathname);
   }
   const withAuth = addTokenHeader(token);
   return await fetchJson(url, withAuth(init));

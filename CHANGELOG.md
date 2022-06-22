@@ -1,3 +1,10 @@
+# [1.2.0-beta.3](https://github.com/TouK/petasos/compare/v1.2.0-beta.2...v1.2.0-beta.3) (2022-06-22)
+
+
+### Features
+
+* clear accessToken query param after reading ([a6cdea3](https://github.com/TouK/petasos/commit/a6cdea35edf948abdfa6a7cc8becf5985b246f89))
+
 # [1.2.0-beta.2](https://github.com/TouK/petasos/compare/v1.2.0-beta.1...v1.2.0-beta.2) (2022-06-22)
 
 

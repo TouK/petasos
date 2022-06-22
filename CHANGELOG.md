@@ -1,3 +1,10 @@
+# [1.2.0-beta.2](https://github.com/TouK/petasos/compare/v1.2.0-beta.1...v1.2.0-beta.2) (2022-06-22)
+
+
+### Features
+
+* save accessToken ([d2cd181](https://github.com/TouK/petasos/commit/d2cd181b90845c5352274746c993f251e3ea00b0))
+
 # [1.2.0-beta.1](https://github.com/TouK/petasos/compare/v1.1.0...v1.2.0-beta.1) (2022-06-14)
 
 

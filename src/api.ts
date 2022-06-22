@@ -1,3 +1,5 @@
+const ACCESS_TOKEN_NAMESPACE = "accessToken";
+
 const addHeaders =
   (customHeaders: Record<string, string>) =>
   ({ headers, ...req }: RequestInit) => ({
@@ -17,7 +19,12 @@ export const fetchSecured = async <R>(
   url: string,
   init: RequestInit = {}
 ): Promise<R> => {
-  const token = getQueryParameters()["accessToken"];
+  const storageToken = localStorage.getItem(ACCESS_TOKEN_NAMESPACE);
+  const queryParamToken = getQueryParameters()[ACCESS_TOKEN_NAMESPACE];
+  const token = queryParamToken ? queryParamToken : storageToken;
+  if (queryParamToken) {
+    localStorage.setItem(ACCESS_TOKEN_NAMESPACE, queryParamToken);
+  }
   const withAuth = addTokenHeader(token);
   return await fetchJson(url, withAuth(init));
 };

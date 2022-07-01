@@ -6,6 +6,7 @@ import { Groups } from "./groups";
 import { Subscription } from "./subscription";
 import { Topic } from "./topic";
 import { Topics } from "./topics";
+import { fetchFn } from "../api";
 
 export interface StoreOptions {
   forcedGroupName?: string;
@@ -80,9 +81,8 @@ export class Store {
   @observable private _hermesConsoleSettings: HermesConsoleSettings;
 
   private async fetchHermesConsoleSettings(): Promise<void> {
-    const res = await fetch(`${Hosts.APP_API}/console`);
-    const value = await res.text();
-    const json = value.replace(/^.+=/, "");
+    const consoleResponse = await fetchFn<string>(`${Hosts.APP_API}/console`);
+    const json = consoleResponse.replace(/^.+=/, "");
     const hermesConsoleSettings = JSON.parse(json);
     runInAction(() => {
       this._hermesConsoleSettings = hermesConsoleSettings;

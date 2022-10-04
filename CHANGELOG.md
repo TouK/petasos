@@ -1,3 +1,10 @@
+# [1.2.0-beta.4](https://github.com/TouK/petasos/compare/v1.2.0-beta.3...v1.2.0-beta.4) (2022-10-04)
+
+
+### Features
+
+* Update README with branch conventions and add .npmrc ([69445f4](https://github.com/TouK/petasos/commit/69445f4efc29a0c7ea7d98100dd1465a88553516))
+
 # [1.2.0-beta.3](https://github.com/TouK/petasos/compare/v1.2.0-beta.2...v1.2.0-beta.3) (2022-06-22)
 
 

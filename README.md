@@ -2,6 +2,10 @@
 
 New, better frontend for [Hermes](https://github.com/allegro/hermes) message broker.
 
+# Branch conventions
+ - dev - development build
+ - main - release build
+
 ## Run locally
 
 Petasos calls Hermes Management API. You can install Hermes locally by following the [docs](https://hermes-pubsub.readthedocs.io) 

@@ -26,6 +26,9 @@ export const devConfig = mergeWithRules({
         target: process.env.HERMES_MANAGEMENT_DEFAULT,
         pathRewrite: { "^/apps-proxy": "" },
         changeOrigin: true,
+        onProxyReq: function(request) {
+          request.setHeader("Origin", process.env.HERMES_MANAGEMENT_DEFAULT);
+        },
       },
     },
   },

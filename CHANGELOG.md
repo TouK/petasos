@@ -1,3 +1,10 @@
+# [1.2.0-beta.5](https://github.com/TouK/petasos/compare/v1.2.0-beta.4...v1.2.0-beta.5) (2022-12-13)
+
+
+### Bug Fixes
+
+* handle broken json in preview ([58a2d0f](https://github.com/TouK/petasos/commit/58a2d0f5b86df6280520a8388099c56ce0ea367a))
+
 # [1.2.0-beta.4](https://github.com/TouK/petasos/compare/v1.2.0-beta.3...v1.2.0-beta.4) (2022-10-04)
 
 

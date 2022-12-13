@@ -18,7 +18,7 @@ import {
 import type { ButtonProps } from "@mui/material/Button/Button";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import { JSONTree } from "react-json-tree";
 import { MessagePreviewModel } from "../models";
 import { TopicInfo } from "../propertiesInfo";
@@ -301,32 +301,44 @@ export function JsonTree({
   rootLabel?: string;
 }) {
   const { palette } = useTheme();
+  const data = useMemo(() => {
+    try {
+      return JSON.parse(jsonText);
+    } catch ({ message }) {
+      return message;
+    }
+  }, [jsonText]);
+
   return (
     <Typography
       component={Box}
       variant="body2"
       sx={{ fontFamily: "'Roboto Mono', monospace" }}
     >
-      {override || (
-        <JSONTree
-          data={JSON.parse(jsonText) || {}}
-          shouldExpandNode={(keyPath, data, level) => level <= 3}
-          theme={{
-            base00: "transparent",
-            base03: "transparent",
-            base07: "inherit",
-            base08: palette.text.disabled,
-            base09: palette.success.light,
-            base0B: palette.secondary.main,
-            base0D: palette.primary[palette.mode === "dark" ? "light" : "dark"],
-          }}
-          invertTheme={false}
-          hideRoot={!rootLabel}
-          labelRenderer={([key, ...path]) =>
-            `${path.length > 0 ? key : rootLabel || key}:`
-          }
-        />
-      )}
+      {override ||
+        (typeof data === "string" ? (
+          <Typography color="error">{data}</Typography>
+        ) : (
+          <JSONTree
+            data={data}
+            shouldExpandNode={(keyPath, data, level) => level <= 3}
+            theme={{
+              base00: "transparent",
+              base03: "transparent",
+              base07: "inherit",
+              base08: palette.text.disabled,
+              base09: palette.success.light,
+              base0B: palette.secondary.main,
+              base0D:
+                palette.primary[palette.mode === "dark" ? "light" : "dark"],
+            }}
+            invertTheme={false}
+            hideRoot={!rootLabel}
+            labelRenderer={([key, ...path]) =>
+              `${path.length > 0 ? key : rootLabel || key}:`
+            }
+          />
+        ))}
     </Typography>
   );
 }

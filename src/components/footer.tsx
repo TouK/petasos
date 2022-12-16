@@ -1,4 +1,4 @@
-import { Container, Link, Stack, styled, Typography } from "@mui/material";
+import { Container, Stack, styled, Typography } from "@mui/material";
 import React from "react";
 
 export const Footer = () => {
@@ -15,14 +15,7 @@ export const Footer = () => {
           color="background.paper"
           sx={{ opacity: 0.5, fontSize: ".6em" }}
         >
-          {_VERSION_} powered by{" "}
-          <Link
-            href="https://hermes-pubsub.readthedocs.io"
-            color="inherit"
-            underline="hover"
-          >
-            hermes
-          </Link>
+          {_VERSION_}
         </Typography>
       </Stack>
     </Container>

@@ -1,3 +1,10 @@
+# [1.2.0-beta.6](https://github.com/TouK/petasos/compare/v1.2.0-beta.5...v1.2.0-beta.6) (2022-12-16)
+
+
+### Features
+
+* remove "powered by" from footer ([2c7fca7](https://github.com/TouK/petasos/commit/2c7fca76b66176d21335dd1fc354c6d13c51b98a))
+
 # [1.2.0-beta.5](https://github.com/TouK/petasos/compare/v1.2.0-beta.4...v1.2.0-beta.5) (2022-12-13)
 
 

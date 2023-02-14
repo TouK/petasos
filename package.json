@@ -51,7 +51,7 @@
     "@types/webpack-env": "^1.16.4",
     "@types/webpack-merge": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
+    "@typescript-eslint/parser": "^5.52.0",
     "add-asset-html-webpack-plugin": "^5.0.2",
     "babel-loader": "^8.2.5",
     "babel-runtime": "^6.26.0",

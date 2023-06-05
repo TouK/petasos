@@ -17,4 +17,4 @@ do
   echo "  $varname: \"$value\"," >> ./_env.js
 done < .env
 
-echo "}; typeof module === 'object' ? module.exports = env : window['.env'] = env;" >> ./_env.js
+echo "}; typeof module === 'object' ? module.exports = env : window['.petasosEnv'] = env;" >> ./_env.js

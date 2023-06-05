@@ -1,0 +1,6 @@
+{
+    "name": "petasos",
+    "exposes": {
+        "./root": "./src/root"
+    }
+}

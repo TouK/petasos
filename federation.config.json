@@ -1,7 +1,6 @@
 {
     "name": "petasos",
     "exposes": {
-        "./root": "./src/remoteTab",
         "./remoteTab": "./src/remoteTab"
     }
 }

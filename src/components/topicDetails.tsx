@@ -237,9 +237,9 @@ export function JsonTree({ override, jsonText, rootLabel }: { override?: JSX.Ele
                             base03: "transparent",
                             base07: "inherit",
                             base08: palette.text.disabled,
-                            base09: palette.success.light,
-                            base0B: palette.secondary.main,
-                            base0D: palette.primary[palette.mode === "dark" ? "light" : "dark"],
+                            base09: palette.warning.main,
+                            base0B: palette.success.main,
+                            base0D: palette.info.main,
                         }}
                         invertTheme={false}
                         hideRoot={!rootLabel}

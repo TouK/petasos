@@ -1,5 +1,5 @@
 //TODO: not this way
-import { Box, Container, Divider, Stack, ThemeProvider } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import React, { PropsWithChildren } from "react";
 import { Outlet } from "react-router-dom";
 import { AddClonedTopicDialog } from "./addClonedTopicDialog";
@@ -15,7 +15,6 @@ import { LayoutColumn } from "./layout";
 import { NavigationBar } from "./navigationBar";
 import { RetransmitMessageDialog } from "./retransmitMessageDialog";
 import { AddClonedSubscriptionDialog, AddSubscriptionDialog, EditSubscriptionDialog } from "./subscriptionDialog";
-import { theme } from "./theme";
 
 const Dialogs = () => (
     <>

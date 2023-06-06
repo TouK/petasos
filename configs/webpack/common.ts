@@ -142,6 +142,10 @@ export const commonConfig: Configuration = {
                     singleton: true,
                     requiredVersion: dependencies["@emotion/react"],
                 },
+                "@mui/material": {
+                    singleton: true,
+                    requiredVersion: dependencies["@mui/material"],
+                },
                 react: {
                     singleton: true,
                     requiredVersion: dependencies["react"],

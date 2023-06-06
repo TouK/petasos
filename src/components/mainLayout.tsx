@@ -37,9 +37,9 @@ const Dialogs = () => (
 );
 export const MainLayout = ({ children = <Outlet /> }: PropsWithChildren<unknown>) => {
     return (
-        <Box bgcolor="background.default" color="text.primary" minHeight="100vh" display="flex">
+        <>
             <Dialogs />
-            <Stack spacing={2} paddingTop={2} paddingBottom={1} flex={1} justifyContent="space-between" alignItems="center">
+            <Stack spacing={2} paddingY={2} flex={1} justifyContent="space-between" alignItems="center">
                 <Container maxWidth="lg">
                     <LayoutColumn alignItems="stretch">
                         <NavigationBar />
@@ -48,6 +48,6 @@ export const MainLayout = ({ children = <Outlet /> }: PropsWithChildren<unknown>
                 </Container>
                 <Footer />
             </Stack>
-        </Box>
+        </>
     );
 };

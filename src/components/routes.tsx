@@ -1,6 +1,7 @@
 import loadable from "@loadable/component";
 import { Box, CircularProgress } from "@mui/material";
 import * as React from "react";
+import { createContext } from "react";
 import { Outlet, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { MainLayout } from "./mainLayout";
 import { RootProviders } from "./rootProviders";
@@ -43,24 +44,28 @@ const SubscriptionView = loadable(() => import("./subscriptionView"), opts);
 const TopicDetailsView = loadable(() => import("./topicDetailsView"), opts);
 const TopicView = loadable(() => import("./topicView"), opts);
 
-export const RootRoutes = () => (
-    <Routes>
-        <Route
-            path="/"
-            element={
-                <RootProviders>
-                    <MainLayout />
-                </RootProviders>
-            }
-        >
-            <Route path="/" element={<RootView />}>
-                <Route index element={<TopicsListView />} />
-                <Route path=":topic" element={<TopicView />}>
-                    <Route index element={<TopicDetailsView />} />
-                    <Route path=":subscription" element={<SubscriptionView />} />
+export const RootPath = createContext<string | null>(null);
+
+export const RootRoutes = ({ basepath }: { basepath?: string }) => (
+    <RootPath.Provider value={basepath}>
+        <Routes>
+            <Route
+                path="/"
+                element={
+                    <RootProviders>
+                        <MainLayout />
+                    </RootProviders>
+                }
+            >
+                <Route path="/" element={<RootView />}>
+                    <Route index element={<TopicsListView />} />
+                    <Route path=":topic" element={<TopicView />}>
+                        <Route index element={<TopicDetailsView />} />
+                        <Route path=":subscription" element={<SubscriptionView />} />
+                    </Route>
                 </Route>
+                <Route path="*" element={<NoMatch />} />
             </Route>
-            <Route path="*" element={<NoMatch />} />
-        </Route>
-    </Routes>
+        </Routes>
+    </RootPath.Provider>
 );

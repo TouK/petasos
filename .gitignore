@@ -5,3 +5,4 @@ node_modules/
 _env.js
 tsconfig.tsbuildinfo
 yarn-error.log
+.eslintcache

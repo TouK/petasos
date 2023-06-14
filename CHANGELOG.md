@@ -1,3 +1,9 @@
+# [1.2.0-beta.8](https://github.com/TouK/petasos/compare/v1.2.0-beta.7...v1.2.0-beta.8) (2023-06-14)
+
+### Bug Fixes
+
+-   message preview timestamp working again ([9e8fd8f](https://github.com/TouK/petasos/commit/9e8fd8f56bc407c24acf4c2bc468a54735fc7ba8))
+
 # [1.2.0-beta.7](https://github.com/TouK/petasos/compare/v1.2.0-beta.6...v1.2.0-beta.7) (2023-06-07)
 
 ### Bug Fixes

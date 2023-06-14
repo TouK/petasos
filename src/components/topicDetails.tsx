@@ -13,7 +13,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { JSONTree } from "react-json-tree";
 import { MessagePreviewModel } from "../models";
 import { TopicInfo } from "../propertiesInfo";
-import { withoutMetadata } from "../store/metadata";
 import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
 import { DetailsBox } from "./detailsBox";
@@ -44,11 +43,11 @@ const MessagesPreview = observer(({ topic }: { topic: Topic }) => {
             ]}
         >
             {topic.messagePreview?.length > 0 ? (
-                topic.messagePreview.map(({ content }: MessagePreviewModel) => (
-                    <Stack key={content} direction="row" alignItems="baseline">
-                        <JsonTree jsonText={withoutMetadata(content)} />
-                        <Timestamp message={content} />
-                    </Stack>
+                topic.messagePreview.map(({ content, timestamp }: MessagePreviewModel) => (
+                    <Box key={`${timestamp}${content}`} position="relative">
+                        <JsonTree jsonText={content} />
+                        <Timestamp timestamp={timestamp} />
+                    </Box>
                 ))
             ) : (
                 <Typography variant="body2" color="text.disabled">

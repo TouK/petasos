@@ -1,3 +1,23 @@
+# [1.2.0](https://github.com/TouK/petasos/compare/v1.1.0...v1.2.0) (2023-06-14)
+
+### Bug Fixes
+
+-   handle broken json in preview ([58a2d0f](https://github.com/TouK/petasos/commit/58a2d0f5b86df6280520a8388099c56ce0ea367a))
+-   message preview timestamp working again ([9e8fd8f](https://github.com/TouK/petasos/commit/9e8fd8f56bc407c24acf4c2bc468a54735fc7ba8))
+-   visual/theme glitches ([f5e0dbc](https://github.com/TouK/petasos/commit/f5e0dbc6c690d32f299c65d0a9df1e9976876662))
+-   visual/theme glitches ([ac462c3](https://github.com/TouK/petasos/commit/ac462c3acf0761e15df6a1d12eb299fc6bd4c4d4))
+-   visual/theme glitches ([6a9b5dd](https://github.com/TouK/petasos/commit/6a9b5ddf45109253f7ef53da7b8fbca98354cca6))
+
+### Features
+
+-   add fetch secured ([ae7645b](https://github.com/TouK/petasos/commit/ae7645b1853d1d4b24ae9f03c8580b8d1869c86f))
+-   clear accessToken query param after reading ([a6cdea3](https://github.com/TouK/petasos/commit/a6cdea35edf948abdfa6a7cc8becf5985b246f89))
+-   expose routes with webpack module federation ([1eec5e6](https://github.com/TouK/petasos/commit/1eec5e635d15980d595574295e4f5699be92f69f))
+-   expose routes with webpack module federation ([87fc9a2](https://github.com/TouK/petasos/commit/87fc9a2a128832de087de45e9bb9a66bfd476c64))
+-   remove "powered by" from footer ([2c7fca7](https://github.com/TouK/petasos/commit/2c7fca76b66176d21335dd1fc354c6d13c51b98a))
+-   save accessToken ([d2cd181](https://github.com/TouK/petasos/commit/d2cd181b90845c5352274746c993f251e3ea00b0))
+-   Update README with branch conventions and add .npmrc ([69445f4](https://github.com/TouK/petasos/commit/69445f4efc29a0c7ea7d98100dd1465a88553516))
+
 # [1.2.0-beta.8](https://github.com/TouK/petasos/compare/v1.2.0-beta.7...v1.2.0-beta.8) (2023-06-14)
 
 ### Bug Fixes

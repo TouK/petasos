@@ -1,3 +1,5 @@
+const ACCESS_TOKEN_NAMESPACE = "accessToken";
+
 const addHeaders =
   (customHeaders: Record<string, string>) =>
   ({ headers, ...req }: RequestInit) => ({
@@ -12,6 +14,21 @@ const addTokenHeader = (token: string) =>
   addHeaders({ Authorization: `Bearer ${token}` });
 
 const withContentType = addHeaders({ "Content-Type": "application/json" });
+
+export const fetchSecured = async <R>(
+  url: string,
+  init: RequestInit = {}
+): Promise<R> => {
+  const storageToken = localStorage.getItem(ACCESS_TOKEN_NAMESPACE);
+  const queryParamToken = getQueryParameters()[ACCESS_TOKEN_NAMESPACE];
+  const token = queryParamToken ? queryParamToken : storageToken;
+  if (queryParamToken) {
+    localStorage.setItem(ACCESS_TOKEN_NAMESPACE, queryParamToken);
+    window.history.replaceState(null, null, window.location.pathname);
+  }
+  const withAuth = addTokenHeader(token);
+  return await fetchJson(url, withAuth(init));
+};
 
 export const fetchJson = async <R>(
   url: string,
@@ -33,18 +50,19 @@ export const fetchJson = async <R>(
   return json as R;
 };
 
-function withToken(
-  fetchFn: typeof fetchJson,
-  tokenGetter: () => Promise<string>
-): typeof fetchJson {
-  return async (url, init = {}) => {
-    const token = await tokenGetter();
-    const withAuth = addTokenHeader(token);
-    return await fetchFn(url, withAuth(init));
-  };
-}
+export const getQueryParameters = () => {
+  const queryStringKeyValue = window.location.search
+    .replace("?", "")
+    .split("&");
+  return queryStringKeyValue.reduce((acc, curr) => {
+    const [key, value] = curr.split("=");
+    return {
+      ...acc,
+      [key]: value,
+    };
+  }, {});
+};
 
-// this is the fetch function used in store, so far no authorization is in use,
-// this should be addressed in the future
-
-export const fetchFn = fetchJson;
+export const fetchFn = Object.keys(getQueryParameters()).length
+  ? fetchSecured
+  : fetchJson;

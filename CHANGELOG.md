@@ -1,3 +1,9 @@
+## [1.2.1-beta.1](https://github.com/TouK/petasos/compare/v1.2.0...v1.2.1-beta.1) (2023-06-24)
+
+### Bug Fixes
+
+-   remote tab scroll and space fill ([98d9400](https://github.com/TouK/petasos/commit/98d940085c4257f04896316bbdfceda920587791))
+
 # [1.2.0](https://github.com/TouK/petasos/compare/v1.1.0...v1.2.0) (2023-06-14)
 
 ### Bug Fixes

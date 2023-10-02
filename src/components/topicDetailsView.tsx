@@ -5,10 +5,10 @@ import { useStore } from "../store/storeProvider";
 import { TopicDetails } from "./topicDetails";
 
 const TopicDetailsView = observer(() => {
-  const { topics } = useStore();
-  const { topic: topicName } = useParams<"topic">();
+    const { topics } = useStore();
+    const { topic: topicName } = useParams<"topic">();
 
-  return <TopicDetails topic={topics.getByName(topicName)} />;
+    return <TopicDetails topic={topics.getByName(topicName)} />;
 });
 
 export default TopicDetailsView;

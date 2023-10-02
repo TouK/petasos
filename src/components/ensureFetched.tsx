@@ -7,43 +7,35 @@ import { LoadingMask } from "./loadingMask";
 
 type FetchFn = () => Promise<unknown>;
 
-const ReFetchButton = ({
-  fetchFn,
-}: PropsWithChildren<{ fetchFn: FetchFn }>) => (
-  <Button color="inherit" size="small" onClick={fetchFn}>
-    Try again
-  </Button>
+const ReFetchButton = ({ fetchFn }: PropsWithChildren<{ fetchFn: FetchFn }>) => (
+    <Button color="inherit" size="small" onClick={fetchFn}>
+        Try again
+    </Button>
 );
 
 const ErrorView = ({ fetchFn }: PropsWithChildren<{ fetchFn: FetchFn }>) => (
-  <ContentBox>
-    <Alert
-      variant="filled"
-      severity="error"
-      action={<ReFetchButton fetchFn={fetchFn} />}
-    >
-      Error when fetching data.
-    </Alert>
-  </ContentBox>
+    <ContentBox>
+        <Alert variant="filled" severity="error" action={<ReFetchButton fetchFn={fetchFn} />}>
+            Error when fetching data.
+        </Alert>
+    </ContentBox>
 );
 
-export const EnsureFetched = observer(
-  (props: PropsWithChildren<{ task: Task<unknown[], unknown> }>) => {
+export const EnsureFetched = observer((props: PropsWithChildren<{ task: Task<unknown[], unknown> }>) => {
     const { children, task } = props;
 
     useEffect(() => {
-      task();
+        task();
     }, [task]);
 
     if (task.rejected) {
-      return <ErrorView fetchFn={task} />;
+        return <ErrorView fetchFn={task} />;
     }
 
     return (
-      <>
-        <LoadingMask open={task.pending} />
-        {children}
-      </>
+        <>
+            <LoadingMask open={task.pending} />
+            {children}
+        </>
     );
-  }
-);
+});

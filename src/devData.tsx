@@ -6,16 +6,14 @@ import { Topic } from "./store/topic";
 const getDevGroupData = () => ({ name: getRandomizedName("group") });
 
 const getDevTopicData = (topic?: Topic) =>
-  topic
-    ? {
-        topic: getRandomizedName(
-          `cloned__${topic.displayName.replace(".", "_")}`
-        ),
-      }
-    : {
-        topic: getRandomizedName("topic"),
-        description: getRandomizedName("description"),
-        schema: `{
+    topic
+        ? {
+              topic: getRandomizedName(`cloned__${topic.displayName.replace(".", "_")}`),
+          }
+        : {
+              topic: getRandomizedName("topic"),
+              description: getRandomizedName("description"),
+              schema: `{
           "type": "record",
           "name": "transaction",
           "namespace": "pl.touk",
@@ -30,20 +28,18 @@ const getDevTopicData = (topic?: Topic) =>
             }
           ]
         }`,
-      };
+          };
 
 const getDevSubscriptionData = (subscription?: Subscription) =>
-  subscription
-    ? {
-        name: getRandomizedName(
-          `cloned__${subscription.name.replace(".", "_")}`
-        ),
-      }
-    : {
-        name: getRandomizedName("subscription"),
-        endpoint: "http://localhost:21312",
-        description: getRandomizedName("description"),
-      };
+    subscription
+        ? {
+              name: getRandomizedName(`cloned__${subscription.name.replace(".", "_")}`),
+          }
+        : {
+              name: getRandomizedName("subscription"),
+              endpoint: "http://localhost:21312",
+              description: getRandomizedName("description"),
+          };
 const stub = () => ({});
 
 export const getGroupData = isDev ? getDevGroupData : stub;

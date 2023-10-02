@@ -9,7 +9,7 @@ import { LinePlaceholder } from "./linePlaceholder";
 export const SubscriptionListElement = observer(({ subscription }: { subscription: Subscription }) => {
     const navigate = useNavigate();
     const state = subscription.state;
-    const noExist = subscription.state === undefined;
+    const noExist = state === undefined;
     const notActive = state !== "ACTIVE" && state !== undefined;
     const active = state === "ACTIVE";
 

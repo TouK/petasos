@@ -22,7 +22,7 @@ export const DeleteSubscriptionDialog = observer(() => {
             confirmText={"Delete subscription"}
             onSubmitSuccess={async () => {
                 await topic.fetchSubscriptionsTask();
-                navigate(`/${topic.name}`);
+                navigate(topic.name);
             }}
         />
     );

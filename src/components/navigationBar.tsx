@@ -29,15 +29,12 @@ export const NavigationBar = observer(() => {
     const rootPath = useContext(RootPath);
     const normalizedPathname = pathname.indexOf(rootPath) === 0 ? pathname.substring(rootPath.length) : pathname;
 
-    let pathnames;
-    if (pathname.includes("topics")) {
-        pathnames = normalizedPathname
-            .replace(/^\/topics[^/]*\//, "/")
-            .split("/")
-            .filter(Boolean);
-    } else {
-        pathnames = normalizedPathname.split("/").filter(Boolean);
-    }
+    const pathnames = pathname.includes("topics")
+        ? normalizedPathname
+              .replace(/^\/topics[^/]*\//, "/")
+              .split("/")
+              .filter(Boolean)
+        : normalizedPathname.split("/").filter(Boolean);
 
     const homeText = groups.areGroupsHidden ? "Topics list" : "Groups and topics";
 

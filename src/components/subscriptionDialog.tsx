@@ -3,7 +3,7 @@ import { Field, FormikErrors } from "formik";
 import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
 import { observer, useObserver } from "mobx-react-lite";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getSubscriptionData } from "../devData";
 import { AdvancedSubscriptionFormikValues, SubscriptionFormikValues } from "../models";
 import { Dialog } from "../store/dialog";
@@ -194,6 +194,7 @@ export const AddSubscriptionDialog = observer(() => {
 export const AddClonedSubscriptionDialog = observer(() => {
     const { dialogs } = useStore();
     const dialog = dialogs.addClonedSubscription;
+    const { pathname } = useLocation();
     const { topic, subscription } = dialog.params;
 
     const initialValues = (): SubscriptionFormikValues =>
@@ -211,7 +212,13 @@ export const AddClonedSubscriptionDialog = observer(() => {
         sub.assignValuesFromForm(values);
         await topic.postSubscriptionTask(sub);
         await topic.fetchSubscriptionsTask();
-        navigate(`/${topic.name}/${values.name}`);
+        const path = getFirstPartOfPath(pathname);
+        navigate(`${path}/${topic.name}/${values.name}`);
+    };
+
+    const getFirstPartOfPath = (path: string) => {
+        const parts = path.split("/");
+        return parts.slice(0, 2).join("/");
     };
 
     return (

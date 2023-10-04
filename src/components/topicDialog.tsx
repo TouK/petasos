@@ -26,7 +26,7 @@ export const TopicDialog = observer(
             await groups.fetchTask();
             await topics.fetchTask();
             const topicName = Topic.joinName(group, topic);
-            navigate(`/${topicName}`);
+            navigate(`${topicName}`);
         };
 
         const basicFields = (errors: FormikErrors<TopicFormikValues>): JSX.Element[] => [

@@ -50,12 +50,13 @@ export const NavigationBar = observer(() => {
                 {pathnames.map((value, index) => {
                     const last = index === pathnames.length - 1;
                     const to = `/${pathnames.slice(0, index + 1).join("/")}`;
+
                     return last ? (
                         <Typography key={to} fontWeight="bold">
                             {nameGetter(to)}
                         </Typography>
                     ) : (
-                        <LinkRouter to={to} key={to}>
+                        <LinkRouter to={to.substring(1)} key={to}>
                             {nameGetter(to)}
                         </LinkRouter>
                     );

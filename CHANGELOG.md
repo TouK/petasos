@@ -1,3 +1,13 @@
+## [1.2.1](https://github.com/TouK/petasos/compare/v1.2.0...v1.2.1) (2023-10-05)
+
+### Bug Fixes
+
+-   auto update subscription status ([e7d5850](https://github.com/TouK/petasos/commit/e7d5850ab63b4551064d5a2115ee771d5757d800))
+-   breadcrumbs navigation ([d47af57](https://github.com/TouK/petasos/commit/d47af57ed5fed6e0b35a7a8da666275c824fa09b))
+-   change validation pathnames ([6f86ead](https://github.com/TouK/petasos/commit/6f86eadc5672d005408a0f400b89bd91a76801fe))
+-   remote tab scroll and space fill ([98d9400](https://github.com/TouK/petasos/commit/98d940085c4257f04896316bbdfceda920587791))
+-   update navigation ([e7456a5](https://github.com/TouK/petasos/commit/e7456a5f69999272b824c0a1a5fecbc91e32fb23))
+
 ## [1.2.1-beta.2](https://github.com/TouK/petasos/compare/v1.2.1-beta.1...v1.2.1-beta.2) (2023-10-04)
 
 ### Bug Fixes

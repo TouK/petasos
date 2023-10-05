@@ -6,25 +6,25 @@ import { ContentBox } from "./contentBox";
 import { EnsureFetched } from "./ensureFetched";
 
 const Topic = observer(({ topicName }: { topicName: string }) => {
-  const { topics } = useStore();
-  const topic = topics.getByName(topicName);
+    const { topics } = useStore();
+    const topic = topics.getByName(topicName);
 
-  if (!topic?.name) {
-    return topics.fetchTask.resolved ? <Navigate to="/" /> : null;
-  }
+    if (!topic?.name) {
+        return topics.fetchTask.resolved ? <Navigate to="/" /> : null;
+    }
 
-  return (
-    <EnsureFetched task={topic.fetchTask}>
-      <ContentBox>
-        <Outlet />
-      </ContentBox>
-    </EnsureFetched>
-  );
+    return (
+        <EnsureFetched task={topic.fetchTask}>
+            <ContentBox>
+                <Outlet />
+            </ContentBox>
+        </EnsureFetched>
+    );
 });
 
 const TopicView = observer(() => {
-  const { topic } = useParams<"topic">();
-  return <Topic topicName={topic} />;
+    const { topic } = useParams<"topic">();
+    return <Topic topicName={topic} />;
 });
 
 export default TopicView;

@@ -9,26 +9,26 @@ import { LayoutColumn, LayoutRow } from "./layout";
 import { Topics } from "./topics";
 
 const GroupsLayout = observer(({ children }: PropsWithChildren<unknown>) => {
-  const { groups } = useStore();
-  return (
-    <EnsureFetched task={groups.fetchTask}>
-      <LayoutRow>
-        {!groups.isGroupsListHidden && <GroupsList />}
-        <LayoutColumn>{children}</LayoutColumn>
-      </LayoutRow>
-    </EnsureFetched>
-  );
+    const { groups } = useStore();
+    return (
+        <EnsureFetched task={groups.fetchTask}>
+            <LayoutRow>
+                {!groups.isGroupsListHidden && <GroupsList />}
+                <LayoutColumn>{children}</LayoutColumn>
+            </LayoutRow>
+        </EnsureFetched>
+    );
 });
 
 const TopicsListView = () => {
-  const [searchParams] = useSearchParams();
-  const group = searchParams.get("group");
+    const [searchParams] = useSearchParams();
+    const group = searchParams.get("group");
 
-  return (
-    <GroupsLayout>
-      <Topics group={group} />
-    </GroupsLayout>
-  );
+    return (
+        <GroupsLayout>
+            <Topics group={group} />
+        </GroupsLayout>
+    );
 };
 
 export default TopicsListView;

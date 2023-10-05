@@ -28,7 +28,13 @@ export const NavigationBar = observer(() => {
     const { pathname } = useLocation();
     const rootPath = useContext(RootPath);
     const normalizedPathname = pathname.indexOf(rootPath) === 0 ? pathname.substring(rootPath.length) : pathname;
-    const pathnames = normalizedPathname.split("/").filter(Boolean);
+
+    const pathnames = pathname.includes("topics")
+        ? normalizedPathname
+              .replace(/^\/topics[^/]*\//, "/")
+              .split("/")
+              .filter(Boolean)
+        : normalizedPathname.split("/").filter(Boolean);
 
     const homeText = groups.areGroupsHidden ? "Topics list" : "Groups and topics";
 
@@ -37,7 +43,6 @@ export const NavigationBar = observer(() => {
             topics.getTopicDisplayName?.(match?.params.topic) || <LinePlaceholder dark length={match?.params.topic.length} />,
         "/:topic/:subscription": (match) => match?.params.subscription,
     });
-
     return (
         <LayoutRow justifyContent="space-between" alignItems="baseline">
             <Breadcrumbs
@@ -49,14 +54,15 @@ export const NavigationBar = observer(() => {
 
                 {pathnames.map((value, index) => {
                     const last = index === pathnames.length - 1;
-                    const to = `/${pathnames.slice(0, index + 1).join("/")}`;
+                    const to = `${pathnames.slice(0, index + 1).join("/")}`;
+
                     return last ? (
                         <Typography key={to} fontWeight="bold">
-                            {nameGetter(to)}
+                            {nameGetter(`/${to}`)}
                         </Typography>
                     ) : (
                         <LinkRouter to={to} key={to}>
-                            {nameGetter(to)}
+                            {nameGetter(`/${to}`)}
                         </LinkRouter>
                     );
                 })}

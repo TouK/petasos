@@ -22,4 +22,20 @@ export const theme = createMuiTheme({
             paper: "#4D4D4D",
         },
     },
+    components: {
+        MuiListItemIcon: {
+            styleOverrides: {
+                root: {
+                    color: 'currentColor',
+                }
+            }
+        },
+        MuiIconButton: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    color: theme.palette.primary.main,
+                })
+            }
+        },
+    }
 });

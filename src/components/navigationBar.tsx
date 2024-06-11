@@ -6,7 +6,7 @@ import { Link as RouterLink, matchPath, PathMatch, useLocation } from "react-rou
 import { useStore } from "../store/storeProvider";
 import { LayoutRow } from "./layout";
 import { LinePlaceholder } from "./linePlaceholder";
-import { RootPath } from "./routes";
+import { RootPath } from "./rootProviders";
 
 function LinkRouter(
     props: PropsWithChildren<{

@@ -1,4 +1,4 @@
-const ACCESS_TOKEN_NAMESPACE = "accessToken";
+import { tokenStorage } from "./tokenStorage";
 
 const addHeaders =
     (customHeaders: Record<string, string>) =>
@@ -14,16 +14,19 @@ const addTokenHeader = (token: string) => addHeaders({ Authorization: `Bearer ${
 
 const withContentType = addHeaders({ "Content-Type": "application/json" });
 
-export const fetchSecured = async <R>(url: string, init: RequestInit = {}): Promise<R> => {
-    const storageToken = localStorage.getItem(ACCESS_TOKEN_NAMESPACE);
-    const queryParamToken = getQueryParameters()[ACCESS_TOKEN_NAMESPACE];
-    const token = queryParamToken ? queryParamToken : storageToken;
-    if (queryParamToken) {
-        localStorage.setItem(ACCESS_TOKEN_NAMESPACE, queryParamToken);
-        window.history.replaceState(null, null, window.location.pathname);
+const getAuthHeader = async (init: RequestInit): Promise<RequestInit> => {
+    try {
+        const token = await tokenStorage.getToken();
+        const withAuth = addTokenHeader(token);
+        return withAuth(init);
+    } catch {
+        return init;
     }
-    const withAuth = addTokenHeader(token);
-    return await fetchJson(url, withAuth(init));
+};
+
+export const fetchSecured = async <R>(url: string, init: RequestInit = {}): Promise<R> => {
+    const options = await getAuthHeader(init);
+    return await fetchJson(url, options);
 };
 
 export const fetchJson = async <R>(url: string, init: RequestInit = {}): Promise<R> => {
@@ -43,15 +46,18 @@ export const fetchJson = async <R>(url: string, init: RequestInit = {}): Promise
     return json as R;
 };
 
-export const getQueryParameters = () => {
-    const queryStringKeyValue = window.location.search.replace("?", "").split("&");
-    return queryStringKeyValue.reduce((acc, curr) => {
-        const [key, value] = curr.split("=");
-        return {
-            ...acc,
-            [key]: value,
-        };
-    }, {});
+export const localStorageToken = (namespace = "accessToken") => {
+    let token: string;
+    const url = new URL(window.location.href);
+    if (url.searchParams.has(namespace)) {
+        token = url.searchParams.get(namespace);
+        localStorage.setItem(namespace, token);
+        url.searchParams.delete(namespace);
+        window.history.replaceState(null, null, url.toString());
+    } else {
+        token = localStorage.getItem(namespace);
+    }
+    return token ? Promise.resolve(token) : Promise.reject();
 };
 
-export const fetchFn = Object.keys(getQueryParameters()).length ? fetchSecured : fetchJson;
+export const fetchFn = fetchSecured;

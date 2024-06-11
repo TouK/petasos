@@ -4,33 +4,50 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { configure } from "mobx";
 import * as React from "react";
-import { PropsWithChildren } from "react";
+import { createContext, PropsWithChildren, useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import { Options } from "../config";
 import { StoreProvider } from "../store/storeProvider";
+import { tokenStorage } from "../tokenStorage";
 import { theme } from "./theme";
 
 configure({
     enforceActions: "observed",
 });
 
-export const RootProviders = ({ children }: PropsWithChildren<unknown>) => (
-    <StoreProvider options={Options}>
-        <ThemeProvider
-            theme={(outerTheme: Theme) => {
-                if (!Object.keys(outerTheme).length) {
-                    return theme;
-                }
+export const RootPath = createContext<string | null>(null);
 
-                // Let's set aside the parent form style since we won't be using the same form style throughout the entire app.
-                const {
-                    components: { MuiFormControl, MuiFormHelperText, MuiFormLabel },
-                    ...filteredOuterTheme
-                } = outerTheme;
+export type RootProvidersProps = {
+    tokenGetter: () => Promise<string>;
+    basepath?: string;
+};
 
-                return deepmerge(theme, filteredOuterTheme);
-            }}
-        >
-            <LocalizationProvider dateAdapter={AdapterMoment}>{children}</LocalizationProvider>
-        </ThemeProvider>
-    </StoreProvider>
-);
+export const RootProviders = ({ children = <Outlet />, tokenGetter, basepath }: PropsWithChildren<RootProvidersProps>) => {
+    useEffect(() => {
+        tokenStorage.replaceTokenGetter(tokenGetter);
+    }, [tokenGetter]);
+
+    return (
+        <RootPath.Provider value={basepath}>
+            <StoreProvider options={Options}>
+                <ThemeProvider
+                    theme={(outerTheme: Theme) => {
+                        if (!Object.keys(outerTheme).length) {
+                            return theme;
+                        }
+
+                        // Let's set aside the parent form style since we won't be using the same form style throughout the entire app.
+                        const {
+                            components: { MuiFormControl, MuiFormHelperText, MuiFormLabel },
+                            ...filteredOuterTheme
+                        } = outerTheme;
+
+                        return deepmerge(theme, filteredOuterTheme);
+                    }}
+                >
+                    <LocalizationProvider dateAdapter={AdapterMoment}>{children}</LocalizationProvider>
+                </ThemeProvider>
+            </StoreProvider>
+        </RootPath.Provider>
+    );
+};

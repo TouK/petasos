@@ -1,6 +1,7 @@
 {
     "name": "petasos",
     "exposes": {
-        "./remoteTab": "./src/remoteTab"
+        "./remoteTab": "./src/remoteTab",
+        "./routes": "./src/components/routes"
     }
 }

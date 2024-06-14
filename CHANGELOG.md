@@ -1,3 +1,9 @@
+# [1.3.0-beta.2](https://github.com/TouK/petasos/compare/v1.3.0-beta.1...v1.3.0-beta.2) (2024-06-14)
+
+### Bug Fixes
+
+-   new colors adjustments and fix form styles [NU-1646] ([a05f7d4](https://github.com/TouK/petasos/commit/a05f7d42a21ae49a89c8029a36d506d22e9c586d))
+
 # [1.3.0-beta.1](https://github.com/TouK/petasos/compare/v1.2.1...v1.3.0-beta.1) (2024-05-28)
 
 ### Features

@@ -1,3 +1,9 @@
+# [1.3.0-beta.3](https://github.com/TouK/petasos/compare/v1.3.0-beta.2...v1.3.0-beta.3) (2024-06-14)
+
+### Features
+
+-   **federation:** expose routes. refactor. update react-router. ([200dad5](https://github.com/TouK/petasos/commit/200dad541e7c1f602becfbad6d082ef24b719294))
+
 # [1.3.0-beta.2](https://github.com/TouK/petasos/compare/v1.3.0-beta.1...v1.3.0-beta.2) (2024-06-14)
 
 ### Bug Fixes

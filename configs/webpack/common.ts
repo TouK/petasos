@@ -154,6 +154,9 @@ export const commonConfig: Configuration = {
                     singleton: true,
                     requiredVersion: dependencies["react-dom"],
                 },
+                "react-router-dom": {
+                    singleton: true,
+                },
             },
             ...federationConfig,
         }),

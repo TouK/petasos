@@ -1,3 +1,9 @@
+# [1.3.0-beta.4](https://github.com/TouK/petasos/compare/v1.3.0-beta.3...v1.3.0-beta.4) (2024-06-17)
+
+### Bug Fixes
+
+-   **federation:** work with older react-router ([2b74169](https://github.com/TouK/petasos/commit/2b74169d9fca30c201dda12fca78d3e811e41cda))
+
 # [1.3.0-beta.3](https://github.com/TouK/petasos/compare/v1.3.0-beta.2...v1.3.0-beta.3) (2024-06-14)
 
 ### Features

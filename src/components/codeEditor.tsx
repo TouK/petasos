@@ -43,7 +43,7 @@ export const CodeEditor = forwardRef<
     const { value, onChange, rows, disabled, autoFocus, formatter, ...passProps } = props;
 
     const editorRef = useRef<HTMLDivElement>(null);
-    const ref = useForkRef<HTMLDivElement, HTMLDivElement>(forwardedRef, editorRef);
+    const ref = useForkRef(forwardedRef, editorRef);
 
     const jarRef = useRef<CodeJar>(null);
     const positionRef = useRef<Position>(null);
@@ -96,7 +96,7 @@ export const CodeEditor = forwardRef<
             sx={{
                 maxHeight: rows && `${parseInt(rows.toString()) * 1.45}em`,
             }}
-            onBlurCapture={formatter && ((event) => jarRef.current?.updateCode(formatter(value)))}
+            onBlurCapture={formatter && (() => jarRef.current?.updateCode(formatter(value)))}
         >
             {value}
         </CodeBox>

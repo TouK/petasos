@@ -23,7 +23,7 @@ export const ConfirmDialog = observer(
     }) => {
         const loading = taskOnSubmit.pending;
         const backendValidationError = taskOnSubmit.rejected
-            ? taskOnSubmit.error
+            ? (taskOnSubmit.error as string)
             : taskOnSubmit.result
             ? taskOnSubmit.result.message
             : null;

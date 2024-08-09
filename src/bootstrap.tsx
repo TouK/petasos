@@ -1,6 +1,6 @@
 import { configure } from "mobx";
 import * as React from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Root } from "./components/root";
 
 configure({
@@ -13,7 +13,8 @@ function init() {
         appRoot = document.createElement("div");
         document.body.appendChild(appRoot);
     }
-    render(<Root />, appRoot);
+    const root = createRoot(appRoot);
+    root.render(<Root />);
 }
 
 init();

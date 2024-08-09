@@ -107,7 +107,9 @@ export const commonConfig: Configuration = {
             },
         ],
     },
-    entry: ["./src/index.ts"],
+    entry: {
+        main: "./src/index.ts",
+    },
     plugins: [
         new MomentLocalesPlugin({
             localesToKeep: ["en"],
@@ -116,6 +118,7 @@ export const commonConfig: Configuration = {
         new HtmlWebpackPlugin({
             title: `${pkg.name} ${pkg.version}`,
             publicPath: "/",
+            chunks: ["runtime", "main"],
         }),
         new CopyPlugin({
             patterns: [

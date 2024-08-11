@@ -29,17 +29,17 @@ const CodeBox = styled("div")(({ theme: t }) => ({
     },
 }));
 
-export const CodeEditor = forwardRef<
-    HTMLDivElement,
-    {
-        value: string;
-        onChange: (code: string) => void;
-        rows: number | string;
-        disabled?: boolean;
-        autoFocus?: boolean;
-        formatter?: (code: string) => string;
-    }
->(function CodeEditor(props, forwardedRef) {
+export type CodeEditorProps = {
+    className?: string;
+    value: string;
+    onChange: (code: string) => void;
+    rows: number | string;
+    disabled?: boolean;
+    autoFocus?: boolean;
+    formatter?: (code: string) => string;
+};
+
+export const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(function CodeEditor(props, forwardedRef) {
     const { value, onChange, rows, disabled, autoFocus, formatter, ...passProps } = props;
 
     const editorRef = useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ export const CodeEditor = forwardRef<
 
     const jarRef = useRef<CodeJar>(null);
     const positionRef = useRef<Position>(null);
-    const [code, setCode] = useState<string>(null);
+    const [code, setCode] = useState<string>(value);
 
     //init CodeJar
     useEffect(() => {
@@ -96,7 +96,7 @@ export const CodeEditor = forwardRef<
             sx={{
                 maxHeight: rows && `${parseInt(rows.toString()) * 1.45}em`,
             }}
-            onBlurCapture={formatter && (() => jarRef.current?.updateCode(formatter(value)))}
+            onBlurCapture={formatter && (() => jarRef.current?.updateCode(formatter(code)))}
         >
             {value}
         </CodeBox>

@@ -1,3 +1,9 @@
+# [1.3.0-beta.5](https://github.com/TouK/petasos/compare/v1.3.0-beta.4...v1.3.0-beta.5) (2024-08-11)
+
+### Bug Fixes
+
+-   infinite loop when injected with module federation ([b8fd128](https://github.com/TouK/petasos/commit/b8fd1281fa4602148dfeb638b1eabdee6d3ba7cf))
+
 # [1.3.0-beta.4](https://github.com/TouK/petasos/compare/v1.3.0-beta.3...v1.3.0-beta.4) (2024-06-17)
 
 ### Bug Fixes

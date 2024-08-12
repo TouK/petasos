@@ -47,7 +47,7 @@ export const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(function C
 
     const jarRef = useRef<CodeJar>(null);
     const positionRef = useRef<Position>(null);
-    const [code, setCode] = useState<string>(value);
+    const [code, setCode] = useState<string>(null);
 
     //init CodeJar
     useEffect(() => {

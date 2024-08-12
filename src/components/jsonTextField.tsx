@@ -13,8 +13,8 @@ function formatJson(value: string): string {
 }
 
 const FieldCodeEditor = ({ name, ...props }: CodeEditorProps & { name: string }) => {
-    const [{ value, onChange }] = useField(name);
-    return <CodeEditor {...props} value={value} onChange={onChange} />;
+    const [{ value }, , { setValue }] = useField(name);
+    return <CodeEditor {...props} value={value} onChange={setValue} />;
 };
 
 export function JsonTextField(props: TextFieldProps) {

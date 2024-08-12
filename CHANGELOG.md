@@ -1,3 +1,9 @@
+# [1.3.0-beta.6](https://github.com/TouK/petasos/compare/v1.3.0-beta.5...v1.3.0-beta.6) (2024-08-12)
+
+### Bug Fixes
+
+-   save schema ([812f7b0](https://github.com/TouK/petasos/commit/812f7b097a00096fa7e440719263fab915c8cc48))
+
 # [1.3.0-beta.5](https://github.com/TouK/petasos/compare/v1.3.0-beta.4...v1.3.0-beta.5) (2024-08-11)
 
 ### Bug Fixes

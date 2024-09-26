@@ -6,6 +6,7 @@ import { debouncedTask } from "../helpers/debouncedTask";
 import {
     Acknowledgement,
     AuthModel,
+    ContentType,
     MessagePreviewModel,
     OwnerModel,
     RetentionTimeModel,
@@ -41,7 +42,7 @@ export class Topic implements TopicModel {
     @observable trackingEnabled: boolean;
     @observable migratedFromJsonType: boolean;
     @observable schemaIdAwareSerializationEnabled: boolean;
-    @observable contentType = "AVRO";
+    @observable contentType: ContentType;
     @observable maxMessageSize = 10240;
     @observable auth: AuthModel;
     @observable createdAt: number;
@@ -155,8 +156,17 @@ export class Topic implements TopicModel {
 
     private getModelFromForm(object: TopicFormikValues): TopicModel {
         const value = this.model;
-        if (object.schema) {
-            value.schema = this.metadataRequired ? addMetadata(object.schema) : object.schema;
+        if (object.contentType) {
+            value.contentType = object.contentType;
+
+            switch (object.contentType) {
+                case "AVRO":
+                    if (object.schema) {
+                        value.schema = this.metadataRequired ? addMetadata(object.schema) : object.schema;
+                    }
+                    break;
+                default:
+            }
         }
         if (object.description) {
             value.description = object.description;

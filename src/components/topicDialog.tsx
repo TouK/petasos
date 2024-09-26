@@ -52,6 +52,16 @@ export const TopicDialog = observer(
             ),
             <Field autoFocus required component={TextField} label="Topic name" name="topic" key="topic" fullWidth />,
             <Field required component={TextField} label="Topic description" name="description" key="description" fullWidth />,
+            <FormControl key="contentType">
+                <FormLabel>ContentType</FormLabel>
+                <Field component={RadioGroup} row name={"contentType"}>
+                    <FormControlLabel value="AVRO" control={<Radio />} label="AVRO" />
+                    <FormControlLabel value="JSON" control={<Radio />} label="JSON" />
+                </Field>
+            </FormControl>,
+        ];
+
+        const schemaInputField = (): JSX.Element => (
             <Field
                 component={JsonTextField}
                 label="Avro schema"
@@ -62,8 +72,8 @@ export const TopicDialog = observer(
                 variant="outlined"
                 multiline
                 rows={15}
-            />,
-        ];
+            />
+        );
 
         const advancedFields = (): JSX.Element[] => [
             <FormControl key="advancedValues.acknowledgement">
@@ -100,6 +110,7 @@ export const TopicDialog = observer(
             <DialogTemplate<TopicFormikValues>
                 advancedFields={advancedFields}
                 basicFields={basicFields}
+                schemaInputField={schemaInputField}
                 dialog={dialog}
                 dialogTitle={"Add new topic"}
                 initialValues={initialValues()}

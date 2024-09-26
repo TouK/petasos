@@ -39,6 +39,7 @@ export const EditTopicDialog = observer(() => {
                   schema: topic.schemaPrettified,
                   group: groups.getGroupOfTopic(topic.name),
                   description: topic.description,
+                  contentType: topic.contentType,
               }
             : {
                   ...DEFAULT_TOPIC_VALUES,
@@ -49,6 +50,16 @@ export const EditTopicDialog = observer(() => {
         !groups.areGroupsHidden && <GroupsFormControl key="group" errors={errors} disabled />,
         <Field required component={TextField} label="Topic name" name="topic" key="topic" fullWidth disabled />,
         <Field required component={TextField} autoFocus label="Topic description" name="description" key="description" fullWidth />,
+        <FormControl key="contentType">
+            <FormLabel>ContentType</FormLabel>
+            <Field component={RadioGroup} row name={"contentType"}>
+                <FormControlLabel value="AVRO" control={<Radio />} label="AVRO" />
+                <FormControlLabel value="JSON" control={<Radio />} label="JSON" />
+            </Field>
+        </FormControl>,
+    ];
+
+    const schemaInputField = (): JSX.Element => (
         <Field
             component={JsonTextField}
             label="Avro schema"
@@ -59,8 +70,8 @@ export const EditTopicDialog = observer(() => {
             variant="outlined"
             multiline
             rows={15}
-        />,
-    ];
+        />
+    );
 
     const advancedFields = (): JSX.Element[] => [
         <FormControl key="advancedValues.acknowledgement">
@@ -97,6 +108,7 @@ export const EditTopicDialog = observer(() => {
         <DialogTemplate<TopicFormikValues>
             advancedFields={advancedFields}
             basicFields={basicFields}
+            schemaInputField={schemaInputField}
             dialog={dialog}
             dialogTitle={"Edit topic"}
             initialValues={initialValues()}

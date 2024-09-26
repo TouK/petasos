@@ -21,6 +21,7 @@ interface DialogTemplateComponentProps<T extends FormValues, R = void> extends O
     initialValues: T;
     basicFields: (FormikErrors) => JSX.Element[];
     advancedFields: (FormikErrors) => JSX.Element[];
+    schemaInputField?: (FormikErrors) => JSX.Element;
 }
 
 function DialogTemplateComponent<T extends FormValues, R = void>(props: DialogTemplateComponentProps<T, R>) {
@@ -35,6 +36,7 @@ function DialogTemplateComponent<T extends FormValues, R = void>(props: DialogTe
         initialValues,
         basicFields,
         advancedFields,
+        schemaInputField,
         ...passProps
     } = props;
     const [backendValidationError, setBackendValidationError] = useState<string>(null);
@@ -87,6 +89,8 @@ function DialogTemplateComponent<T extends FormValues, R = void>(props: DialogTe
                                         <BackendValidation text={backendValidationError} />
                                         <DialogFormFields
                                             basicFields={basicFields(errors).filter(Boolean)}
+                                            schemaInputField={schemaInputField ? schemaInputField(errors) : null}
+                                            showSchemaInput={values.contentType !== "JSON"}
                                             advancedFields={advancedFields(errors).filter(Boolean)}
                                             showAdvanced={showAdvanced}
                                             toggleAdvanced={() => setShowAdvanced(!showAdvanced)}

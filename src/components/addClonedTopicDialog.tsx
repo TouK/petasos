@@ -24,6 +24,7 @@ export const AddClonedTopicDialog = observer(() => {
                   schema: topic.schemaPrettified,
                   group: groups.getGroupOfTopic(topic.name),
                   description: topic.description,
+                  contentType: topic.contentType,
                   ...getTopicData(topic),
               }
             : {

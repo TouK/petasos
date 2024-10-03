@@ -16,6 +16,7 @@ export const DEFAULT_TOPIC_VALUES: TopicFormikValues = {
     schema: "",
     group: "",
     description: "",
+    contentType: "AVRO",
 };
 
 export const AddTopicDialog = observer(() => {

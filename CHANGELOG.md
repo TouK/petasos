@@ -1,3 +1,9 @@
+# [1.3.0-beta.7](https://github.com/TouK/petasos/compare/v1.3.0-beta.6...v1.3.0-beta.7) (2024-10-03)
+
+### Features
+
+-   allow creating topic without schema ([ca608cd](https://github.com/TouK/petasos/commit/ca608cd8d69263fa1571397743eb5f390bf6e6a4))
+
 # [1.3.0-beta.6](https://github.com/TouK/petasos/compare/v1.3.0-beta.5...v1.3.0-beta.6) (2024-08-12)
 
 ### Bug Fixes

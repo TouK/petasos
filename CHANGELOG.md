@@ -1,3 +1,9 @@
+# [1.3.0-beta.8](https://github.com/TouK/petasos/compare/v1.3.0-beta.7...v1.3.0-beta.8) (2024-10-11)
+
+### Bug Fixes
+
+-   change max size of a topic message (from 10KB to 100KB) ([4a0834f](https://github.com/TouK/petasos/commit/4a0834fde03b8e7e02a1570b0c174f09662222ec))
+
 # [1.3.0-beta.7](https://github.com/TouK/petasos/compare/v1.3.0-beta.6...v1.3.0-beta.7) (2024-10-03)
 
 ### Features

@@ -19,6 +19,7 @@ import { addMetadata, withoutMetadataFields } from "./metadata";
 import { Store } from "./store";
 import { Subscription } from "./subscription";
 import { ValidationError } from "./topics";
+import { DEFAULT_TOPIC_VALUES } from "../components/addTopicDialog";
 
 export class Topic implements TopicModel {
     static GROUP_NAME_SEPARATOR = ".";
@@ -43,7 +44,7 @@ export class Topic implements TopicModel {
     @observable migratedFromJsonType: boolean;
     @observable schemaIdAwareSerializationEnabled: boolean;
     @observable contentType: ContentType;
-    @observable maxMessageSize = 10240;
+    @observable maxMessageSize = DEFAULT_TOPIC_VALUES.advancedValues.maxMessageSize;
     @observable auth: AuthModel;
     @observable createdAt: number;
     @observable modifiedAt: number;

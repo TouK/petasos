@@ -9,7 +9,7 @@ export const DEFAULT_TOPIC_VALUES: TopicFormikValues = {
     advancedValues: {
         acknowledgement: "LEADER",
         trackingEnabled: false,
-        maxMessageSize: 10240,
+        maxMessageSize: 102400,
         retentionTime: 1,
     },
     topic: "",

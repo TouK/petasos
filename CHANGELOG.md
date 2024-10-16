@@ -1,3 +1,9 @@
+# [1.3.0-beta.9](https://github.com/TouK/petasos/compare/v1.3.0-beta.8...v1.3.0-beta.9) (2024-10-16)
+
+### Bug Fixes
+
+-   Resolve an issue with radio buttons ([ba61d02](https://github.com/TouK/petasos/commit/ba61d02b03f2d13e8512470decdcccce48293f7d))
+
 # [1.3.0-beta.8](https://github.com/TouK/petasos/compare/v1.3.0-beta.7...v1.3.0-beta.8) (2024-10-11)
 
 ### Bug Fixes

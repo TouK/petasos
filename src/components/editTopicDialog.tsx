@@ -1,6 +1,6 @@
-import { FormControl, FormControlLabel, FormLabel, Radio } from "@mui/material";
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { Field, FormikErrors } from "formik";
-import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
+import { CheckboxWithLabel, TextField } from "formik-mui";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { TopicFormikValues } from "../models";
@@ -52,7 +52,7 @@ export const EditTopicDialog = observer(() => {
         <Field required component={TextField} autoFocus label="Topic description" name="description" key="description" fullWidth />,
         <FormControl key="contentType">
             <FormLabel>ContentType</FormLabel>
-            <Field component={RadioGroup} row name={"contentType"}>
+            <Field as={RadioGroup} row name={"contentType"}>
                 <FormControlLabel value="AVRO" control={<Radio />} label="AVRO" />
                 <FormControlLabel value="JSON" control={<Radio />} label="JSON" />
             </Field>
@@ -76,7 +76,7 @@ export const EditTopicDialog = observer(() => {
     const advancedFields = (): JSX.Element[] => [
         <FormControl key="advancedValues.acknowledgement">
             <FormLabel>Acknowledgement</FormLabel>
-            <Field component={RadioGroup} row name={"advancedValues.acknowledgement"}>
+            <Field as={RadioGroup} row name={"advancedValues.acknowledgement"}>
                 <FormControlLabel value="LEADER" control={<Radio />} label="LEADER" />
                 <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
             </Field>

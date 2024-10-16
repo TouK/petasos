@@ -1,6 +1,6 @@
-import { FormControl, FormControlLabel, FormLabel, Radio } from "@mui/material";
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { Field, FormikErrors } from "formik";
-import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
+import { CheckboxWithLabel, TextField } from "formik-mui";
 import { observer, useObserver } from "mobx-react-lite";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -73,7 +73,7 @@ export const SubscriptionDialog = ({
     const advancedFields = (): JSX.Element[] => [
         <FormControl key="advancedValues.mode">
             <FormLabel>Mode</FormLabel>
-            <Field component={RadioGroup} row name={"advancedValues.mode"}>
+            <Field as={RadioGroup} row name={"advancedValues.mode"}>
                 <FormControlLabel value="ANYCAST" control={<Radio />} label="ANYCAST" />
                 <FormControlLabel value="BROADCAST" control={<Radio />} label="BROADCAST" />
             </Field>
@@ -129,7 +129,7 @@ export const SubscriptionDialog = ({
         />,
         <FormControl key="advancedValues.trackingMode">
             <FormLabel>Tracking mode</FormLabel>
-            <Field component={RadioGroup} row name={"advancedValues.trackingMode"}>
+            <Field as={RadioGroup} row name={"advancedValues.trackingMode"}>
                 <FormControlLabel value="trackingOff" control={<Radio />} label="No tracking" />
                 <FormControlLabel value="discardedOnly" control={<Radio />} label="Track message discarding only" />
                 <FormControlLabel value="trackingAll" control={<Radio />} label="Track everything" />

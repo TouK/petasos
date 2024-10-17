@@ -53,7 +53,7 @@ export const TopicDialog = observer(
             <Field autoFocus required component={TextField} label="Topic name" name="topic" key="topic" fullWidth />,
             <Field required component={TextField} label="Topic description" name="description" key="description" fullWidth />,
             <FormControl key="contentType">
-                <FormLabel>ContentType</FormLabel>
+                <FormLabel>Content type</FormLabel>
                 <Field as={RadioGroup} row name={"contentType"}>
                     <FormControlLabel value="AVRO" control={<Radio />} label="AVRO" />
                     <FormControlLabel value="JSON" control={<Radio />} label="JSON" />

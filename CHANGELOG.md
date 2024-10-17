@@ -1,3 +1,9 @@
+# [1.3.0-beta.10](https://github.com/TouK/petasos/compare/v1.3.0-beta.9...v1.3.0-beta.10) (2024-10-17)
+
+### Bug Fixes
+
+-   problem with json content type validation ([01f9a5a](https://github.com/TouK/petasos/commit/01f9a5ae53c3e864139e4b260fb7ddf9fe866a05))
+
 # [1.3.0-beta.9](https://github.com/TouK/petasos/compare/v1.3.0-beta.8...v1.3.0-beta.9) (2024-10-16)
 
 ### Bug Fixes

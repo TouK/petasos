@@ -51,7 +51,7 @@ export const EditTopicDialog = observer(() => {
         <Field required component={TextField} label="Topic name" name="topic" key="topic" fullWidth disabled />,
         <Field required component={TextField} autoFocus label="Topic description" name="description" key="description" fullWidth />,
         <FormControl key="contentType">
-            <FormLabel>ContentType</FormLabel>
+            <FormLabel>Content type</FormLabel>
             <Field as={RadioGroup} row name={"contentType"}>
                 <FormControlLabel value="AVRO" control={<Radio />} label="AVRO" />
                 <FormControlLabel value="JSON" control={<Radio />} label="JSON" />

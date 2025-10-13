@@ -8,8 +8,9 @@ import { useStore } from "../store/storeProvider";
 import { ValidationError } from "../store/topics";
 import { DEFAULT_TOPIC_VALUES } from "./addTopicDialog";
 import { DialogTemplate } from "./dialogTemplate";
-import { JsonTextField } from "./jsonTextField";
 import { GroupsFormControl } from "./groupsFormControl";
+import { JsonTextField } from "./jsonTextField";
+import labels from "./labels";
 import { validateTopicForm } from "./validateTopicForm";
 
 export const EditTopicDialog = observer(() => {
@@ -48,13 +49,13 @@ export const EditTopicDialog = observer(() => {
 
     const basicFields = (errors: FormikErrors<TopicFormikValues>): JSX.Element[] => [
         !groups.areGroupsHidden && <GroupsFormControl key="group" errors={errors} disabled />,
-        <Field required component={TextField} label="Topic name" name="topic" key="topic" fullWidth disabled />,
-        <Field required component={TextField} autoFocus label="Topic description" name="description" key="description" fullWidth />,
+        <Field required component={TextField} label={labels.topic.name} name="topic" key="topic" fullWidth disabled />,
+        <Field required component={TextField} autoFocus label={labels.topic.description} name="description" key="description" fullWidth />,
         <FormControl key="contentType">
-            <FormLabel>Content type</FormLabel>
+            <FormLabel>{labels.topic.contentType.label}</FormLabel>
             <Field as={RadioGroup} row name={"contentType"}>
-                <FormControlLabel value="AVRO" control={<Radio />} label="AVRO" />
-                <FormControlLabel value="JSON" control={<Radio />} label="JSON" />
+                <FormControlLabel value="AVRO" control={<Radio />} label={labels.topic.contentType.avro.label} />
+                <FormControlLabel value="JSON" control={<Radio />} label={labels.topic.contentType.json.label} />
             </Field>
         </FormControl>,
     ];

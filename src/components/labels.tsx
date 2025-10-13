@@ -1,0 +1,56 @@
+import { Box, Link, Tooltip } from "@mui/material";
+import { HelpOutline } from "@mui/icons-material";
+import React, { PropsWithChildren, ReactNode } from "react";
+
+function LabelWithHint({ children, hint }: PropsWithChildren<{ hint: ReactNode }>) {
+    return (
+        <Box sx={{ display: "inline-flex", alignItems: "center" }}>
+            {children}
+            <Tooltip title={hint} placement="top">
+                <HelpOutline fontSize="small" color="disabled" sx={{ marginLeft: 0.5 }} />
+            </Tooltip>
+        </Box>
+    );
+}
+
+export default {
+    topic: {
+        name: "Topic name",
+        description: "Topic description",
+        contentType: {
+            label: "Schema",
+            avro: {
+                label: (
+                    <LabelWithHint
+                        hint={
+                            "You will need to provide Avro schema for your data. The data will be binary encoded using Avro serialization framework."
+                        }
+                    >
+                        Avro
+                    </LabelWithHint>
+                ),
+            },
+            json: {
+                label: (
+                    <LabelWithHint
+                        hint={
+                            <>
+                                Your data will be transmitted as plain text (no binary encoding). You will still be able to manipulate JSON
+                                objects using{" "}
+                                <Link
+                                    href="https://nussknacker.io/documentation/docs/scenarios_authoring/Spel/#dynamic-navigation"
+                                    target="_blank"
+                                >
+                                    dynamic navigation
+                                </Link>
+                                .
+                            </>
+                        }
+                    >
+                        No schema
+                    </LabelWithHint>
+                ),
+            },
+        },
+    },
+};

@@ -9,8 +9,9 @@ import { Dialog } from "../store/dialog";
 import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
 import { DialogTemplate } from "./dialogTemplate";
-import { JsonTextField } from "./jsonTextField";
 import { GroupsFormControl } from "./groupsFormControl";
+import { JsonTextField } from "./jsonTextField";
+import labels from "./labels";
 import { validateTopicForm } from "./validateTopicForm";
 
 export const TopicDialog = observer(
@@ -50,13 +51,13 @@ export const TopicDialog = observer(
                     }
                 />
             ),
-            <Field autoFocus required component={TextField} label="Topic name" name="topic" key="topic" fullWidth />,
-            <Field required component={TextField} label="Topic description" name="description" key="description" fullWidth />,
+            <Field autoFocus required component={TextField} label={labels.topic.name} name="topic" key="topic" fullWidth />,
+            <Field required component={TextField} label={labels.topic.description} name="description" key="description" fullWidth />,
             <FormControl key="contentType">
-                <FormLabel>Content type</FormLabel>
+                <FormLabel>{labels.topic.contentType.label}</FormLabel>
                 <Field as={RadioGroup} row name={"contentType"}>
-                    <FormControlLabel value="AVRO" control={<Radio />} label="AVRO" />
-                    <FormControlLabel value="JSON" control={<Radio />} label="JSON" />
+                    <FormControlLabel value="AVRO" control={<Radio />} label={labels.topic.contentType.avro.label} />
+                    <FormControlLabel value="JSON" control={<Radio />} label={labels.topic.contentType.json.label} />
                 </Field>
             </FormControl>,
         ];

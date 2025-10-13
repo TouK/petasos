@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import { TextField } from "formik-mui";
 import { TextFieldProps } from "formik-mui/dist/TextField";
-import React, { useMemo } from "react";
+import React, { forwardRef, useMemo } from "react";
 import { CodeEditor, CodeEditorProps } from "./codeEditor";
 
 function formatJson(value: string): string {
@@ -12,10 +12,11 @@ function formatJson(value: string): string {
     }
 }
 
-const FieldCodeEditor = ({ name, ...props }: CodeEditorProps & { name: string }) => {
+type FieldCodeEditorProps = CodeEditorProps & { name: string };
+const FieldCodeEditor = forwardRef<HTMLDivElement, FieldCodeEditorProps>(function FieldCodeEditor({ name, ...props }, ref) {
     const [{ value }, , { setValue }] = useField(name);
-    return <CodeEditor {...props} value={value} onChange={setValue} />;
-};
+    return <CodeEditor ref={ref} {...props} value={value} onChange={setValue} />;
+});
 
 export function JsonTextField(props: TextFieldProps) {
     const {
@@ -24,7 +25,10 @@ export function JsonTextField(props: TextFieldProps) {
 
     const inputProps = useMemo(
         () => ({
-            inputComponent: (props) => <FieldCodeEditor name={name} {...props} />,
+            // FIXME: props type
+            inputComponent: forwardRef<HTMLDivElement, any>(function InputComponent(props, ref) {
+                return <FieldCodeEditor ref={ref} name={name} {...props} />;
+            }),
         }),
         [name],
     );

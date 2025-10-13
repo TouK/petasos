@@ -5,8 +5,8 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import MomentLocalesPlugin from "moment-locales-webpack-plugin";
 import { resolve } from "path";
 import { Configuration, container, DefinePlugin } from "webpack";
-import federationConfig from "../../federation.config.json";
 import pkg, { dependencies } from "../../package.json";
+import { __pathOfImport } from "../rel-transformer";
 
 dotenv.config();
 
@@ -161,7 +161,11 @@ export const commonConfig: Configuration = {
                     singleton: true,
                 },
             },
-            ...federationConfig,
+            name: pkg.name,
+            exposes: {
+                "./remoteTab": __pathOfImport(import("../../src/remoteTab")),
+                "./routes": __pathOfImport(import("../../src/components/routes")),
+            },
         }),
     ],
     performance: {

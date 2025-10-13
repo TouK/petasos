@@ -5,6 +5,15 @@ import json from "highlight.js/lib/languages/json";
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 
 hljs.registerLanguage("json", json);
+hljs.addPlugin({
+    "before:highlightElement": ({ el }) => {
+        if (!el.classList.contains("hljs")) return;
+        hljs.configure({ ignoreUnescapedHTML: true });
+    },
+    "after:highlightElement": () => {
+        hljs.configure({ ignoreUnescapedHTML: false });
+    },
+});
 
 const CodeBox = styled("div")(({ theme: t }) => ({
     "&": {

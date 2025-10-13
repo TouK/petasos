@@ -96,7 +96,7 @@ export const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(function C
             sx={{
                 maxHeight: rows && `${parseInt(rows.toString()) * 1.45}em`,
             }}
-            onBlurCapture={formatter && (() => jarRef.current?.updateCode(formatter(code)))}
+            onBlurCapture={formatter && (() => jarRef.current?.updateCode(formatter(value)))}
         >
             {value}
         </CodeBox>

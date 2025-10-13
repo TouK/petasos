@@ -1,3 +1,15 @@
+# [1.3.0-beta.11](https://github.com/TouK/petasos/compare/v1.3.0-beta.10...v1.3.0-beta.11) (2025-10-13)
+
+### Bug Fixes
+
+-   code formatter ([4731721](https://github.com/TouK/petasos/commit/4731721993a464926ee079014ed442bb7675dbe3))
+-   hljs warning ([353e679](https://github.com/TouK/petasos/commit/353e67996e7b267452ed77042e54c2d537a8766b))
+-   input ref warning ([71892cb](https://github.com/TouK/petasos/commit/71892cbd24288623c1ed1fff100146cb0d60ec3f))
+
+### Features
+
+-   extract some topic labels ([80bf0d5](https://github.com/TouK/petasos/commit/80bf0d592fe868d85df62df46cc80091c399dbdf))
+
 # [1.3.0-beta.10](https://github.com/TouK/petasos/compare/v1.3.0-beta.9...v1.3.0-beta.10) (2024-10-17)
 
 ### Bug Fixes

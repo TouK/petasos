@@ -1,5 +1,5 @@
 //TODO: not this way
-import { Container, Stack } from "@mui/material";
+import { Container, Stack, useMediaQuery, useTheme } from "@mui/material";
 import React, { PropsWithChildren } from "react";
 import { Outlet } from "react-router-dom";
 import { AddClonedTopicDialog } from "./addClonedTopicDialog";
@@ -38,27 +38,31 @@ const Dialogs = () => (
 export const MAIN_CLASSNAME = "petasos-main";
 
 export const MainLayout = ({ children = <Outlet /> }: PropsWithChildren<unknown>) => {
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.up("md"));
+
     return (
         <>
             <Dialogs />
-            <Stack
-                className={MAIN_CLASSNAME}
-                minHeight="100%"
-                spacing={2}
-                paddingTop={2}
-                paddingBottom={1}
-                flex={1}
-                justifyContent="space-between"
-                alignItems="center"
-            >
-                <Container maxWidth="lg">
+            <Container className={MAIN_CLASSNAME} maxWidth="xl" disableGutters={!md} sx={{ flex: 1, display: "flex", minHeight: "100%" }}>
+                <Stack
+                    sx={{
+                        flex: 1,
+                        paddingY: 2,
+                        paddingX: 2,
+                        justifyContent: "space-between",
+                        alignItems: "stretch",
+                        p: (theme) => (theme.breakpoints.up("md") ? 2 : 0),
+                    }}
+                    spacing={2}
+                >
                     <LayoutColumn alignItems="stretch">
                         <NavigationBar />
                         {children}
                     </LayoutColumn>
-                </Container>
-                <Footer />
-            </Stack>
+                    <Footer />
+                </Stack>
+            </Container>
         </>
     );
 };

@@ -1,4 +1,3 @@
-import { Add as AddIcon } from "@mui/icons-material";
 import { Breadcrumbs, Button, Link, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React, { PropsWithChildren, ReactNode, useContext } from "react";
@@ -69,9 +68,9 @@ export const NavigationBar = observer(() => {
             </Breadcrumbs>
             <Button
                 color="primary"
-                variant="contained"
+                variant="outlined"
+                size="small"
                 onClick={() => dialogs.topic.open({ topic: null })}
-                startIcon={<AddIcon />}
                 disabled={!groups.fetchTask.resolved}
             >
                 Add topic

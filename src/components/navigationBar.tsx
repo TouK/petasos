@@ -49,7 +49,7 @@ export const NavigationBar = observer(() => {
                     color: (t) => t.palette.getContrastText(t.palette.background.default),
                 }}
             >
-                {pathnames.length ? <LinkRouter to={rootPath || "/"}>{homeText}</LinkRouter> : <Typography>{homeText}</Typography>}
+                {pathnames.length ? <LinkRouter to={rootPath || "/"}>{homeText}</LinkRouter> : null}
 
                 {pathnames.map((value, index) => {
                     const last = index === pathnames.length - 1;

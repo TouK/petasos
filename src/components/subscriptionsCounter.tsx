@@ -10,7 +10,12 @@ export const SubscriptionsCounter = observer(({ topic }: { topic: Topic }) => {
 
     const size = topic.subscriptionsMap.size;
     return (
-        <Typography variant="caption" color={size < 1 ? "text.disabled" : "inherit"}>
+        <Typography
+            variant="caption"
+            sx={(theme) => ({
+                color: size < 1 ? theme.palette.action.disabled : "inherit",
+            })}
+        >
             {topic.fetchSubscriptionsTask.resolved ? (
                 size === 1 ? (
                     "1 subscription"

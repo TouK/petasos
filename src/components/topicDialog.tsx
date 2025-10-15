@@ -17,7 +17,7 @@ import { validateTopicForm } from "./validateTopicForm";
 export const TopicDialog = observer(
     ({ initialValues, dialog }: { initialValues: () => TopicFormikValues; dialog: Dialog<{ topic: Topic }> }) => {
         const store = useStore();
-        const { dialogs, groups, topics } = store;
+        const { dialogOpen, groups, topics } = store;
 
         const taskOnSubmit = (values) => Topic.create(values, store);
 
@@ -42,7 +42,7 @@ export const TopicDialog = observer(
                                     variant="outlined"
                                     color="primary"
                                     sx={{ whiteSpace: "nowrap" }}
-                                    onClick={() => dialogs.group.open()}
+                                    onClick={() => dialogOpen("group")}
                                 >
                                     Create new group
                                 </Button>

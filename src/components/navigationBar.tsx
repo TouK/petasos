@@ -23,7 +23,7 @@ const displayNameGet = (matchers: Record<string, (match: PathMatch) => ReactNode
 };
 
 export const NavigationBar = observer(() => {
-    const { topics, groups, dialogs } = useStore();
+    const { topics, groups, dialogOpen } = useStore();
     const { pathname } = useLocation();
     const rootPath = useContext(RootPath);
     const normalizedPathname = pathname.indexOf(rootPath) === 0 ? pathname.substring(rootPath.length) : pathname;
@@ -70,7 +70,7 @@ export const NavigationBar = observer(() => {
                 color="primary"
                 variant="outlined"
                 size="small"
-                onClick={() => dialogs.topic.open({ topic: null })}
+                onClick={() => dialogOpen("topic", { topic: null })}
                 disabled={!groups.fetchTask.resolved}
             >
                 Add topic

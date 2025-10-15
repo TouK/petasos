@@ -8,7 +8,7 @@ import { useStore } from "../store/storeProvider";
 import { ContentBox } from "./contentBox";
 
 export const GroupsList = observer(() => {
-    const { groups, dialogs } = useStore();
+    const { groups, dialogOpen } = useStore();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const switchGroup = (group = "") => {
@@ -46,7 +46,7 @@ export const GroupsList = observer(() => {
                                 <IconButtonWithTooltip
                                     size="small"
                                     onClick={() =>
-                                        dialogs.topic.open({
+                                        dialogOpen("topic", {
                                             topic: null,
                                             group: group,
                                         })
@@ -59,7 +59,7 @@ export const GroupsList = observer(() => {
                                     <IconButtonWithTooltip
                                         size="small"
                                         onClick={() => {
-                                            dialogs.deleteGroupDialog.open({ group });
+                                            dialogOpen("deleteGroupDialog", { group });
                                         }}
                                         disabled={groups.getTopicsForGroup(group).length > 0}
                                         tooltipText={

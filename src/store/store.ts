@@ -11,6 +11,7 @@ export interface StoreOptions {
     forcedGroupName?: string;
     groupsHidden?: boolean;
     allowAdvancedFields?: boolean;
+    open?: (key: keyof Store["dialogs"], ...args: Parameters<Store["dialogs"][typeof key]["open"]>) => void;
 }
 
 interface HermesConsoleSettings {
@@ -58,6 +59,11 @@ export class Store {
             subscription: Subscription;
         }>(),
     };
+
+    @action.bound
+    dialogOpen(key: keyof typeof this.dialogs, ...args: Parameters<(typeof this.dialogs)[typeof key]["open"]>) {
+        this.dialogs[key]?.open(...args);
+    }
 
     @observable options: StoreOptions = {};
 

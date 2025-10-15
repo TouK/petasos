@@ -6,7 +6,14 @@ import {
     PlayArrow as PlayArrowIcon,
     Refresh as RefreshIcon,
 } from "@mui/icons-material";
-import { Box, Button, Divider, Stack, TextField, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Divider,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
@@ -17,7 +24,11 @@ import { Subscription } from "../store/subscription";
 import { Topic } from "../store/topic";
 import { DetailsBox } from "./detailsBox";
 import { LayoutRow } from "./layout";
-import { createRow, PropertiesTable, PropertiesTableRow } from "./propertiesTable";
+import {
+    createRow,
+    PropertiesTable,
+    PropertiesTableRow,
+} from "./propertiesTable";
 import { DetailsHeader, DetailsProperties, JsonTree } from "./topicDetails";
 
 export const SubscriptionDetails = observer((props: { topic: Topic; subscription: Subscription }) => {
@@ -52,7 +63,7 @@ export const SubscriptionDetails = observer((props: { topic: Topic; subscription
 });
 
 const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription: Subscription }) => {
-    const { dialogs } = useStore();
+    const { dialogOpen } = useStore();
     const { topic, subscription } = props;
 
     useEffect(() => {
@@ -65,13 +76,13 @@ const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription:
                 ["ACTIVE", "SUSPENDED"].includes(subscription.state) && {
                     color: subscription.state === "ACTIVE" ? "warning" : "success",
                     Icon: subscription.state === "ACTIVE" ? <PauseIcon /> : <PlayArrowIcon />,
-                    action: () => dialogs.changeSubscriptionStateDialog.open({ subscription }),
+                    action: () => dialogOpen("changeSubscriptionStateDialog", { subscription }),
                     label: subscription.state === "ACTIVE" ? "Suspend" : "Activate",
                 },
                 {
                     Icon: <EditIcon />,
                     action: () =>
-                        dialogs.editSubscription.open({
+                        dialogOpen("editSubscription", {
                             topic,
                             subscription,
                         }),
@@ -80,7 +91,7 @@ const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription:
                 {
                     Icon: <FileCopyIcon />,
                     action: () =>
-                        dialogs.addClonedSubscription.open({
+                        dialogOpen("addClonedSubscription", {
                             topic,
                             subscription,
                         }),
@@ -89,7 +100,7 @@ const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription:
                 {
                     Icon: <DeleteIcon />,
                     action: () =>
-                        dialogs.deleteSubscriptionDialog.open({
+                        dialogOpen("deleteSubscriptionDialog", {
                             topic,
                             subscription,
                         }),
@@ -105,13 +116,13 @@ const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription:
 
 const MessageRetransmission = observer((props: { subscription: Subscription }) => {
     const { subscription } = props;
-    const { dialogs } = useStore();
+    const { dialogOpen } = useStore();
 
     const [selectedDate, handleDateChange] = useState(moment());
 
     return (
         <DetailsBox header="Messages retransmission">
-            <LayoutRow spacing={1} alignItems="stretch">
+            <LayoutRow spacing={1} mt={2} alignItems="center">
                 <DateTimePicker
                     renderInput={(props) => <TextField label="Start date" {...props} />}
                     value={selectedDate}
@@ -123,11 +134,11 @@ const MessageRetransmission = observer((props: { subscription: Subscription }) =
                     inputFormat="yyyy/MM/DD HH:mm"
                 />
                 <Button
-                    color="secondary"
-                    variant="outlined"
+                    color="primary"
+                    variant="text"
                     size="small"
                     onClick={() => {
-                        dialogs.retransmitMessageDialog.open({
+                        dialogOpen("retransmitMessageDialog", {
                             subscription,
                             selectedDate,
                         });

@@ -4,9 +4,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { configure } from "mobx";
 import * as React from "react";
-import { createContext, PropsWithChildren, useEffect } from "react";
+import { createContext, PropsWithChildren, useCallback, useEffect, useMemo } from "react";
 import { Outlet } from "react-router-dom";
 import { Options } from "../config";
+import { StoreOptions } from "../store/store";
 import { StoreProvider } from "../store/storeProvider";
 import { tokenStorage } from "../tokenStorage";
 import { theme } from "./theme";
@@ -27,9 +28,15 @@ export const RootProviders = ({ children = <Outlet />, tokenGetter, basepath }: 
         tokenStorage.replaceTokenGetter(tokenGetter);
     }, [tokenGetter]);
 
+    const open = useCallback<StoreOptions["open"]>((dialog, key, params) => {
+        dialog();
+    }, []);
+
+    const options = useMemo<StoreOptions>(() => ({ ...Options, open }), [open]);
+
     return (
         <RootPath.Provider value={basepath}>
-            <StoreProvider options={Options}>
+            <StoreProvider options={options}>
                 <ThemeProvider
                     theme={(outerTheme: Theme) => {
                         if (!Object.keys(outerTheme).length) {

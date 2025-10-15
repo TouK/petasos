@@ -7,11 +7,14 @@ import { Subscription } from "./subscription";
 import { Topic } from "./topic";
 import { Topics } from "./topics";
 
+export type Dialogs = Store["dialogs"];
+export type OpenArgs<K extends keyof Dialogs> = Dialogs[K] extends Dialog<infer P> ? [P] : never;
+
 export interface StoreOptions {
     forcedGroupName?: string;
     groupsHidden?: boolean;
     allowAdvancedFields?: boolean;
-    open?: (key: keyof Store["dialogs"], ...args: Parameters<Store["dialogs"][typeof key]["open"]>) => void;
+    open?: <K extends keyof Dialogs>(open: () => void, key: K, ...args: OpenArgs<K>) => void;
 }
 
 interface HermesConsoleSettings {
@@ -61,8 +64,9 @@ export class Store {
     };
 
     @action.bound
-    dialogOpen(key: keyof typeof this.dialogs, ...args: Parameters<(typeof this.dialogs)[typeof key]["open"]>) {
-        this.dialogs[key]?.open(...args);
+    dialogOpen<K extends keyof Dialogs>(key: K, ...args: OpenArgs<K>): void {
+        const dialog = this.dialogs[key];
+        this.options.open?.(() => dialog.open(...(args as any)), key, ...args);
     }
 
     @observable options: StoreOptions = {};

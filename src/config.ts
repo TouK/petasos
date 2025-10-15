@@ -19,7 +19,7 @@ export const Hosts = {
 
 const parseBool = (value: string): boolean => value === "true";
 
-export const Options: StoreOptions = {
+export const Options: Partial<StoreOptions> = {
     forcedGroupName: Env.FORCED_GROUP_NAME,
     groupsHidden: parseBool(Env.GROUPS_HIDDEN),
     allowAdvancedFields: parseBool(Env.ALLOW_ADVANCED_FIELDS),

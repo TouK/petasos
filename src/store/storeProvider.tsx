@@ -10,7 +10,7 @@ configure({
 
 const StoreContext = createContext<Store>(null);
 
-export function StoreProvider({ children, options }: PropsWithChildren<{ options?: StoreOptions }>) {
+export function StoreProvider({ children, options }: PropsWithChildren<{ options: StoreOptions }>) {
     const store = useLocalStore(() => new Store(options));
     const initialized = useRef(false);
 

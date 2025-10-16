@@ -1,5 +1,5 @@
-import { Box, Link, Tooltip } from "@mui/material";
 import { HelpOutline } from "@mui/icons-material";
+import { Box, Link, Tooltip } from "@mui/material";
 import React, { PropsWithChildren, ReactNode } from "react";
 
 function LabelWithHint({ children, hint }: PropsWithChildren<{ hint: ReactNode }>) {
@@ -26,7 +26,7 @@ export default {
                             "You will need to provide Avro schema for your data. The data will be binary encoded using Avro serialization framework."
                         }
                     >
-                        Avro
+                        Avro schema
                     </LabelWithHint>
                 ),
             },

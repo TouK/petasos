@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { Field, FormikErrors } from "formik";
-import { CheckboxWithLabel, TextField } from "formik-mui";
+import { TextField } from "formik-mui";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -84,13 +84,13 @@ export const TopicDialog = observer(
                     <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
                 </Field>
             </FormControl>,
-            <Field
-                component={CheckboxWithLabel}
-                Label={{ label: "Tracking enabled" }}
-                name="advancedValues.trackingEnabled"
-                key="advancedValues.trackingEnabled"
-                type="checkbox"
-            />,
+            // <Field
+            //     component={CheckboxWithLabel}
+            //     Label={{ label: "Tracking enabled" }}
+            //     name="advancedValues.trackingEnabled"
+            //     key="advancedValues.trackingEnabled"
+            //     type="checkbox"
+            // />,
             <Field
                 component={TextField}
                 label="Max message size (bytes)"

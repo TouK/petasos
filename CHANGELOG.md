@@ -1,3 +1,13 @@
+# [1.3.0-beta.14](https://github.com/TouK/petasos/compare/v1.3.0-beta.13...v1.3.0-beta.14) (2025-10-17)
+
+### Bug Fixes
+
+-   revert debug change ([dcc6bc5](https://github.com/TouK/petasos/commit/dcc6bc5f17bb08a0ae694d51339f374e3f37b1f0))
+
+### Features
+
+-   subscriptions display and edit tweaks ([ffc15e1](https://github.com/TouK/petasos/commit/ffc15e1e3ad740f33b1ef0e6c5e29158c59232fa))
+
 # [1.3.0-beta.13](https://github.com/TouK/petasos/compare/v1.3.0-beta.12...v1.3.0-beta.13) (2025-10-17)
 
 ### Features

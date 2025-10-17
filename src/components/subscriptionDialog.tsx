@@ -6,6 +6,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getSubscriptionData } from "../devData";
 import { AdvancedSubscriptionFormikValues, SubscriptionFormikValues } from "../models";
+
 import { Dialog } from "../store/dialog";
 import { useStore } from "../store/storeProvider";
 import { Subscription } from "../store/subscription";
@@ -149,7 +150,6 @@ export const SubscriptionDialog = ({
                 basicFields={basicFields}
                 dialog={dialog}
                 submitButtonText={submitButtonText}
-                dialogTitle={dialogTitle}
                 initialValues={initialValues}
                 onSubmitSuccess={onSubmitSuccess}
                 taskOnSubmit={taskOnSubmit}

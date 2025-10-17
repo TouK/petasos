@@ -2,9 +2,10 @@ import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGrou
 import { Field, FormikErrors } from "formik";
 import { TextField } from "formik-mui";
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { TopicFormikValues } from "../models";
+
 import { Dialog } from "../store/dialog";
 import { useStore } from "../store/storeProvider";
 import { Topic } from "../store/topic";
@@ -107,14 +108,15 @@ export const TopicDialog = observer(
             />,
         ];
 
+        const formikInitialValues = useMemo(() => initialValues(), [initialValues]);
+
         return (
             <DialogTemplate<TopicFormikValues>
                 advancedFields={advancedFields}
                 basicFields={basicFields}
                 schemaInputField={schemaInputField}
                 dialog={dialog}
-                dialogTitle={"Add new topic"}
-                initialValues={initialValues()}
+                initialValues={formikInitialValues}
                 submitButtonText={"Add topic"}
                 onSubmitSuccess={onSubmitSuccess}
                 taskOnSubmit={taskOnSubmit}

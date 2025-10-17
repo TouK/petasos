@@ -111,7 +111,6 @@ export const EditTopicDialog = observer(() => {
             basicFields={basicFields}
             schemaInputField={schemaInputField}
             dialog={dialog}
-            dialogTitle={"Edit topic"}
             initialValues={initialValues()}
             submitButtonText={"Update topic"}
             onSubmitSuccess={onSubmitSuccess}

@@ -1,20 +1,23 @@
 import { action, computed, observable, runInAction } from "mobx";
 import moment from "moment";
+import { ReactNode } from "react";
 import { Hosts } from "../config";
 import { Dialog } from "./dialog";
+import { DialogBase } from "./dialogBase";
 import { Groups } from "./groups";
+import { PromptDialog } from "./promptDialog";
 import { Subscription } from "./subscription";
 import { Topic } from "./topic";
 import { Topics } from "./topics";
 
-export type Dialogs = Store["dialogs"];
-export type OpenArgs<K extends keyof Dialogs> = Dialogs[K] extends Dialog<infer P> ? [P] : never;
+export type DialogsType = Store["dialogs"];
+export type OpenDialogArgs<K extends keyof DialogsType> = DialogsType[K] extends DialogBase<infer P> ? [P] : never;
 
 export interface StoreOptions {
     forcedGroupName?: string;
     groupsHidden?: boolean;
     allowAdvancedFields?: boolean;
-    open?: <K extends keyof Dialogs>(open: () => void, key: K, ...args: OpenArgs<K>) => void;
+    open?: <K extends keyof DialogsType>(open: (callback?: (dialog: DialogsType[K]) => void) => Promise<void>, key: K) => void;
 }
 
 interface HermesConsoleSettings {
@@ -31,42 +34,65 @@ export class Store {
     @observable readonly topics = new Topics(this);
     @observable readonly dialogs = {
         //groups
-        group: new Dialog<void, string>(),
-        deleteGroupDialog: new Dialog<{ group: string }>(),
+        group: new Dialog<void, string>(() => "Add new group"),
+        deleteGroupDialog: new PromptDialog<{ group: string }>(),
 
         //topics
-        topic: new Dialog<{ topic: Topic; group?: string }>(),
-        editTopic: new Dialog<{ topic: Topic }>(),
-        addClonedTopic: new Dialog<{ topic: Topic }>(),
-        deleteTopicDialog: new Dialog<{ topic: Topic }>(),
+        topic: new Dialog<{ topic: Topic; group?: string }>(() => "Add new topic"),
+        editTopic: new Dialog<{ topic: Topic }>(() => "Edit topic"),
+        addClonedTopic: new Dialog<{ topic: Topic }>(() => "Add new topic"),
+        deleteTopicDialog: new PromptDialog<{ topic: Topic }>(),
 
         //subscription
-        subscription: new Dialog<{ topic: Topic }>(),
+        subscription: new Dialog<{ topic: Topic }>(({ topic }) => `Add new subscription to topic ${topic?.name}`),
         editSubscription: new Dialog<{
             topic: Topic;
             subscription: Subscription;
-        }>(),
+        }>(({ topic }) => `Edit subscription to topic ${topic?.name}`),
         addClonedSubscription: new Dialog<{
             topic: Topic;
             subscription: Subscription;
-        }>(),
-        deleteSubscriptionDialog: new Dialog<{
+        }>(({ topic }) => `Add new subscription to topic ${topic?.name}`),
+        deleteSubscriptionDialog: new PromptDialog<{
             topic: Topic;
             subscription: Subscription;
         }>(),
-        retransmitMessageDialog: new Dialog<{
+        retransmitMessageDialog: new PromptDialog<{
             subscription: Subscription;
             selectedDate: moment.Moment;
         }>(),
-        changeSubscriptionStateDialog: new Dialog<{
+        changeSubscriptionStateDialog: new PromptDialog<{
             subscription: Subscription;
         }>(),
     };
 
     @action.bound
-    dialogOpen<K extends keyof Dialogs>(key: K, ...args: OpenArgs<K>): void {
+    setDialogView(key: string, view: ReactNode): void {
         const dialog = this.dialogs[key];
-        this.options.open?.(() => dialog.open(...(args as any)), key, ...args);
+        if (dialog instanceof Dialog) {
+            dialog.view = view;
+        }
+    }
+
+    @action.bound
+    dialogOpen<K extends keyof DialogsType>(key: K, ...args: OpenDialogArgs<K>): void {
+        const dialog = this.dialogs[key];
+        if (dialog instanceof Dialog) {
+            this.options.open?.(async (callback) => {
+                const task = dialog.open(...(args as any));
+                setTimeout(() => callback?.(dialog), 100);
+                await task;
+            }, key);
+        } else {
+            dialog.open(...(args as any));
+        }
+    }
+    @action.bound
+    dialogClose(key: string): void {
+        const dialog = this.dialogs[key];
+        if (dialog instanceof Dialog) {
+            dialog.close();
+        }
     }
 
     @observable options: StoreOptions = {};

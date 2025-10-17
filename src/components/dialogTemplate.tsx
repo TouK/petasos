@@ -2,13 +2,15 @@ import { Dialog as MuiDialog, DialogContent, DialogTitle, LinearProgress, Stack 
 import type { DialogProps } from "@mui/material/Dialog/Dialog";
 import { Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FormValues } from "../models";
+
 import { Dialog } from "../store/dialog";
 import { ValidationError } from "../store/topics";
 import { BackendValidation } from "./backendValidation";
 import { DialogActions } from "./dialogActions";
 import { DialogFormFields } from "./dialogFormFields";
+import { ShouldUseDialogPortals } from "./rootProviders";
 
 interface DialogTemplateComponentProps<T extends FormValues, R = void> extends Omit<DialogProps, "open" | "onClose"> {
     dialog: Dialog<unknown, R>;
@@ -16,7 +18,6 @@ interface DialogTemplateComponentProps<T extends FormValues, R = void> extends O
     taskOnSubmit: (values: T | Omit<T, "advancedValues">) => Promise<void | ValidationError>;
     onSubmitSuccess: (values: T | Omit<T, "advancedValues">) => Promise<R>;
     onCancel?: () => void;
-    dialogTitle: string;
     submitButtonText: string;
     initialValues: T;
     basicFields: (FormikErrors) => JSX.Element[];
@@ -31,7 +32,6 @@ function DialogTemplateComponent<T extends FormValues, R = void>(props: DialogTe
         taskOnSubmit,
         onSubmitSuccess,
         onCancel,
-        dialogTitle,
         submitButtonText,
         initialValues,
         basicFields,
@@ -66,49 +66,55 @@ function DialogTemplateComponent<T extends FormValues, R = void>(props: DialogTe
         setShowAdvanced(false);
     };
 
+    const shouldUsePortals = useContext(ShouldUseDialogPortals);
+
+    const form = (
+        <Formik
+            initialValues={initialValues}
+            enableReinitialize={true}
+            validate={(values) => validateFunc(values, showAdvanced)}
+            onSubmit={submitFunc}
+        >
+            {({ submitForm, isSubmitting, errors, validateForm, values }) => (
+                <>
+                    {isSubmitting && <LinearProgress color="secondary" />}
+                    {shouldUsePortals ? null : <DialogTitle>{dialog.title}</DialogTitle>}
+                    <DialogContent>
+                        <Form>
+                            <Stack spacing={2} my={1}>
+                                <BackendValidation text={backendValidationError} />
+                                <DialogFormFields
+                                    basicFields={basicFields(errors).filter(Boolean)}
+                                    schemaInputField={schemaInputField ? schemaInputField(errors) : null}
+                                    showSchemaInput={values.contentType !== "JSON"}
+                                    advancedFields={advancedFields(errors).filter(Boolean)}
+                                    showAdvanced={showAdvanced}
+                                    toggleAdvanced={() => setShowAdvanced(!showAdvanced)}
+                                    validateForm={() => validateForm(values)}
+                                />
+                            </Stack>
+                        </Form>
+                    </DialogContent>
+                    <DialogActions
+                        cancelForm={cancelForm}
+                        isSubmitting={isSubmitting}
+                        submitForm={submitForm}
+                        submitButtonText={submitButtonText}
+                    />
+                </>
+            )}
+        </Formik>
+    );
+
+    if (shouldUsePortals) return <>{form}</>;
+
     if (!dialog.isOpen) {
         return null;
     }
 
     return (
         <MuiDialog open={dialog.isOpen} onClose={() => dialog.close()} fullWidth {...passProps}>
-            <Formik
-                initialValues={initialValues}
-                enableReinitialize={true}
-                validate={(values) => validateFunc(values, showAdvanced)}
-                onSubmit={submitFunc}
-            >
-                {({ submitForm, isSubmitting, errors, validateForm, values }) => {
-                    return (
-                        <>
-                            {isSubmitting && <LinearProgress color="secondary" />}
-                            <DialogTitle>{dialogTitle}</DialogTitle>
-                            <DialogContent>
-                                <Form>
-                                    <Stack spacing={2} my={1}>
-                                        <BackendValidation text={backendValidationError} />
-                                        <DialogFormFields
-                                            basicFields={basicFields(errors).filter(Boolean)}
-                                            schemaInputField={schemaInputField ? schemaInputField(errors) : null}
-                                            showSchemaInput={values.contentType !== "JSON"}
-                                            advancedFields={advancedFields(errors).filter(Boolean)}
-                                            showAdvanced={showAdvanced}
-                                            toggleAdvanced={() => setShowAdvanced(!showAdvanced)}
-                                            validateForm={() => validateForm(values)}
-                                        />
-                                    </Stack>
-                                </Form>
-                            </DialogContent>
-                            <DialogActions
-                                cancelForm={cancelForm}
-                                isSubmitting={isSubmitting}
-                                submitForm={submitForm}
-                                submitButtonText={submitButtonText}
-                            />
-                        </>
-                    );
-                }}
-            </Formik>
+            {form}
         </MuiDialog>
     );
 }

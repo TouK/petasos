@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useCallback } from "react";
 import { getTopicData } from "../devData";
 import { TopicFormikValues } from "../models";
 import { useStore } from "../store/storeProvider";
@@ -22,10 +22,13 @@ export const DEFAULT_TOPIC_VALUES: TopicFormikValues = {
 export const AddTopicDialog = observer(() => {
     const { groups, dialogs } = useStore();
     const dialog = dialogs.topic;
-    const initialValues = (): TopicFormikValues => ({
-        ...DEFAULT_TOPIC_VALUES,
-        group: dialog.params?.group || groups.defaultGroup,
-        ...getTopicData(),
-    });
+    const initialValues = useCallback(
+        (): TopicFormikValues => ({
+            ...DEFAULT_TOPIC_VALUES,
+            group: dialog.params?.group || groups.defaultGroup,
+            ...getTopicData(),
+        }),
+        [dialog.params?.group, groups.defaultGroup],
+    );
     return <TopicDialog initialValues={initialValues} dialog={dialog} />;
 });

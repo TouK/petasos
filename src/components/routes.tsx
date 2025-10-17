@@ -1,6 +1,5 @@
 import loadable from "@loadable/component";
-import { BugReport } from "@mui/icons-material";
-import { Box, CircularProgress, Fab } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import * as React from "react";
 import { RouteObject } from "react-router-dom";
 import { localStorageToken } from "../api";
@@ -32,26 +31,7 @@ export function createRoutes(props: Partial<RootProvidersProps> = {}): RouteObje
     return [
         {
             path: "/",
-            element: (
-                <>
-                    <Fab
-                        color="warning"
-                        sx={{
-                            position: "fixed",
-                            bottom: (t) => t.spacing(2),
-                            right: (t) => t.spacing(2),
-                        }}
-                        onClick={async () => {
-                            const accessToken = await tokenGetter();
-                            const href = `http://localhost:7890?accessToken=${accessToken}`;
-                            window.location.href = href;
-                        }}
-                    >
-                        <BugReport />
-                    </Fab>
-                    <RootElement basepath={basepath} tokenGetter={tokenGetter} open={open} />
-                </>
-            ),
+            element: <RootElement basepath={basepath} tokenGetter={tokenGetter} open={open} />,
             children: [
                 {
                     index: true,

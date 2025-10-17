@@ -1,3 +1,9 @@
+# [1.3.0-beta.13](https://github.com/TouK/petasos/compare/v1.3.0-beta.12...v1.3.0-beta.13) (2025-10-17)
+
+### Features
+
+-   topics display and edit tweaks ([50b6031](https://github.com/TouK/petasos/commit/50b603126ace5352acd5fa7c210ee16998c19d0a))
+
 # [1.3.0-beta.12](https://github.com/TouK/petasos/compare/v1.3.0-beta.11...v1.3.0-beta.12) (2025-10-17)
 
 ### Bug Fixes

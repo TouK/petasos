@@ -1,13 +1,17 @@
 {
+  "only": [
+    "src/**/*",
+    "jest.setup.js"
+  ],
   "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "loose": true
-      }
-    ],
+    "@babel/preset-env",
     "@babel/typescript",
-    "@babel/preset-react"
+    [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic"
+      }
+    ]
   ],
   "plugins": [
     [
@@ -16,12 +20,13 @@
         "legacy": true
       }
     ],
-    [
-      "@babel/plugin-proposal-class-properties",
-      {
-        "loose": true
-      }
-    ],
     "@babel/plugin-transform-runtime"
-  ]
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "react-refresh/babel"
+      ]
+    }
+  }
 }

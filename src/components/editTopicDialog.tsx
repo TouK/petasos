@@ -1,19 +1,20 @@
-import { FormControl, FormControlLabel, FormLabel, Radio } from "@mui/material";
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { Field, FormikErrors } from "formik";
-import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
+import { CheckboxWithLabel, TextField } from "formik-mui";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { TopicFormikValues } from "../models";
 import { useStore } from "../store/storeProvider";
 import { ValidationError } from "../store/topics";
-import { DEFAULT_TOPIC_VALUES } from "./addTopicDialog";
 import { DialogTemplate } from "./dialogTemplate";
-import { JsonTextField } from "./jsonTextField";
+import { getTopicInitialData } from "./getTopicInitialData";
 import { GroupsFormControl } from "./groupsFormControl";
+import { JsonTextField } from "./jsonTextField";
+import labels from "./labels";
 import { validateTopicForm } from "./validateTopicForm";
 
 export const EditTopicDialog = observer(() => {
-    const { dialogs, groups, topics } = useStore();
+    const { dialogs, groups, topics, trackingHidden } = useStore();
     const dialog = dialogs.editTopic;
     const { topic } = dialog.params;
 
@@ -29,26 +30,27 @@ export const EditTopicDialog = observer(() => {
     const initialValues = (): TopicFormikValues =>
         topic
             ? {
-                  advancedValues: {
-                      acknowledgement: topic.ack,
-                      trackingEnabled: topic.trackingEnabled,
-                      maxMessageSize: topic.maxMessageSize,
-                      retentionTime: topic.retentionTime.duration,
-                  },
+                  ...getTopicInitialData(groups, topic),
                   topic: topic.displayName,
-                  schema: topic.schemaPrettified,
-                  group: groups.getGroupOfTopic(topic.name),
-                  description: topic.description,
               }
             : {
-                  ...DEFAULT_TOPIC_VALUES,
-                  group: groups.defaultGroup,
+                  ...getTopicInitialData(groups),
               };
 
     const basicFields = (errors: FormikErrors<TopicFormikValues>): JSX.Element[] => [
         !groups.areGroupsHidden && <GroupsFormControl key="group" errors={errors} disabled />,
-        <Field required component={TextField} label="Topic name" name="topic" key="topic" fullWidth disabled />,
-        <Field required component={TextField} autoFocus label="Topic description" name="description" key="description" fullWidth />,
+        <Field required component={TextField} label={labels.topic.name} name="topic" key="topic" fullWidth disabled />,
+        <Field component={TextField} autoFocus label={labels.topic.description} name="description" key="description" fullWidth />,
+        <FormControl key="contentType">
+            <FormLabel>{labels.topic.contentType.label}</FormLabel>
+            <Field as={RadioGroup} row name={"contentType"}>
+                <FormControlLabel value="JSON" control={<Radio />} label={labels.topic.contentType.json.label} />
+                <FormControlLabel value="AVRO" control={<Radio />} label={labels.topic.contentType.avro.label} />
+            </Field>
+        </FormControl>,
+    ];
+
+    const schemaInputField = (): JSX.Element => (
         <Field
             component={JsonTextField}
             label="Avro schema"
@@ -59,24 +61,26 @@ export const EditTopicDialog = observer(() => {
             variant="outlined"
             multiline
             rows={15}
-        />,
-    ];
+        />
+    );
 
     const advancedFields = (): JSX.Element[] => [
         <FormControl key="advancedValues.acknowledgement">
             <FormLabel>Acknowledgement</FormLabel>
-            <Field component={RadioGroup} row name={"advancedValues.acknowledgement"}>
+            <Field as={RadioGroup} row name={"advancedValues.acknowledgement"}>
                 <FormControlLabel value="LEADER" control={<Radio />} label="LEADER" />
                 <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
             </Field>
         </FormControl>,
-        <Field
-            component={CheckboxWithLabel}
-            Label={{ label: "Tracking enabled" }}
-            name="advancedValues.trackingEnabled"
-            key="advancedValues.trackingEnabled"
-            type="checkbox"
-        />,
+        trackingHidden ? null : (
+            <Field
+                component={CheckboxWithLabel}
+                Label={{ label: "Tracking enabled" }}
+                name="advancedValues.trackingEnabled"
+                key="advancedValues.trackingEnabled"
+                type="checkbox"
+            />
+        ),
         <Field
             component={TextField}
             label="Max message size (bytes)"
@@ -97,8 +101,8 @@ export const EditTopicDialog = observer(() => {
         <DialogTemplate<TopicFormikValues>
             advancedFields={advancedFields}
             basicFields={basicFields}
+            schemaInputField={schemaInputField}
             dialog={dialog}
-            dialogTitle={"Edit topic"}
             initialValues={initialValues()}
             submitButtonText={"Update topic"}
             onSubmitSuccess={onSubmitSuccess}

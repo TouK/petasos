@@ -1,17 +1,17 @@
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { RootRoutes } from "./routes";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createRoutes } from "./routes";
 import { theme } from "./theme";
+
+const router = createBrowserRouter(createRoutes());
 
 export const Root = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box minHeight="100vh" display="flex" flex={1}>
-                <Router>
-                    <RootRoutes />
-                </Router>
+                <RouterProvider router={router} />
             </Box>
         </ThemeProvider>
     );

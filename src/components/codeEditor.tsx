@@ -5,6 +5,15 @@ import json from "highlight.js/lib/languages/json";
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 
 hljs.registerLanguage("json", json);
+hljs.addPlugin({
+    "before:highlightElement": ({ el }) => {
+        if (!el.classList.contains("hljs")) return;
+        hljs.configure({ ignoreUnescapedHTML: true });
+    },
+    "after:highlightElement": () => {
+        hljs.configure({ ignoreUnescapedHTML: false });
+    },
+});
 
 const CodeBox = styled("div")(({ theme: t }) => ({
     "&": {
@@ -29,21 +38,21 @@ const CodeBox = styled("div")(({ theme: t }) => ({
     },
 }));
 
-export const CodeEditor = forwardRef<
-    HTMLDivElement,
-    {
-        value: string;
-        onChange: (code: string) => void;
-        rows: number | string;
-        disabled?: boolean;
-        autoFocus?: boolean;
-        formatter?: (code: string) => string;
-    }
->(function CodeEditor(props, forwardedRef) {
+export type CodeEditorProps = {
+    className?: string;
+    value: string;
+    onChange: (code: string) => void;
+    rows: number | string;
+    disabled?: boolean;
+    autoFocus?: boolean;
+    formatter?: (code: string) => string;
+};
+
+export const CodeEditor = forwardRef<HTMLDivElement, CodeEditorProps>(function CodeEditor(props, forwardedRef) {
     const { value, onChange, rows, disabled, autoFocus, formatter, ...passProps } = props;
 
     const editorRef = useRef<HTMLDivElement>(null);
-    const ref = useForkRef<HTMLDivElement, HTMLDivElement>(forwardedRef, editorRef);
+    const ref = useForkRef(forwardedRef, editorRef);
 
     const jarRef = useRef<CodeJar>(null);
     const positionRef = useRef<Position>(null);
@@ -96,7 +105,7 @@ export const CodeEditor = forwardRef<
             sx={{
                 maxHeight: rows && `${parseInt(rows.toString()) * 1.45}em`,
             }}
-            onBlurCapture={formatter && ((event) => jarRef.current?.updateCode(formatter(value)))}
+            onBlurCapture={formatter && (() => jarRef.current?.updateCode(formatter(value)))}
         >
             {value}
         </CodeBox>

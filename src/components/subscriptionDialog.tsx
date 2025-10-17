@@ -1,33 +1,33 @@
-import { FormControl, FormControlLabel, FormLabel, Radio } from "@mui/material";
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { Field, FormikErrors } from "formik";
-import { CheckboxWithLabel, RadioGroup, TextField } from "formik-mui";
+import { CheckboxWithLabel, TextField } from "formik-mui";
 import { observer, useObserver } from "mobx-react-lite";
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getSubscriptionData } from "../devData";
-import { AdvancedSubscriptionFormikValues, SubscriptionFormikValues } from "../models";
+import { SubscriptionFormikValues } from "../models";
+
 import { Dialog } from "../store/dialog";
 import { useStore } from "../store/storeProvider";
 import { Subscription } from "../store/subscription";
 import { ValidationError } from "../store/topics";
 import { DialogTemplate } from "./dialogTemplate";
 
+import { getSubscriptionInitialData } from "./getSubscriptionInitialData";
+
 export const SubscriptionDialog = ({
     isEdit,
-    dialogTitle,
     submitButtonText,
     initialValues,
     dialog,
     taskOnSubmit,
 }: {
     isEdit: boolean;
-    dialogTitle: string;
     submitButtonText: string;
     initialValues: SubscriptionFormikValues;
     dialog: Dialog<unknown>;
     taskOnSubmit: (SubscriptionFormikValues) => Promise<void | ValidationError>;
 }) => {
-    const { groups, topics } = useStore();
+    const { groups, topics, trackingHidden } = useStore();
 
     const validateFunc = (values: SubscriptionFormikValues, includeAdvanced: boolean) => {
         const errors: FormikErrors<SubscriptionFormikValues> = {};
@@ -36,7 +36,7 @@ export const SubscriptionDialog = ({
         } else if (!new RegExp("([a-zA-Z0-9]*)://(([a-zA-Z0-9\\.\\~\\-\\_]*):(.*)@)?(.*)").test(values.endpoint)) {
             errors.endpoint = "Invalid endpoint";
         }
-        const requiredFields = ["name", "description"];
+        const requiredFields = ["name"];
         requiredFields.forEach((field) => {
             if (!values[field]) {
                 errors[field] = "Required";
@@ -67,13 +67,13 @@ export const SubscriptionDialog = ({
             disabled={isEdit}
         />,
         <Field required component={TextField} label="Endpoint" name="endpoint" key="endpoint" style={{ width: "100%" }} />,
-        <Field required component={TextField} label="Description" name="description" key="description" style={{ width: "100%" }} />,
+        <Field component={TextField} label="Description" name="description" key="description" style={{ width: "100%" }} />,
     ];
 
     const advancedFields = (): JSX.Element[] => [
         <FormControl key="advancedValues.mode">
             <FormLabel>Mode</FormLabel>
-            <Field component={RadioGroup} row name={"advancedValues.mode"}>
+            <Field as={RadioGroup} row name={"advancedValues.mode"}>
                 <FormControlLabel value="ANYCAST" control={<Radio />} label="ANYCAST" />
                 <FormControlLabel value="BROADCAST" control={<Radio />} label="BROADCAST" />
             </Field>
@@ -127,14 +127,16 @@ export const SubscriptionDialog = ({
             key="advancedValues.backoffMaxIntervalInSec"
             style={{ width: "100%" }}
         />,
-        <FormControl key="advancedValues.trackingMode">
-            <FormLabel>Tracking mode</FormLabel>
-            <Field component={RadioGroup} row name={"advancedValues.trackingMode"}>
-                <FormControlLabel value="trackingOff" control={<Radio />} label="No tracking" />
-                <FormControlLabel value="discardedOnly" control={<Radio />} label="Track message discarding only" />
-                <FormControlLabel value="trackingAll" control={<Radio />} label="Track everything" />
-            </Field>
-        </FormControl>,
+        trackingHidden ? null : (
+            <FormControl key="advancedValues.trackingMode">
+                <FormLabel>Tracking mode</FormLabel>
+                <Field as={RadioGroup} row name={"advancedValues.trackingMode"}>
+                    <FormControlLabel value="trackingOff" control={<Radio />} label="No tracking" />
+                    <FormControlLabel value="discardedOnly" control={<Radio />} label="Track message discarding only" />
+                    <FormControlLabel value="trackingAll" control={<Radio />} label="Track everything" />
+                </Field>
+            </FormControl>
+        ),
     ];
 
     return useObserver(() => {
@@ -149,7 +151,6 @@ export const SubscriptionDialog = ({
                 basicFields={basicFields}
                 dialog={dialog}
                 submitButtonText={submitButtonText}
-                dialogTitle={dialogTitle}
                 initialValues={initialValues}
                 onSubmitSuccess={onSubmitSuccess}
                 taskOnSubmit={taskOnSubmit}
@@ -159,19 +160,13 @@ export const SubscriptionDialog = ({
     });
 };
 
-const getDefaultSubscriptionValues = () => ({
-    name: "",
-    endpoint: "",
-    description: "",
-    advancedValues: new AdvancedSubscriptionFormikValues(),
-    ...getSubscriptionData(),
-});
-
 export const AddSubscriptionDialog = observer(() => {
     const { dialogs } = useStore();
     const dialog = dialogs.subscription;
     const { topic } = dialog.params;
-    const initialValues = getDefaultSubscriptionValues;
+    const initialValues = () => ({
+        ...getSubscriptionInitialData(),
+    });
 
     const taskOnSubmit = async (values: SubscriptionFormikValues): Promise<void | ValidationError> => {
         const sub: Subscription = new Subscription(values.name, topic);
@@ -182,7 +177,6 @@ export const AddSubscriptionDialog = observer(() => {
     return (
         <SubscriptionDialog
             isEdit={false}
-            dialogTitle={`Add new subscription to topic ${topic?.name}`}
             submitButtonText={"Add subscription"}
             initialValues={initialValues()}
             dialog={dialog}
@@ -197,36 +191,34 @@ export const AddClonedSubscriptionDialog = observer(() => {
     const { pathname } = useLocation();
     const { topic, subscription } = dialog.params;
 
-    const initialValues = (): SubscriptionFormikValues =>
-        subscription
-            ? {
-                  ...subscription.toForm,
-                  name: "",
-                  ...getSubscriptionData(subscription),
-              }
-            : getDefaultSubscriptionValues();
+    const initialValues = (): SubscriptionFormikValues => ({
+        ...getSubscriptionInitialData(subscription),
+    });
 
     const navigate = useNavigate();
-    const taskOnSubmit = async (values: SubscriptionFormikValues): Promise<void | ValidationError> => {
-        const sub: Subscription = new Subscription(values.name, topic);
-        sub.assignValuesFromForm(values);
-        await topic.postSubscriptionTask(sub);
-        await topic.fetchSubscriptionsTask();
-        const path = getFirstPartOfPath(pathname);
-        navigate(`${path}/${topic.name}/${values.name}`);
-    };
-
-    const getFirstPartOfPath = (path: string) => {
+    const getFirstPartOfPath = useCallback((path: string) => {
         const parts = path.split("/");
         return parts.slice(0, 2).join("/");
-    };
+    }, []);
 
+    const taskOnSubmit = useCallback(
+        async (values: SubscriptionFormikValues): Promise<void | ValidationError> => {
+            const sub: Subscription = new Subscription(values.name, topic);
+            sub.assignValuesFromForm(values);
+            await topic.postSubscriptionTask(sub);
+            await topic.fetchSubscriptionsTask();
+            const path = getFirstPartOfPath(pathname);
+            navigate(`${path}/${topic.name}/${values.name}`);
+        },
+        [getFirstPartOfPath, navigate, pathname, topic],
+    );
+
+    const initialValues1 = useMemo(() => initialValues(), []);
     return (
         <SubscriptionDialog
             isEdit={false}
-            dialogTitle={`Add new subscription to topic ${topic?.name}`}
             submitButtonText={"Add subscription"}
-            initialValues={initialValues()}
+            initialValues={initialValues1}
             dialog={dialog}
             taskOnSubmit={taskOnSubmit}
         />
@@ -238,7 +230,15 @@ export const EditSubscriptionDialog = observer(() => {
     const dialog = dialogs.editSubscription;
     const { topic, subscription } = dialog.params;
 
-    const initialValues = (): SubscriptionFormikValues => (subscription ? subscription.toForm : getDefaultSubscriptionValues());
+    const initialValues = (): SubscriptionFormikValues =>
+        subscription
+            ? {
+                  ...getSubscriptionInitialData(subscription),
+                  name: subscription.name,
+              }
+            : {
+                  ...getSubscriptionInitialData(),
+              };
 
     const taskOnSubmit = async (values: SubscriptionFormikValues): Promise<void | ValidationError> => {
         subscription.assignValuesFromForm(values);
@@ -248,7 +248,6 @@ export const EditSubscriptionDialog = observer(() => {
     return (
         <SubscriptionDialog
             isEdit={true}
-            dialogTitle={`Edit subscription to topic ${topic?.name}`}
             submitButtonText={"Update subscription"}
             initialValues={initialValues()}
             dialog={dialog}

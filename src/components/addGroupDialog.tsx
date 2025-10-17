@@ -48,7 +48,6 @@ export const AddGroupDialog = () => {
                 advancedFields={() => []}
                 basicFields={basicFields}
                 dialog={dialog}
-                dialogTitle={"Add new group"}
                 initialValues={initialValues()}
                 submitButtonText={"Add group"}
                 onSubmitSuccess={onSubmitSuccess}

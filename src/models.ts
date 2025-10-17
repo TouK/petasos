@@ -10,7 +10,7 @@ export interface TopicModel {
     trackingEnabled: boolean;
     migratedFromJsonType: boolean;
     schemaIdAwareSerializationSchemaEnabled: boolean;
-    contentType: string;
+    contentType: ContentType;
     maxMessageSize: number;
     auth: AuthModel;
     subscribingRestricted: boolean;
@@ -119,6 +119,7 @@ export interface UndeliveredMessage {
 
 export interface FormValues<T extends FormikValues = FormikValues> {
     advancedValues?: T;
+    contentType?: ContentType;
 }
 
 export interface TopicFormikValues extends FormValues<AdvancedTopicFormikValues> {
@@ -129,6 +130,8 @@ export interface TopicFormikValues extends FormValues<AdvancedTopicFormikValues>
 }
 
 export type Acknowledgement = "LEADER" | "ALL";
+
+export type ContentType = "AVRO" | "JSON";
 
 export interface AdvancedTopicFormikValues extends FormikValues {
     acknowledgement: Acknowledgement;

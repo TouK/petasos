@@ -29,11 +29,13 @@ export const DialogFormFields = observer(
     (props: {
         basicFields: JSX.Element[];
         advancedFields: JSX.Element[];
+        schemaInputField: JSX.Element;
+        showSchemaInput: boolean;
         showAdvanced: boolean;
         toggleAdvanced: () => void;
         validateForm: () => void;
     }) => {
-        const { basicFields, advancedFields, showAdvanced, toggleAdvanced, validateForm } = props;
+        const { basicFields, schemaInputField, showSchemaInput, advancedFields, showAdvanced, toggleAdvanced, validateForm } = props;
         const { options } = useStore();
 
         const toggleButton = <ToggleButton toggleAdvanced={toggleAdvanced} validateForm={validateForm} showAdvanced={showAdvanced} />;
@@ -42,6 +44,7 @@ export const DialogFormFields = observer(
                 {basicFields.map((field, i) => (
                     <Box key={i}>{field}</Box>
                 ))}
+                {showSchemaInput && <Box key={1}>{schemaInputField}</Box>}
                 {options.allowAdvancedFields && advancedFields.length > 0 && (
                     <>
                         <Divider>{toggleButton}</Divider>

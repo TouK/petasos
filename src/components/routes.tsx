@@ -1,33 +1,11 @@
 import loadable from "@loadable/component";
 import { Box, CircularProgress } from "@mui/material";
 import * as React from "react";
-import { createContext } from "react";
-import { Outlet, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
+import { localStorageToken } from "../api";
 import { MainLayout } from "./mainLayout";
-import { RootProviders } from "./rootProviders";
+import { RootProviders, RootProvidersProps } from "./rootProviders";
 import { RootView } from "./rootView";
-
-function RouteTester({ path }: { path?: string }) {
-    const params = useParams();
-    const loc = useLocation();
-    return (
-        <div>
-            <h2>matched {path}</h2>
-            <div>{JSON.stringify(params)}</div>
-            <div>{JSON.stringify(loc)}</div>
-            <Outlet />
-        </div>
-    );
-}
-
-function NoMatch() {
-    return (
-        <div>
-            <h1>no match</h1>
-            <RouteTester />
-        </div>
-    );
-}
 
 const Loading = () => (
     <Box flex={1} display="flex" justifyContent="center" alignItems="center">
@@ -35,37 +13,45 @@ const Loading = () => (
     </Box>
 );
 
-const opts = {
-    fallback: <Loading />,
-};
-
-const TopicsListView = loadable(() => import("./topicsListView"), opts);
-const SubscriptionView = loadable(() => import("./subscriptionView"), opts);
-const TopicDetailsView = loadable(() => import("./topicDetailsView"), opts);
-const TopicView = loadable(() => import("./topicView"), opts);
-
-export const RootPath = createContext<string | null>(null);
-
-export const RootRoutes = ({ basepath }: { basepath?: string }) => (
-    <RootPath.Provider value={basepath}>
-        <Routes>
-            <Route
-                path="/"
-                element={
-                    <RootProviders>
-                        <MainLayout />
-                    </RootProviders>
-                }
-            >
-                <Route path="/" element={<RootView />}>
-                    <Route index element={<TopicsListView />} />
-                    <Route path=":topic" element={<TopicView />}>
-                        <Route index element={<TopicDetailsView />} />
-                        <Route path=":subscription" element={<SubscriptionView />} />
-                    </Route>
-                </Route>
-                <Route path="*" element={<NoMatch />} />
-            </Route>
-        </Routes>
-    </RootPath.Provider>
+const RootElement = (props: RootProvidersProps) => (
+    <RootProviders {...props}>
+        <MainLayout>
+            <RootView />
+        </MainLayout>
+    </RootProviders>
 );
+
+const TopicsListView = loadable(() => import("./topicsListView"), { fallback: <Loading /> });
+const TopicView = loadable(() => import("./topicView"), { fallback: <Loading /> });
+const TopicDetailsView = loadable(() => import("./topicDetailsView"), { fallback: <Loading /> });
+const SubscriptionView = loadable(() => import("./subscriptionView"), { fallback: <Loading /> });
+
+export function createRoutes(props: Partial<RootProvidersProps> = {}): RouteObject[] {
+    const { basepath, tokenGetter = localStorageToken, open } = props;
+    return [
+        {
+            path: "/",
+            element: <RootElement basepath={basepath} tokenGetter={tokenGetter} open={open} />,
+            children: [
+                {
+                    index: true,
+                    element: <TopicsListView />,
+                },
+                {
+                    path: ":topic",
+                    element: <TopicView />,
+                    children: [
+                        {
+                            index: true,
+                            element: <TopicDetailsView />,
+                        },
+                        {
+                            path: ":subscription",
+                            element: <SubscriptionView />,
+                        },
+                    ],
+                },
+            ],
+        },
+    ];
+}

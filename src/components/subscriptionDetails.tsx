@@ -52,7 +52,7 @@ export const SubscriptionDetails = observer((props: { topic: Topic; subscription
 });
 
 const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription: Subscription }) => {
-    const { dialogs } = useStore();
+    const { dialogOpen } = useStore();
     const { topic, subscription } = props;
 
     useEffect(() => {
@@ -65,13 +65,13 @@ const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription:
                 ["ACTIVE", "SUSPENDED"].includes(subscription.state) && {
                     color: subscription.state === "ACTIVE" ? "warning" : "success",
                     Icon: subscription.state === "ACTIVE" ? <PauseIcon /> : <PlayArrowIcon />,
-                    action: () => dialogs.changeSubscriptionStateDialog.open({ subscription }),
+                    action: () => dialogOpen("changeSubscriptionStateDialog", { subscription }),
                     label: subscription.state === "ACTIVE" ? "Suspend" : "Activate",
                 },
                 {
                     Icon: <EditIcon />,
                     action: () =>
-                        dialogs.editSubscription.open({
+                        dialogOpen("editSubscription", {
                             topic,
                             subscription,
                         }),
@@ -80,7 +80,7 @@ const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription:
                 {
                     Icon: <FileCopyIcon />,
                     action: () =>
-                        dialogs.addClonedSubscription.open({
+                        dialogOpen("addClonedSubscription", {
                             topic,
                             subscription,
                         }),
@@ -89,7 +89,7 @@ const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription:
                 {
                     Icon: <DeleteIcon />,
                     action: () =>
-                        dialogs.deleteSubscriptionDialog.open({
+                        dialogOpen("deleteSubscriptionDialog", {
                             topic,
                             subscription,
                         }),
@@ -105,13 +105,13 @@ const SubscriptionDetailsHeader = observer((props: { topic: Topic; subscription:
 
 const MessageRetransmission = observer((props: { subscription: Subscription }) => {
     const { subscription } = props;
-    const { dialogs } = useStore();
+    const { dialogOpen } = useStore();
 
     const [selectedDate, handleDateChange] = useState(moment());
 
     return (
         <DetailsBox header="Messages retransmission">
-            <LayoutRow spacing={1} alignItems="stretch">
+            <LayoutRow spacing={1} mt={2} alignItems="center">
                 <DateTimePicker
                     renderInput={(props) => <TextField label="Start date" {...props} />}
                     value={selectedDate}
@@ -123,11 +123,11 @@ const MessageRetransmission = observer((props: { subscription: Subscription }) =
                     inputFormat="yyyy/MM/DD HH:mm"
                 />
                 <Button
-                    color="secondary"
-                    variant="outlined"
+                    color="primary"
+                    variant="text"
                     size="small"
                     onClick={() => {
-                        dialogs.retransmitMessageDialog.open({
+                        dialogOpen("retransmitMessageDialog", {
                             subscription,
                             selectedDate,
                         });
@@ -229,7 +229,7 @@ const SubscriptionProperties = observer((props: { subscription: Subscription }) 
     const timeFormat = "dddd, MMMM Do, YYYY h:mm:ss A";
 
     const properties: PropertiesTableRow[] = [
-        createRow("Description", subscription.description),
+        subscription.description ? createRow("Description", subscription.description) : null,
         createRow("Creation date", moment.unix(subscription.createdAt).format(timeFormat)),
         createRow("Modification date", moment.unix(subscription.modifiedAt).format(timeFormat)),
     ];
@@ -243,7 +243,7 @@ const SubscriptionProperties = observer((props: { subscription: Subscription }) 
             SubscriptionInfo.subscriptionPolicy.sendingDelay,
         ),
         createRow("Message TTL", `${subscription.subscriptionPolicy.messageTtl} seconds`, SubscriptionInfo.subscriptionPolicy.messageTtl),
-        createRow("Message delivery tracking", subscription.trackingMode),
+        subscription.trackingHidden ? null : createRow("Message delivery tracking", subscription.trackingMode),
         createRow(
             "Retry on 4xx status",
             subscription.subscriptionPolicy.retryClientErrors ? "yes" : "no",

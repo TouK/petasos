@@ -70,23 +70,23 @@ export function DetailsHeaderActions({ actions }: { actions: ActionButtonProps[]
 }
 
 const TopicDetailsHeader = observer(({ topic }: { topic: Topic }) => {
-    const { dialogs } = useStore();
+    const { dialogOpen } = useStore();
     return (
         <DetailsHeader
             actions={[
                 {
                     Icon: <EditIcon />,
-                    action: () => dialogs.editTopic.open({ topic }),
+                    action: () => dialogOpen("editTopic", { topic }),
                     label: "Edit",
                 },
                 {
                     Icon: <FileCopyIcon />,
-                    action: () => dialogs.addClonedTopic.open({ topic }),
+                    action: () => dialogOpen("addClonedTopic", { topic }),
                     label: "Clone",
                 },
                 {
                     Icon: <DeleteIcon />,
-                    action: () => dialogs.deleteTopicDialog.open({ topic }),
+                    action: () => dialogOpen("deleteTopicDialog", { topic }),
                     label: "Remove",
                 },
             ]}
@@ -143,7 +143,7 @@ const TopicProperties = observer(({ topic }: { topic: Topic }) => {
     const advancedProperties: PropertiesTableRow[] = [
         createRow("Acknowledgement", topic.ack, TopicInfo.ack),
         createRow("Retention time", `${topic.retentionTime.duration} days`, TopicInfo.retentionTime.duration),
-        createRow("Tracking enabled", `${topic.trackingEnabled}`),
+        topic.trackingHidden ? null : createRow("Tracking enabled", `${topic.trackingEnabled}`),
         createRow("Max message size", `${topic.maxMessageSize}`),
     ];
 
@@ -188,7 +188,7 @@ export const DetailsProperties = observer(
 );
 
 const TopicSubscriptionsList = observer(({ topic }: { topic: Topic }) => {
-    const { dialogs } = useStore();
+    const { dialogOpen } = useStore();
     return (
         <DetailsBox
             header="Subscriptions"
@@ -196,7 +196,7 @@ const TopicSubscriptionsList = observer(({ topic }: { topic: Topic }) => {
                 {
                     color: "primary",
                     Icon: <AddIcon />,
-                    action: () => dialogs.subscription.open({ topic }),
+                    action: () => dialogOpen("subscription", { topic }),
                     label: "Add subscription",
                 },
             ]}

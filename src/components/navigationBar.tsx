@@ -1,4 +1,3 @@
-import { Add as AddIcon } from "@mui/icons-material";
 import { Breadcrumbs, Button, Link, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React, { PropsWithChildren, ReactNode, useContext } from "react";
@@ -6,7 +5,7 @@ import { Link as RouterLink, matchPath, PathMatch, useLocation } from "react-rou
 import { useStore } from "../store/storeProvider";
 import { LayoutRow } from "./layout";
 import { LinePlaceholder } from "./linePlaceholder";
-import { RootPath } from "./routes";
+import { RootPath } from "./rootProviders";
 
 function LinkRouter(
     props: PropsWithChildren<{
@@ -24,7 +23,7 @@ const displayNameGet = (matchers: Record<string, (match: PathMatch) => ReactNode
 };
 
 export const NavigationBar = observer(() => {
-    const { topics, groups, dialogs } = useStore();
+    const { topics, groups, dialogOpen } = useStore();
     const { pathname } = useLocation();
     const rootPath = useContext(RootPath);
     const normalizedPathname = pathname.indexOf(rootPath) === 0 ? pathname.substring(rootPath.length) : pathname;
@@ -50,7 +49,7 @@ export const NavigationBar = observer(() => {
                     color: (t) => t.palette.getContrastText(t.palette.background.default),
                 }}
             >
-                {pathnames.length ? <LinkRouter to={rootPath || "/"}>{homeText}</LinkRouter> : <Typography>{homeText}</Typography>}
+                {pathnames.length ? <LinkRouter to={rootPath || "/"}>{homeText}</LinkRouter> : null}
 
                 {pathnames.map((value, index) => {
                     const last = index === pathnames.length - 1;
@@ -69,9 +68,9 @@ export const NavigationBar = observer(() => {
             </Breadcrumbs>
             <Button
                 color="primary"
-                variant="contained"
-                onClick={() => dialogs.topic.open({ topic: null })}
-                startIcon={<AddIcon />}
+                variant="outlined"
+                size="small"
+                onClick={() => dialogOpen("topic", { topic: null })}
                 disabled={!groups.fetchTask.resolved}
             >
                 Add topic

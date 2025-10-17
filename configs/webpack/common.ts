@@ -5,8 +5,8 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import MomentLocalesPlugin from "moment-locales-webpack-plugin";
 import { resolve } from "path";
 import { Configuration, container, DefinePlugin } from "webpack";
-import federationConfig from "../../federation.config.json";
 import pkg, { dependencies } from "../../package.json";
+import { __pathOfImport } from "../rel-transformer";
 
 dotenv.config();
 
@@ -107,7 +107,9 @@ export const commonConfig: Configuration = {
             },
         ],
     },
-    entry: ["./src/index.ts"],
+    entry: {
+        main: "./src/index.ts",
+    },
     plugins: [
         new MomentLocalesPlugin({
             localesToKeep: ["en"],
@@ -116,6 +118,7 @@ export const commonConfig: Configuration = {
         new HtmlWebpackPlugin({
             title: `${pkg.name} ${pkg.version}`,
             publicPath: "/",
+            chunks: ["runtime", "main"],
         }),
         new CopyPlugin({
             patterns: [
@@ -154,8 +157,15 @@ export const commonConfig: Configuration = {
                     singleton: true,
                     requiredVersion: dependencies["react-dom"],
                 },
+                "react-router-dom": {
+                    singleton: true,
+                },
             },
-            ...federationConfig,
+            name: pkg.name,
+            exposes: {
+                "./remoteTab": __pathOfImport(import("../../src/remoteTab")),
+                "./routes": __pathOfImport(import("../../src/components/routes")),
+            },
         }),
     ],
     performance: {

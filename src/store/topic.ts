@@ -1,11 +1,13 @@
 import { action, computed, observable, runInAction, toJS } from "mobx";
 import urlJoin from "url-join";
 import { fetchFn } from "../api";
+import { DEFAULT_TOPIC_VALUES } from "../components/getTopicInitialData";
 import { HermesFrontendUrl, Hosts } from "../config";
 import { debouncedTask } from "../helpers/debouncedTask";
 import {
     Acknowledgement,
     AuthModel,
+    ContentType,
     MessagePreviewModel,
     OwnerModel,
     RetentionTimeModel,
@@ -21,6 +23,10 @@ import { ValidationError } from "./topics";
 
 export class Topic implements TopicModel {
     static GROUP_NAME_SEPARATOR = ".";
+
+    @computed get trackingHidden(): boolean {
+        return this.store.trackingHidden;
+    }
 
     @computed get reqUrl(): string {
         return urlJoin(HermesFrontendUrl, "topics", this.name);
@@ -41,8 +47,8 @@ export class Topic implements TopicModel {
     @observable trackingEnabled: boolean;
     @observable migratedFromJsonType: boolean;
     @observable schemaIdAwareSerializationEnabled: boolean;
-    @observable contentType = "AVRO";
-    @observable maxMessageSize = 10240;
+    @observable contentType: ContentType;
+    @observable maxMessageSize = DEFAULT_TOPIC_VALUES.advancedValues.maxMessageSize;
     @observable auth: AuthModel;
     @observable createdAt: number;
     @observable modifiedAt: number;
@@ -121,7 +127,7 @@ export class Topic implements TopicModel {
     }
 
     @computed get schemaPrettified() {
-        return this.jsonPrettify(this.schema);
+        return this.jsonPrettify(this.schema || DEFAULT_TOPIC_VALUES.schema);
     }
 
     static splitName(name: string): string[] {
@@ -155,12 +161,19 @@ export class Topic implements TopicModel {
 
     private getModelFromForm(object: TopicFormikValues): TopicModel {
         const value = this.model;
-        if (object.schema) {
-            value.schema = this.metadataRequired ? addMetadata(object.schema) : object.schema;
+        if (object.contentType) {
+            value.contentType = object.contentType;
+
+            switch (object.contentType) {
+                case "AVRO":
+                    if (object.schema) {
+                        value.schema = this.metadataRequired ? addMetadata(object.schema) : object.schema;
+                    }
+                    break;
+                default:
+            }
         }
-        if (object.description) {
-            value.description = object.description;
-        }
+        value.description = object.description;
         if (object.advancedValues) {
             if (object.advancedValues.retentionTime) {
                 value.retentionTime = new DefaultStorageRetentionTimeModel(object.advancedValues.retentionTime, false);

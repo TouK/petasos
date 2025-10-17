@@ -1,6 +1,7 @@
 import { Topic as TopicIcon } from "@mui/icons-material";
-import { Box, List, ListItemButton, ListItemIcon, ListItemText, Pagination, Paper, Stack } from "@mui/material";
+import { Avatar, Box, Divider, List, ListItemAvatar, ListItemButton, ListItemText, Pagination, Paper, Stack } from "@mui/material";
 import { observer } from "mobx-react-lite";
+import moment from "moment/moment";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
@@ -13,7 +14,7 @@ const TopicsList = observer(({ names }: { names: string[] }) => {
     const { topics } = useStore();
     return (
         <Box component={Paper}>
-            <List>
+            <List disablePadding>
                 {names.map((topicName) => (
                     <TopicListElement key={topicName} topic={topics.getByName(topicName)} />
                 ))}
@@ -30,13 +31,55 @@ const TopicListElement = observer(({ topic }: { topic: Topic }) => {
     }, [topic]);
 
     return (
-        <ListItemButton onClick={() => navigate(topic.name)}>
-            <ListItemIcon>
-                <TopicIcon />
-            </ListItemIcon>
+        <ListItemButton divider onClick={() => navigate(topic.name)}>
+            <ListItemAvatar sx={{ minWidth: "46px", color: "inherit", alignSelf: "start" }}>
+                <Avatar
+                    variant="rounded"
+                    sx={{
+                        color: "inherit",
+                        bgcolor: "transparent",
+                        fontSize: "1.2em",
+                        ".MuiSvgIcon-root": {
+                            transition: (theme) =>
+                                theme.transitions.create("font-size", {
+                                    easing: theme.transitions.easing.easeOut,
+                                    duration: theme.transitions.duration.shorter,
+                                }),
+                            fontSize: "1em",
+                            ".MuiListItemButton-root:hover &": {
+                                fontSize: "1.25em",
+                            },
+                        },
+                    }}
+                >
+                    <TopicIcon width={"1em"} height={"1em"} />
+                </Avatar>
+            </ListItemAvatar>
             <ListItemText
-                primary={topic.displayName}
-                secondary={topic.description || !topic.fetchTask.pending ? topic.description : <LinePlaceholder />}
+                primary={<Box sx={{ fontWeight: "bold", fontSize: "1rem" }}>{topic.displayName}</Box>}
+                secondary={
+                    <Stack
+                        direction="row"
+                        spacing={1}
+                        mt={1}
+                        alignItems="center"
+                        divider={<Divider orientation="vertical" variant={"inset"} flexItem />}
+                    >
+                        {!topic.fetchTask.pending ? (
+                            topic.description ? (
+                                <Box component="span">{topic.description}</Box>
+                            ) : null
+                        ) : (
+                            <LinePlaceholder />
+                        )}
+                        {topic.modifiedAt || !topic.fetchTask.pending ? (
+                            <Box component="span">Last modified: {moment.unix(topic.modifiedAt).format("YYYY-MM-DD h:mm:ss")}</Box>
+                        ) : (
+                            <LinePlaceholder />
+                        )}
+                    </Stack>
+                }
+                secondaryTypographyProps={{ component: "span" }}
             />
             <SubscriptionsCounter topic={topic} />
         </ListItemButton>

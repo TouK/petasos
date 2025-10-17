@@ -2,6 +2,7 @@
 dist/
 node_modules/
 *.iml
+.env
 _env.js
 tsconfig.tsbuildinfo
 yarn-error.log

@@ -21,7 +21,7 @@ export function DetailsBox(
     const { header, children, actions = [] } = props;
     const [collapsed, setCollapsed] = useState(false);
 
-    const toggle = () => setCollapsed(!collapsed);
+    const toggle = () => setCollapsed(false);
     const filteredActions = actions.filter(Boolean);
 
     return (

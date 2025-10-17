@@ -3,7 +3,7 @@ import { Button, DialogActions, DialogContent, DialogContentText, LinearProgress
 import { observer } from "mobx-react-lite";
 import { Task } from "mobx-task/lib/task";
 import React, { useEffect } from "react";
-import { Dialog } from "../store/dialog";
+import { PromptDialog } from "../store/promptDialog";
 import { ValidationError } from "../store/topics";
 import { StyledDialog } from "./styledMuiComponents";
 
@@ -15,7 +15,7 @@ export const ConfirmDialog = observer(
         confirmText = "Confirm",
         onSubmitSuccess,
     }: {
-        dialog: Dialog<unknown>;
+        dialog: PromptDialog<unknown>;
         taskOnSubmit: Task<[], Promise<void | ValidationError>>;
         text: string;
         confirmText?: string;
@@ -23,7 +23,7 @@ export const ConfirmDialog = observer(
     }) => {
         const loading = taskOnSubmit.pending;
         const backendValidationError = taskOnSubmit.rejected
-            ? taskOnSubmit.error
+            ? (taskOnSubmit.error as string)
             : taskOnSubmit.result
             ? taskOnSubmit.result.message
             : null;

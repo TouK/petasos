@@ -1,6 +1,0 @@
-{
-    "name": "petasos",
-    "exposes": {
-        "./remoteTab": "./src/remoteTab"
-    }
-}

@@ -15,9 +15,13 @@ export const devConfig = mergeWithRules({
 })(commonConfig, {
     mode: "development",
     devServer: {
+        client: {
+            overlay: false,
+        },
         host: "0.0.0.0",
         port: 7890,
-        hot: true, // enable HMR on the server
+        hot: true,
+        allowedHosts: "all",
         historyApiFallback: {
             disableDotRule: true,
         },
@@ -40,32 +44,12 @@ export const devConfig = mergeWithRules({
             },
         },
     },
-    devtool: "eval-cheap-module-source-map",
-    optimization: {
-        moduleIds: "named",
-        chunkIds: "named",
-    },
+    devtool: "eval-source-map",
     plugins: [
         new ReactRefreshWebpackPlugin({
             overlay: false,
         }),
     ],
-    module: {
-        rules: [
-            {
-                test: /\.[jt]sx?$/,
-                exclude: /node_modules/,
-                use: [
-                    {
-                        loader: "babel-loader",
-                        options: {
-                            plugins: [require.resolve("react-refresh/babel")],
-                        },
-                    },
-                ],
-            },
-        ],
-    },
 });
 
 export default devConfig;

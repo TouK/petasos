@@ -1,0 +1,36 @@
+import { action, computed, observable } from "mobx";
+import { debouncedTask } from "../helpers/debouncedTask";
+
+export class DialogBase<T = void, R = void> {
+    open = debouncedTask.rejected(this.openFn, { wait: 0 });
+    private _resolver: (value: R) => void;
+    @observable private _params: T | null;
+
+    @computed get params(): T {
+        return this._params || ({} as T);
+    }
+
+    @computed get isOpen(): boolean {
+        return this.open.pending;
+    }
+
+    @action.bound close(result?: R) {
+        this._resolver?.(result || null);
+        setTimeout(this.cleanup, 200);
+    }
+
+    @action.bound
+    private cleanup() {
+        this._resolver = null;
+        this._params = null;
+    }
+
+    @action.bound
+    private openFn(params: T): Promise<R | null> {
+        this.cleanup();
+        return new Promise<R | null>((resolve) => {
+            this._params = params;
+            this._resolver = resolve;
+        });
+    }
+}

@@ -1,3 +1,39 @@
+# [1.3.0](https://github.com/TouK/petasos/compare/v1.2.1...v1.3.0) (2025-10-17)
+
+### Bug Fixes
+
+-   change max size of a topic message (from 10KB to 100KB) ([4a0834f](https://github.com/TouK/petasos/commit/4a0834fde03b8e7e02a1570b0c174f09662222ec))
+-   code formatter ([4731721](https://github.com/TouK/petasos/commit/4731721993a464926ee079014ed442bb7675dbe3))
+-   **federation:** work with older react-router ([2b74169](https://github.com/TouK/petasos/commit/2b74169d9fca30c201dda12fca78d3e811e41cda))
+-   hljs warning ([353e679](https://github.com/TouK/petasos/commit/353e67996e7b267452ed77042e54c2d537a8766b))
+-   infinite loop when injected with module federation ([b8fd128](https://github.com/TouK/petasos/commit/b8fd1281fa4602148dfeb638b1eabdee6d3ba7cf))
+-   input ref warning ([71892cb](https://github.com/TouK/petasos/commit/71892cbd24288623c1ed1fff100146cb0d60ec3f))
+-   new colors adjustments and fix form styles [NU-1646] ([a05f7d4](https://github.com/TouK/petasos/commit/a05f7d42a21ae49a89c8029a36d506d22e9c586d))
+-   problem with json content type validation ([01f9a5a](https://github.com/TouK/petasos/commit/01f9a5ae53c3e864139e4b260fb7ddf9fe866a05))
+-   Resolve an issue with radio buttons ([ba61d02](https://github.com/TouK/petasos/commit/ba61d02b03f2d13e8512470decdcccce48293f7d))
+-   revert debug change ([dcc6bc5](https://github.com/TouK/petasos/commit/dcc6bc5f17bb08a0ae694d51339f374e3f37b1f0))
+-   save schema ([812f7b0](https://github.com/TouK/petasos/commit/812f7b097a00096fa7e440719263fab915c8cc48))
+-   wrong label ([0d5e8e1](https://github.com/TouK/petasos/commit/0d5e8e172631fd7fbf43127ef160bf5f71fb02b6))
+
+### Features
+
+-   allow creating topic without schema ([ca608cd](https://github.com/TouK/petasos/commit/ca608cd8d69263fa1571397743eb5f390bf6e6a4))
+-   disable boxes collapse ([bb28b5e](https://github.com/TouK/petasos/commit/bb28b5e11177a586a4afcc66a882083adb5de998))
+-   extract some topic labels ([80bf0d5](https://github.com/TouK/petasos/commit/80bf0d592fe868d85df62df46cc80091c399dbdf))
+-   **federation:** expose routes. refactor. update react-router. ([200dad5](https://github.com/TouK/petasos/commit/200dad541e7c1f602becfbad6d082ef24b719294))
+-   hide tracking options param ([45411ba](https://github.com/TouK/petasos/commit/45411ba1ebd6f67c9b97eaca9fd425b00c66ea75))
+-   match mui version with nu ([6300d27](https://github.com/TouK/petasos/commit/6300d275ff76542bb4bdcd96abbd7436d42df951))
+-   new colors adjustments and fix form styles [NU-1646] ([386ae87](https://github.com/TouK/petasos/commit/386ae87ece1bf2ab9818f3d25ba160d09ef46cd0))
+-   open dialogs in portal feature for remoteTab ([3f3921d](https://github.com/TouK/petasos/commit/3f3921de3769ca6ecdfcc08ccf633b5c8c0741b5))
+-   subscriptions display and edit tweaks ([ffc15e1](https://github.com/TouK/petasos/commit/ffc15e1e3ad740f33b1ef0e6c5e29158c59232fa))
+-   sync some styles with nu ([a9ccd23](https://github.com/TouK/petasos/commit/a9ccd2366d2e3ef7f64fba479bfa6d00740a14dd))
+-   sync some styles with nu ([cadba58](https://github.com/TouK/petasos/commit/cadba584b27750968d1f8c49ec0b980f9c200118))
+-   topics display and edit tweaks ([50b6031](https://github.com/TouK/petasos/commit/50b603126ace5352acd5fa7c210ee16998c19d0a))
+-   tweak styles ([617b22f](https://github.com/TouK/petasos/commit/617b22f165dd4d061da5a6458965379bb941665e))
+-   unified dialogOpen ([f414a32](https://github.com/TouK/petasos/commit/f414a320e625b4ed33e5a1d2ea1b902a3673d3ba))
+-   unified dialogOpen ([c898ddc](https://github.com/TouK/petasos/commit/c898ddcbc6447c7fefe1924b1eccc46ca7833adb))
+-   unused field removed ([dd995f8](https://github.com/TouK/petasos/commit/dd995f85bd8c8c1c258e2408ac3df2deae29ecd3))
+
 # [1.3.0-beta.15](https://github.com/TouK/petasos/compare/v1.3.0-beta.14...v1.3.0-beta.15) (2025-10-17)
 
 ### Features

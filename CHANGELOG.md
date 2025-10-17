@@ -1,3 +1,9 @@
+# [1.3.0-beta.15](https://github.com/TouK/petasos/compare/v1.3.0-beta.14...v1.3.0-beta.15) (2025-10-17)
+
+### Features
+
+-   hide tracking options param ([45411ba](https://github.com/TouK/petasos/commit/45411ba1ebd6f67c9b97eaca9fd425b00c66ea75))
+
 # [1.3.0-beta.14](https://github.com/TouK/petasos/compare/v1.3.0-beta.13...v1.3.0-beta.14) (2025-10-17)
 
 ### Bug Fixes

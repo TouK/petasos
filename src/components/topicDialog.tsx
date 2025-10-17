@@ -57,8 +57,8 @@ export const TopicDialog = observer(
             <FormControl key="contentType">
                 <FormLabel>{labels.topic.contentType.label}</FormLabel>
                 <Field as={RadioGroup} row name={"contentType"}>
-                    <FormControlLabel value="AVRO" control={<Radio />} label={labels.topic.contentType.avro.label} />
                     <FormControlLabel value="JSON" control={<Radio />} label={labels.topic.contentType.json.label} />
+                    <FormControlLabel value="AVRO" control={<Radio />} label={labels.topic.contentType.avro.label} />
                 </Field>
             </FormControl>,
         ];

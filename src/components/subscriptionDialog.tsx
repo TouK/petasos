@@ -15,14 +15,12 @@ import { DialogTemplate } from "./dialogTemplate";
 
 export const SubscriptionDialog = ({
     isEdit,
-    dialogTitle,
     submitButtonText,
     initialValues,
     dialog,
     taskOnSubmit,
 }: {
     isEdit: boolean;
-    dialogTitle: string;
     submitButtonText: string;
     initialValues: SubscriptionFormikValues;
     dialog: Dialog<unknown>;
@@ -182,7 +180,6 @@ export const AddSubscriptionDialog = observer(() => {
     return (
         <SubscriptionDialog
             isEdit={false}
-            dialogTitle={`Add new subscription to topic ${topic?.name}`}
             submitButtonText={"Add subscription"}
             initialValues={initialValues()}
             dialog={dialog}
@@ -224,7 +221,6 @@ export const AddClonedSubscriptionDialog = observer(() => {
     return (
         <SubscriptionDialog
             isEdit={false}
-            dialogTitle={`Add new subscription to topic ${topic?.name}`}
             submitButtonText={"Add subscription"}
             initialValues={initialValues()}
             dialog={dialog}
@@ -248,7 +244,6 @@ export const EditSubscriptionDialog = observer(() => {
     return (
         <SubscriptionDialog
             isEdit={true}
-            dialogTitle={`Edit subscription to topic ${topic?.name}`}
             submitButtonText={"Update subscription"}
             initialValues={initialValues()}
             dialog={dialog}

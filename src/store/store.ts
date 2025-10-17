@@ -1,6 +1,7 @@
 import { action, computed, observable, runInAction } from "mobx";
 import moment from "moment";
 import { ReactNode } from "react";
+import labels from "../components/labels";
 import { Hosts } from "../config";
 import { Dialog } from "./dialog";
 import { DialogBase } from "./dialogBase";
@@ -34,25 +35,25 @@ export class Store {
     @observable readonly topics = new Topics(this);
     @observable readonly dialogs = {
         //groups
-        group: new Dialog<void, string>(() => "Add new group"),
+        group: new Dialog<void, string>(() => labels.dialogs.addGroup),
         deleteGroupDialog: new PromptDialog<{ group: string }>(),
 
         //topics
-        topic: new Dialog<{ topic: Topic; group?: string }>(() => "Add new topic"),
-        editTopic: new Dialog<{ topic: Topic }>(() => "Edit topic"),
-        addClonedTopic: new Dialog<{ topic: Topic }>(() => "Add new topic"),
+        topic: new Dialog<{ topic: Topic; group?: string }>(() => labels.dialogs.addTopic),
+        editTopic: new Dialog<{ topic: Topic }>(() => labels.dialogs.editTopic),
+        addClonedTopic: new Dialog<{ topic: Topic }>(() => labels.dialogs.addTopic),
         deleteTopicDialog: new PromptDialog<{ topic: Topic }>(),
 
         //subscription
-        subscription: new Dialog<{ topic: Topic }>(({ topic }) => `Add new subscription to topic ${topic?.name}`),
+        subscription: new Dialog<{ topic: Topic }>(({ topic }) => labels.dialogs.addSubscription(topic?.displayName)),
         editSubscription: new Dialog<{
             topic: Topic;
             subscription: Subscription;
-        }>(({ topic }) => `Edit subscription to topic ${topic?.name}`),
+        }>(({ topic }) => labels.dialogs.editSubscription(topic?.displayName)),
         addClonedSubscription: new Dialog<{
             topic: Topic;
             subscription: Subscription;
-        }>(({ topic }) => `Add new subscription to topic ${topic?.name}`),
+        }>(({ topic }) => labels.dialogs.addSubscription(topic?.displayName)),
         deleteSubscriptionDialog: new PromptDialog<{
             topic: Topic;
             subscription: Subscription;

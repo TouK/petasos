@@ -27,6 +27,7 @@ export class DialogBase<T = void, R = void> {
 
     @action.bound
     private openFn(params: T): Promise<R | null> {
+        this.cleanup();
         return new Promise<R | null>((resolve) => {
             this._params = params;
             this._resolver = resolve;

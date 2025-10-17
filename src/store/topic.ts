@@ -1,6 +1,7 @@
 import { action, computed, observable, runInAction, toJS } from "mobx";
 import urlJoin from "url-join";
 import { fetchFn } from "../api";
+import { DEFAULT_TOPIC_VALUES } from "../components/getTopicInitialData";
 import { HermesFrontendUrl, Hosts } from "../config";
 import { debouncedTask } from "../helpers/debouncedTask";
 import {
@@ -19,7 +20,6 @@ import { addMetadata, withoutMetadataFields } from "./metadata";
 import { Store } from "./store";
 import { Subscription } from "./subscription";
 import { ValidationError } from "./topics";
-import { DEFAULT_TOPIC_VALUES } from "../components/addTopicDialog";
 
 export class Topic implements TopicModel {
     static GROUP_NAME_SEPARATOR = ".";
@@ -123,7 +123,7 @@ export class Topic implements TopicModel {
     }
 
     @computed get schemaPrettified() {
-        return this.jsonPrettify(this.schema);
+        return this.jsonPrettify(this.schema || DEFAULT_TOPIC_VALUES.schema);
     }
 
     static splitName(name: string): string[] {
@@ -169,9 +169,7 @@ export class Topic implements TopicModel {
                 default:
             }
         }
-        if (object.description) {
-            value.description = object.description;
-        }
+        value.description = object.description;
         if (object.advancedValues) {
             if (object.advancedValues.retentionTime) {
                 value.retentionTime = new DefaultStorageRetentionTimeModel(object.advancedValues.retentionTime, false);

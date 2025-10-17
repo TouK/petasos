@@ -1,6 +1,7 @@
 import { Topic as TopicIcon } from "@mui/icons-material";
 import { Avatar, Box, Divider, List, ListItemAvatar, ListItemButton, ListItemText, Pagination, Paper, Stack } from "@mui/material";
 import { observer } from "mobx-react-lite";
+import moment from "moment/moment";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../store/storeProvider";
@@ -64,9 +65,18 @@ const TopicListElement = observer(({ topic }: { topic: Topic }) => {
                         alignItems="center"
                         divider={<Divider orientation="vertical" variant={"inset"} flexItem />}
                     >
-                        <Box component="span">
-                            {topic.description || !topic.fetchTask.pending ? topic.description : <LinePlaceholder />}
-                        </Box>
+                        {!topic.fetchTask.pending ? (
+                            topic.description ? (
+                                <Box component="span">{topic.description}</Box>
+                            ) : null
+                        ) : (
+                            <LinePlaceholder />
+                        )}
+                        {topic.modifiedAt || !topic.fetchTask.pending ? (
+                            <Box component="span">Last modified: {moment.unix(topic.modifiedAt).format("YYYY-MM-DD h:mm:ss")}</Box>
+                        ) : (
+                            <LinePlaceholder />
+                        )}
                     </Stack>
                 }
                 secondaryTypographyProps={{ component: "span" }}

@@ -14,11 +14,18 @@ function LabelWithHint({ children, hint }: PropsWithChildren<{ hint: ReactNode }
 }
 
 export default {
+    dialogs: {
+        addGroup: "Add new group",
+        addTopic: "Add new topic",
+        editTopic: "Edit topic",
+        addSubscription: (topic = "") => `Add new subscription to topic ${topic}`.trim(),
+        editSubscription: (topic = "") => `Edit subscription to topic ${topic}`.trim(),
+    },
     topic: {
         name: "Topic name",
         description: "Topic description",
         contentType: {
-            label: "Schema",
+            label: "Message format:",
             avro: {
                 label: (
                     <LabelWithHint
@@ -47,7 +54,7 @@ export default {
                             </>
                         }
                     >
-                        No schema
+                        Any data
                     </LabelWithHint>
                 ),
             },

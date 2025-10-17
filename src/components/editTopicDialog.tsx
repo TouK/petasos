@@ -6,8 +6,8 @@ import React from "react";
 import { TopicFormikValues } from "../models";
 import { useStore } from "../store/storeProvider";
 import { ValidationError } from "../store/topics";
-import { DEFAULT_TOPIC_VALUES } from "./addTopicDialog";
 import { DialogTemplate } from "./dialogTemplate";
+import { getTopicInitialData } from "./getTopicInitialData";
 import { GroupsFormControl } from "./groupsFormControl";
 import { JsonTextField } from "./jsonTextField";
 import labels from "./labels";
@@ -30,32 +30,22 @@ export const EditTopicDialog = observer(() => {
     const initialValues = (): TopicFormikValues =>
         topic
             ? {
-                  advancedValues: {
-                      acknowledgement: topic.ack,
-                      trackingEnabled: topic.trackingEnabled,
-                      maxMessageSize: topic.maxMessageSize,
-                      retentionTime: topic.retentionTime.duration,
-                  },
+                  ...getTopicInitialData(groups, topic),
                   topic: topic.displayName,
-                  schema: topic.schemaPrettified,
-                  group: groups.getGroupOfTopic(topic.name),
-                  description: topic.description,
-                  contentType: topic.contentType,
               }
             : {
-                  ...DEFAULT_TOPIC_VALUES,
-                  group: groups.defaultGroup,
+                  ...getTopicInitialData(groups),
               };
 
     const basicFields = (errors: FormikErrors<TopicFormikValues>): JSX.Element[] => [
         !groups.areGroupsHidden && <GroupsFormControl key="group" errors={errors} disabled />,
         <Field required component={TextField} label={labels.topic.name} name="topic" key="topic" fullWidth disabled />,
-        <Field required component={TextField} autoFocus label={labels.topic.description} name="description" key="description" fullWidth />,
+        <Field component={TextField} autoFocus label={labels.topic.description} name="description" key="description" fullWidth />,
         <FormControl key="contentType">
             <FormLabel>{labels.topic.contentType.label}</FormLabel>
             <Field as={RadioGroup} row name={"contentType"}>
-                <FormControlLabel value="AVRO" control={<Radio />} label={labels.topic.contentType.avro.label} />
                 <FormControlLabel value="JSON" control={<Radio />} label={labels.topic.contentType.json.label} />
+                <FormControlLabel value="AVRO" control={<Radio />} label={labels.topic.contentType.avro.label} />
             </Field>
         </FormControl>,
     ];

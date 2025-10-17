@@ -93,7 +93,7 @@ function composeValidators<T>(validators: Validator<T>[]): Validate<T> {
 
 export function validateTopicForm(values: TopicFormikValues, includeAdvanced: boolean): FormikErrors<TopicFormikValues> {
     const validate = composeValidators<TopicFormikValues>([
-        validateRequired(values.contentType === "AVRO" ? ["group", "topic", "description", "schema"] : ["group", "topic", "description"]),
+        validateRequired(values.contentType === "AVRO" ? ["group", "topic", "schema"] : ["group", "topic"]),
         validateTopic,
         values.contentType === "AVRO" && validateSchema,
         includeAdvanced && validateMaxMessageSize,

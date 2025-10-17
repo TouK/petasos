@@ -6,14 +6,7 @@ import {
     PlayArrow as PlayArrowIcon,
     Refresh as RefreshIcon,
 } from "@mui/icons-material";
-import {
-    Box,
-    Button,
-    Divider,
-    Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
+import { Box, Button, Divider, Stack, TextField, Typography } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
@@ -24,11 +17,7 @@ import { Subscription } from "../store/subscription";
 import { Topic } from "../store/topic";
 import { DetailsBox } from "./detailsBox";
 import { LayoutRow } from "./layout";
-import {
-    createRow,
-    PropertiesTable,
-    PropertiesTableRow,
-} from "./propertiesTable";
+import { createRow, PropertiesTable, PropertiesTableRow } from "./propertiesTable";
 import { DetailsHeader, DetailsProperties, JsonTree } from "./topicDetails";
 
 export const SubscriptionDetails = observer((props: { topic: Topic; subscription: Subscription }) => {
@@ -240,7 +229,7 @@ const SubscriptionProperties = observer((props: { subscription: Subscription }) 
     const timeFormat = "dddd, MMMM Do, YYYY h:mm:ss A";
 
     const properties: PropertiesTableRow[] = [
-        createRow("Description", subscription.description),
+        subscription.description ? createRow("Description", subscription.description) : null,
         createRow("Creation date", moment.unix(subscription.createdAt).format(timeFormat)),
         createRow("Modification date", moment.unix(subscription.modifiedAt).format(timeFormat)),
     ];

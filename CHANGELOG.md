@@ -1,3 +1,21 @@
+# [1.3.0-beta.12](https://github.com/TouK/petasos/compare/v1.3.0-beta.11...v1.3.0-beta.12) (2025-10-17)
+
+### Bug Fixes
+
+-   wrong label ([0d5e8e1](https://github.com/TouK/petasos/commit/0d5e8e172631fd7fbf43127ef160bf5f71fb02b6))
+
+### Features
+
+-   disable boxes collapse ([bb28b5e](https://github.com/TouK/petasos/commit/bb28b5e11177a586a4afcc66a882083adb5de998))
+-   match mui version with nu ([6300d27](https://github.com/TouK/petasos/commit/6300d275ff76542bb4bdcd96abbd7436d42df951))
+-   open dialogs in portal feature for remoteTab ([3f3921d](https://github.com/TouK/petasos/commit/3f3921de3769ca6ecdfcc08ccf633b5c8c0741b5))
+-   sync some styles with nu ([a9ccd23](https://github.com/TouK/petasos/commit/a9ccd2366d2e3ef7f64fba479bfa6d00740a14dd))
+-   sync some styles with nu ([cadba58](https://github.com/TouK/petasos/commit/cadba584b27750968d1f8c49ec0b980f9c200118))
+-   tweak styles ([617b22f](https://github.com/TouK/petasos/commit/617b22f165dd4d061da5a6458965379bb941665e))
+-   unified dialogOpen ([f414a32](https://github.com/TouK/petasos/commit/f414a320e625b4ed33e5a1d2ea1b902a3673d3ba))
+-   unified dialogOpen ([c898ddc](https://github.com/TouK/petasos/commit/c898ddcbc6447c7fefe1924b1eccc46ca7833adb))
+-   unused field removed ([dd995f8](https://github.com/TouK/petasos/commit/dd995f85bd8c8c1c258e2408ac3df2deae29ecd3))
+
 # [1.3.0-beta.11](https://github.com/TouK/petasos/compare/v1.3.0-beta.10...v1.3.0-beta.11) (2025-10-13)
 
 ### Bug Fixes

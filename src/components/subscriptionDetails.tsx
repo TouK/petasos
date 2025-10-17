@@ -243,7 +243,7 @@ const SubscriptionProperties = observer((props: { subscription: Subscription }) 
             SubscriptionInfo.subscriptionPolicy.sendingDelay,
         ),
         createRow("Message TTL", `${subscription.subscriptionPolicy.messageTtl} seconds`, SubscriptionInfo.subscriptionPolicy.messageTtl),
-        createRow("Message delivery tracking", subscription.trackingMode),
+        subscription.trackingHidden ? null : createRow("Message delivery tracking", subscription.trackingMode),
         createRow(
             "Retry on 4xx status",
             subscription.subscriptionPolicy.retryClientErrors ? "yes" : "no",

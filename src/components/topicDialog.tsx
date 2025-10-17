@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { Field, FormikErrors } from "formik";
-import { TextField } from "formik-mui";
+import { CheckboxWithLabel, TextField } from "formik-mui";
 import { observer } from "mobx-react-lite";
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ import { validateTopicForm } from "./validateTopicForm";
 export const TopicDialog = observer(
     ({ initialValues, dialog }: { initialValues: () => TopicFormikValues; dialog: Dialog<{ topic: Topic }> }) => {
         const store = useStore();
-        const { dialogOpen, groups, topics } = store;
+        const { dialogOpen, groups, topics, trackingHidden } = store;
 
         const taskOnSubmit = (values) => Topic.create(values, store);
 
@@ -53,7 +53,7 @@ export const TopicDialog = observer(
                 />
             ),
             <Field autoFocus required component={TextField} label={labels.topic.name} name="topic" key="topic" fullWidth />,
-            <Field required component={TextField} label={labels.topic.description} name="description" key="description" fullWidth />,
+            <Field component={TextField} label={labels.topic.description} name="description" key="description" fullWidth />,
             <FormControl key="contentType">
                 <FormLabel>{labels.topic.contentType.label}</FormLabel>
                 <Field as={RadioGroup} row name={"contentType"}>
@@ -85,13 +85,15 @@ export const TopicDialog = observer(
                     <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
                 </Field>
             </FormControl>,
-            // <Field
-            //     component={CheckboxWithLabel}
-            //     Label={{ label: "Tracking enabled" }}
-            //     name="advancedValues.trackingEnabled"
-            //     key="advancedValues.trackingEnabled"
-            //     type="checkbox"
-            // />,
+            trackingHidden ? null : (
+                <Field
+                    component={CheckboxWithLabel}
+                    Label={{ label: "Tracking enabled" }}
+                    name="advancedValues.trackingEnabled"
+                    key="advancedValues.trackingEnabled"
+                    type="checkbox"
+                />
+            ),
             <Field
                 component={TextField}
                 label="Max message size (bytes)"

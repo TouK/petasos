@@ -24,6 +24,10 @@ import { ValidationError } from "./topics";
 export class Topic implements TopicModel {
     static GROUP_NAME_SEPARATOR = ".";
 
+    @computed get trackingHidden(): boolean {
+        return this.store.trackingHidden;
+    }
+
     @computed get reqUrl(): string {
         return urlJoin(HermesFrontendUrl, "topics", this.name);
     }

@@ -22,5 +22,6 @@ const parseBool = (value: string): boolean => value === "true";
 export const Options: Partial<StoreOptions> = {
     forcedGroupName: Env.FORCED_GROUP_NAME,
     groupsHidden: parseBool(Env.GROUPS_HIDDEN),
+    trackingHidden: parseBool(Env.TRACKING_HIDDEN),
     allowAdvancedFields: parseBool(Env.ALLOW_ADVANCED_FIELDS),
 };

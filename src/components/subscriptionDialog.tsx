@@ -27,7 +27,7 @@ export const SubscriptionDialog = ({
     dialog: Dialog<unknown>;
     taskOnSubmit: (SubscriptionFormikValues) => Promise<void | ValidationError>;
 }) => {
-    const { groups, topics } = useStore();
+    const { groups, topics, trackingHidden } = useStore();
 
     const validateFunc = (values: SubscriptionFormikValues, includeAdvanced: boolean) => {
         const errors: FormikErrors<SubscriptionFormikValues> = {};
@@ -127,14 +127,16 @@ export const SubscriptionDialog = ({
             key="advancedValues.backoffMaxIntervalInSec"
             style={{ width: "100%" }}
         />,
-        <FormControl key="advancedValues.trackingMode">
-            <FormLabel>Tracking mode</FormLabel>
-            <Field as={RadioGroup} row name={"advancedValues.trackingMode"}>
-                <FormControlLabel value="trackingOff" control={<Radio />} label="No tracking" />
-                <FormControlLabel value="discardedOnly" control={<Radio />} label="Track message discarding only" />
-                <FormControlLabel value="trackingAll" control={<Radio />} label="Track everything" />
-            </Field>
-        </FormControl>,
+        trackingHidden ? null : (
+            <FormControl key="advancedValues.trackingMode">
+                <FormLabel>Tracking mode</FormLabel>
+                <Field as={RadioGroup} row name={"advancedValues.trackingMode"}>
+                    <FormControlLabel value="trackingOff" control={<Radio />} label="No tracking" />
+                    <FormControlLabel value="discardedOnly" control={<Radio />} label="Track message discarding only" />
+                    <FormControlLabel value="trackingAll" control={<Radio />} label="Track everything" />
+                </Field>
+            </FormControl>
+        ),
     ];
 
     return useObserver(() => {

@@ -17,6 +17,7 @@ export type OpenDialogArgs<K extends keyof DialogsType> = DialogsType[K] extends
 export interface StoreOptions {
     forcedGroupName?: string;
     groupsHidden?: boolean;
+    trackingHidden?: boolean;
     allowAdvancedFields?: boolean;
     open?: <K extends keyof DialogsType>(open: (callback?: (dialog: DialogsType[K]) => void) => Promise<void>, key: K) => void;
 }
@@ -66,6 +67,10 @@ export class Store {
             subscription: Subscription;
         }>(),
     };
+
+    @computed get trackingHidden(): boolean {
+        return this.options.trackingHidden;
+    }
 
     @action.bound
     setDialogView(key: string, view: ReactNode): void {

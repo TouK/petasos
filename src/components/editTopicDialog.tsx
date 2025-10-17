@@ -14,7 +14,7 @@ import labels from "./labels";
 import { validateTopicForm } from "./validateTopicForm";
 
 export const EditTopicDialog = observer(() => {
-    const { dialogs, groups, topics } = useStore();
+    const { dialogs, groups, topics, trackingHidden } = useStore();
     const dialog = dialogs.editTopic;
     const { topic } = dialog.params;
 
@@ -72,13 +72,15 @@ export const EditTopicDialog = observer(() => {
                 <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
             </Field>
         </FormControl>,
-        <Field
-            component={CheckboxWithLabel}
-            Label={{ label: "Tracking enabled" }}
-            name="advancedValues.trackingEnabled"
-            key="advancedValues.trackingEnabled"
-            type="checkbox"
-        />,
+        trackingHidden ? null : (
+            <Field
+                component={CheckboxWithLabel}
+                Label={{ label: "Tracking enabled" }}
+                name="advancedValues.trackingEnabled"
+                key="advancedValues.trackingEnabled"
+                type="checkbox"
+            />
+        ),
         <Field
             component={TextField}
             label="Max message size (bytes)"

@@ -57,6 +57,10 @@ export class Subscription implements SubscriptionModel {
         return this.parent.name;
     }
 
+    @computed get trackingHidden(): boolean {
+        return this.parent.trackingHidden;
+    }
+
     @computed get toForm(): SubscriptionFormikValues {
         return {
             name: this.name,

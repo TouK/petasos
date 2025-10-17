@@ -143,7 +143,7 @@ const TopicProperties = observer(({ topic }: { topic: Topic }) => {
     const advancedProperties: PropertiesTableRow[] = [
         createRow("Acknowledgement", topic.ack, TopicInfo.ack),
         createRow("Retention time", `${topic.retentionTime.duration} days`, TopicInfo.retentionTime.duration),
-        createRow("Tracking enabled", `${topic.trackingEnabled}`),
+        topic.trackingHidden ? null : createRow("Tracking enabled", `${topic.trackingEnabled}`),
         createRow("Max message size", `${topic.maxMessageSize}`),
     ];
 

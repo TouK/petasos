@@ -23,15 +23,15 @@ export const RootPath = createContext<string | null>(null);
 export const ShouldUseDialogPortals = createContext<boolean>(false);
 
 export type RootProvidersProps = {
-    tokenGetter: () => Promise<string>;
+    getAuthToken: () => Promise<string>;
     basepath?: string;
     open?: OpenPortal;
 };
 
-export const RootProviders = ({ children = <Outlet />, tokenGetter, basepath, open }: PropsWithChildren<RootProvidersProps>) => {
+export const RootProviders = ({ children = <Outlet />, getAuthToken, basepath, open }: PropsWithChildren<RootProvidersProps>) => {
     useEffect(() => {
-        tokenStorage.replaceTokenGetter(tokenGetter);
-    }, [tokenGetter]);
+        tokenStorage.replaceAuthTokenGetter(getAuthToken);
+    }, [getAuthToken]);
 
     const extendedOpen = useCallback(
         async <K extends keyof DialogsType>(openDialog: (callback?: (dialog: DialogsType[K]) => void) => Promise<void>) => {

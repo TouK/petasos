@@ -19,12 +19,12 @@ function createElementsFromRoutes(routes: RouteObject[] = []) {
 export type OpenPortal = (title: string, children: ReactNode) => Promise<() => void>;
 type RemoteTabProps = {
     basepath: string;
-    tokenGetter?: () => Promise<string>;
+    getAuthToken?: () => Promise<string>;
     open?: OpenPortal;
 };
 
-function RemoteTab({ basepath, tokenGetter, open }: RemoteTabProps) {
-    const routes = React.useMemo(() => createRoutes({ basepath, tokenGetter, open }), [basepath, tokenGetter]);
+function RemoteTab({ basepath, getAuthToken, open }: RemoteTabProps) {
+    const routes = React.useMemo(() => createRoutes({ basepath, getAuthToken, open }), [basepath, getAuthToken]);
     return (
         <Box height="100%" width="100%" overflow="auto">
             <Routes>{createElementsFromRoutes(routes)}</Routes>

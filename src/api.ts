@@ -10,14 +10,14 @@ const addHeaders =
         },
     });
 
-const addTokenHeader = (token: string) => addHeaders({ Authorization: `Bearer ${token}` });
+const addAuthorizationHeader = (authorization: string) => addHeaders({ Authorization: authorization });
 
 const withContentType = addHeaders({ "Content-Type": "application/json" });
 
 const getAuthHeader = async (init: RequestInit): Promise<RequestInit> => {
     try {
-        const token = await tokenStorage.getToken();
-        const withAuth = addTokenHeader(token);
+        const authorization = await tokenStorage.getAuthToken();
+        const withAuth = addAuthorizationHeader(authorization);
         return withAuth(init);
     } catch {
         return init;
@@ -46,8 +46,9 @@ export const fetchJson = async <R>(url: string, init: RequestInit = {}): Promise
     return json as R;
 };
 
-// Fallback token getter, used when the host app does not pass its own `tokenGetter`.
-export const sessionStorageToken = (namespace = "accessToken") => {
+// Fallback used when the host app does not pass its own `getAuthToken`. Reads the raw token from the
+// sessionStorage entry shared with the host and returns a ready `Authorization` header value.
+export const sessionStorageAuthToken = (namespace = "accessToken") => {
     let token: string;
     const url = new URL(window.location.href);
     if (url.searchParams.has(namespace)) {
@@ -58,7 +59,7 @@ export const sessionStorageToken = (namespace = "accessToken") => {
     } else {
         token = sessionStorage.getItem(namespace);
     }
-    return token ? Promise.resolve(token) : Promise.reject();
+    return token ? Promise.resolve(`Bearer ${token}`) : Promise.reject();
 };
 
 export const fetchFn = fetchSecured;

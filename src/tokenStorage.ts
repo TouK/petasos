@@ -1,10 +1,12 @@
+// Holds a getter resolving to a ready `Authorization` header value (`Bearer <token>`), replaced by the
+// host app through RootProviders.
 class TokenStorage {
-    getToken = () => this.tokenGetter();
+    getAuthToken = () => this.authTokenGetter();
 
-    constructor(private tokenGetter: () => Promise<string> = Promise.reject) {}
+    constructor(private authTokenGetter: () => Promise<string> = () => Promise.reject()) {}
 
-    replaceTokenGetter(newGetter: () => Promise<string>): void {
-        this.tokenGetter = newGetter;
+    replaceAuthTokenGetter(newGetter: () => Promise<string>): void {
+        this.authTokenGetter = newGetter;
     }
 }
 

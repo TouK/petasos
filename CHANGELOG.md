@@ -1,3 +1,13 @@
+# [1.4.0-beta.1](https://github.com/TouK/petasos/compare/v1.3.0...v1.4.0-beta.1) (2026-07-25)
+
+### Bug Fixes
+
+-   read access token from sessionStorage ([49a8af7](https://github.com/TouK/petasos/commit/49a8af7b5bb177c78711113daf2352d5416287ba))
+
+### Features
+
+-   accept getAuthToken from host app ([f88fd16](https://github.com/TouK/petasos/commit/f88fd166a7d493763f28d15c8fb7e7f321bfcc9b))
+
 # [1.3.0](https://github.com/TouK/petasos/compare/v1.2.1...v1.3.0) (2025-10-17)
 
 ### Bug Fixes

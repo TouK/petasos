@@ -46,16 +46,17 @@ export const fetchJson = async <R>(url: string, init: RequestInit = {}): Promise
     return json as R;
 };
 
-export const localStorageToken = (namespace = "accessToken") => {
+// Fallback token getter, used when the host app does not pass its own `tokenGetter`.
+export const sessionStorageToken = (namespace = "accessToken") => {
     let token: string;
     const url = new URL(window.location.href);
     if (url.searchParams.has(namespace)) {
         token = url.searchParams.get(namespace);
-        localStorage.setItem(namespace, token);
+        sessionStorage.setItem(namespace, token);
         url.searchParams.delete(namespace);
         window.history.replaceState(null, null, url.toString());
     } else {
-        token = localStorage.getItem(namespace);
+        token = sessionStorage.getItem(namespace);
     }
     return token ? Promise.resolve(token) : Promise.reject();
 };

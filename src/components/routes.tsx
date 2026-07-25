@@ -2,7 +2,7 @@ import loadable from "@loadable/component";
 import { Box, CircularProgress } from "@mui/material";
 import * as React from "react";
 import { RouteObject } from "react-router-dom";
-import { localStorageToken } from "../api";
+import { sessionStorageToken } from "../api";
 import { MainLayout } from "./mainLayout";
 import { RootProviders, RootProvidersProps } from "./rootProviders";
 import { RootView } from "./rootView";
@@ -27,7 +27,7 @@ const TopicDetailsView = loadable(() => import("./topicDetailsView"), { fallback
 const SubscriptionView = loadable(() => import("./subscriptionView"), { fallback: <Loading /> });
 
 export function createRoutes(props: Partial<RootProvidersProps> = {}): RouteObject[] {
-    const { basepath, tokenGetter = localStorageToken, open } = props;
+    const { basepath, tokenGetter = sessionStorageToken, open } = props;
     return [
         {
             path: "/",

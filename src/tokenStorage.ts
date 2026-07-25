@@ -1,4 +1,4 @@
-export class TokenStorage {
+class TokenStorage {
     getToken = () => this.tokenGetter();
 
     constructor(private tokenGetter: () => Promise<string> = Promise.reject) {}
